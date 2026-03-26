@@ -1,0 +1,47 @@
+version: '3.8'
+services:
+  # Servidor PHP con tu código
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: hex_app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - .:/var/www
+    networks:
+      - hex_network
+
+  # Servidor Web Nginx
+  nginx:
+    image: nginx:alpine
+    container_name: hex_nginx
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - hex_network
+
+  # Base de Datos Postgres
+  db:
+    image: postgres:15-alpine
+    container_name: hex_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5432:5432"
+    networks:
+      - hex_network
+
+networks:
+  hex_network:
+    driver: bridge
