@@ -18,9 +18,9 @@ class ListAuthorCommentsController extends Controller
             $comments = $this->useCase->execute($id);
 
             $data = array_map(fn($comment) => [
-                'id'      => $comment->getId(),
-                'post_id' => $comment->getPostId(),
-                'content' => $comment->getContent()
+                'id'      => $comment->getCommentIdValue(),
+                'post_id' => $comment->getPostIdValue(),
+                'content' => $comment->getDescriptionValue()
             ], $comments);
 
             return response()->json([

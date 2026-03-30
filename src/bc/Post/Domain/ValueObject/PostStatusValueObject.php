@@ -2,8 +2,8 @@
 
 namespace Src\bc\Post\Domain\ValueObject;
 
-use InvalidArgumentException;
 use Src\bc\Post\Domain\Enums\PostStatusEnum;
+use InvalidArgumentException;
 
 
 class PostStatusValueObject
