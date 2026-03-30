@@ -6,7 +6,7 @@ use InvalidArgumentException;
 use DateTimeImmutable;
 use Exception;
 
-class DateVOB
+class DateValueObject
 {
     protected string $value;
 

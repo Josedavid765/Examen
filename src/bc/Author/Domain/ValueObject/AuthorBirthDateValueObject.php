@@ -2,11 +2,11 @@
 
 namespace Src\bc\Author\Domain\ValueObject;
 
-use Src\shared\Domain\ValueObjects\DateVOB;
+use Src\shared\Domain\ValueObjects\DateValueObject;
 use InvalidArgumentException;
 use DateTimeImmutable;
 
-class AuthorBirthDate extends DateVOB
+class AuthorBirthDateValueObject extends DateValueObject
 {
     public function __construct(?string $value = null)
     {
@@ -27,3 +27,4 @@ class AuthorBirthDate extends DateVOB
         }
     }
 }
+

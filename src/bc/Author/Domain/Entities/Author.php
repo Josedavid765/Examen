@@ -2,19 +2,19 @@
 
 namespace Src\bc\Author\Domain\Entities;
 
-use Src\bc\Author\Domain\ValueObject\AuthorBirthDate;
-use Src\bc\Author\Domain\ValueObject\AuthorFirstName;
-use Src\bc\Author\Domain\ValueObject\AuthorId;
-use Src\bc\Author\Domain\ValueObject\AuthorLastName;
+use Src\bc\Author\Domain\ValueObject\AuthorBirthDateValueObject;
+use Src\bc\Author\Domain\ValueObject\AuthorFirstNameValueObject;
+use Src\bc\Author\Domain\ValueObject\AuthorIdValueObject;
+use Src\bc\Author\Domain\ValueObject\AuthorLastNameValueObject;
 
 class Author
 {
-    private AuthorId $authorId;
-    private AuthorFirstName $firstName;
-    private AuthorLastName $lastName;
-    private AuthorBirthDate $birthDate;
+    private AuthorIdValueObject $authorId;
+    private AuthorFirstNameValueObject $firstName;
+    private AuthorLastNameValueObject $lastName;
+    private AuthorBirthDateValueObject $birthDate;
 
-    public function __construct(AuthorId $authorId, AuthorFirstName $firstName, AuthorLastName $lastName, AuthorBirthDate $birthDate)
+    public function __construct(AuthorIdValueObject $authorId, AuthorFirstNameValueObject $firstName, AuthorLastNameValueObject $lastName, AuthorBirthDateValueObject $birthDate)
     {
         $this->authorId = $authorId;
         $this->firstName = $firstName;
@@ -22,17 +22,17 @@ class Author
         $this->birthDate = $birthDate;
     }
 
-    public function getAuthorId(): AuthorId { return $this->authorId; }
+    public function getAuthorId(): AuthorIdValueObject { return $this->authorId; }
     public function getAuthorIdValue(): string { return $this->authorId->value(); }
 
-    public function getAuthorFirstName(): AuthorFirstName { return $this->firstName; }
+    public function getAuthorFirstName(): AuthorFirstNameValueObject { return $this->firstName; }
     public function getAuthorFirstNameValue(): string { return $this->firstName->value(); }
 
-    public function getAuthorLastName(): AuthorLastName { return $this->lastName; }
+    public function getAuthorLastName(): AuthorLastNameValueObject { return $this->lastName; }
     public function getAuthorLastNameValue(): string { return $this->lastName->value(); }
 
     public function getFullName(): string {return $this->firstName->value() . ' ' . $this->lastName->value();}
 
-    public function getAuthorBirthDate(): AuthorBirthDate { return $this->birthDate; }
+    public function getAuthorBirthDate(): AuthorBirthDateValueObject { return $this->birthDate; }
     public function getAuthorBirthDateValue(): string { return $this->birthDate->value(); }
 }

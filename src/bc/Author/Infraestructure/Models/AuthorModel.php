@@ -7,9 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class AuthorModel extends Model
 {
     protected $table = 'authors';
-    protected $keyType = 'string';
-    protected $primaryKey = 'id';
     public $incrementing = false;
+    protected $keyType = 'string';
 
     protected $fillable = [
         'id',

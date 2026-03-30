@@ -3,9 +3,9 @@
 namespace Src\bc\Author\Application\UseCase;
 
 use Src\bc\Author\Application\Port\AuthorRepositoryport;
-use Src\bc\Post\Domain\Ports\PostRepositoryPort;  
-use Src\bc\Author\Domain\ValueObject\AuthorId;
-
+use Src\bc\Post\Application\Port\PostRepositoryPort;
+use Src\bc\Author\Domain\ValueObject\AuthorIdValueObject;
+use Exception;
 class ListAuthorPostsUseCase
 {
     public function __construct(
@@ -15,10 +15,12 @@ class ListAuthorPostsUseCase
 
     public function execute(string $authorId): array
     {
-        $id = new AuthorId($authorId);
+        $id = new AuthorIdValueObject($authorId);
+
         if (!$this->authorRepo->readAuthor($id)) {
-            throw new \Exception("Author not found");
+            throw new Exception("Author not found");
         }
-        return $this->postRepo->findAllByAuthorId($id->value());
+
+        return $this->postRepo->findByAuthorIdBatch($id->value(), 100);
     }
 }

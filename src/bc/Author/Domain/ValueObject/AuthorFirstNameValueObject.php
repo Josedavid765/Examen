@@ -2,10 +2,10 @@
 
 namespace Src\bc\Author\Domain\ValueObject;
 
-use Src\shared\Domain\ValueObjects\StringVOB;
+use Src\shared\Domain\ValueObjects\StringValueObject;
 use InvalidArgumentException;
 
-class AuthorLastName extends StringVOB
+class AuthorFirstNameValueObject extends StringValueObject
 {
     public function __construct(string $value)
     {
@@ -16,9 +16,9 @@ class AuthorLastName extends StringVOB
 
     private function ensureHasValidLength(string $value): void
     {
-        if (strlen(trim($value)) < 3) {
+        if (strlen(trim($value)) < 4) {
             throw new InvalidArgumentException(
-                sprintf('<%s> no permite el valor <%s>. El nombre debe tener al menos 3 caracteres.', static::class, $value)
+                sprintf('<%s> no permite el valor <%s>. El nombre debe tener al menos 4 caracteres.', static::class, $value)
             );
         }
     }

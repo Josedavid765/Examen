@@ -4,7 +4,7 @@ namespace Src\shared\Domain\ValueObjects;
 
 use InvalidArgumentException;
 
-class IntVOB
+class IntValueObject
 {
     protected int $value;
 

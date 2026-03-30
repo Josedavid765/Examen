@@ -3,10 +3,10 @@
 namespace Src\bc\Author\Infraestructure\Hydrators;
 
 use Src\bc\Author\Domain\Entities\Author;
-use Src\bc\Author\Domain\ValueObject\AuthorId;
-use Src\bc\Author\Domain\ValueObject\AuthorFirstName;
-use Src\bc\Author\Domain\ValueObject\AuthorLastName;
-use Src\bc\Author\Domain\ValueObject\AuthorBirthDate;
+use Src\bc\Author\Domain\ValueObject\AuthorIdValueObject;
+use Src\bc\Author\Domain\ValueObject\AuthorFirstNameValueObject;
+use Src\bc\Author\Domain\ValueObject\AuthorLastNameValueObject;
+use Src\bc\Author\Domain\ValueObject\AuthorBirthDateValueObject;
 use Src\bc\Author\Infraestructure\Models\AuthorModel;
 
 class AuthorHydrators
@@ -14,10 +14,10 @@ class AuthorHydrators
     public static function toDomain(AuthorModel $model): Author
     {
         return new Author(
-            new AuthorId($model->id),
-            new AuthorFirstName($model->first_name),
-            new AuthorLastName($model->last_name),
-            new AuthorBirthDate($model->birth_date)
+            new AuthorIdValueObject((string) $model->id),
+            new AuthorFirstNameValueObject((string) $model->first_name),
+            new AuthorLastNameValueObject((string) $model->last_name),
+            new AuthorBirthDateValueObject((string) $model->birth_date)
         );
     }
 

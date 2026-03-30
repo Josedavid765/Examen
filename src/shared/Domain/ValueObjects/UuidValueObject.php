@@ -5,7 +5,7 @@ namespace Src\shared\Domain\ValueObjects;
 use Ramsey\Uuid\Uuid;
 use InvalidArgumentException;
 
-class UuidVOB
+class UuidValueObject
 {
     protected string $value;
 
@@ -21,7 +21,7 @@ class UuidVOB
 
     public function value(): string { return $this->value; }
 
-    public function ensureISValidUuid(string $id)
+    public function ensureIsValidUuid(string $id)
     {
         if(!Uuid::isValid($id)){
             throw new InvalidArgumentException(

@@ -3,9 +3,9 @@
 namespace Src\bc\Author\Application\UseCase;
 
 use Src\bc\Author\Application\Port\AuthorRepositoryport;
-use Src\bc\Post\Domain\Ports\PostRepositoryPort;
-use Src\bc\Comment\Domain\Ports\CommentRepositoryPort;
-use Src\bc\Author\Domain\ValueObject\AuthorId;
+use Src\bc\Author\Domain\ValueObject\AuthorIdValueObject;
+use Src\bc\Post\Application\Port\PostRepositoryPort;
+use Src\bc\Comment\Application\Port\CommentRepositoryPort;
 
 class DeleteAuthorUseCase
 {
@@ -17,23 +17,23 @@ class DeleteAuthorUseCase
 
     public function execute(string $id): void
     {
-        $authorId = new AuthorId($id);
+        $authorId = new AuthorIdValueObject($id);
         $limit = 50;
 
         do {
-            $deletedCount = $this->commentRepo->deleteBatchByAuthorId($authorId->value(), $limit);
-        } while ($deletedCount >= $limit);
+            $deletedCommentsCount = $this->commentRepo->deleteCommentsByAuthorIdBatch($authorId->value(), $limit);
+        } while ($deletedCommentsCount >= $limit);
 
         do {
-            $posts = $this->postRepo->findBatchByAuthorId($authorId->value(), $limit);
+            $posts = $this->postRepo->findByAuthorIdBatch($authorId->value(), $limit);
 
             foreach ($posts as $post) {
-                $this->commentRepo->deleteByPostId($post->getId());
-                $this->postRepo->deletePost($post->getId());
+                $this->commentRepo->deleteCommentsByPostId($post->getPostIdValue());
+                $this->postRepo->deletePost($post->getPostId());
             }
-            
-            $countPosts = count($posts);
-        } while ($countPosts >= $limit);
+
+            $currentPostsCount = count($posts);
+        } while ($currentPostsCount >= $limit);
 
         $this->repo->deleteAuthor($authorId);
     }

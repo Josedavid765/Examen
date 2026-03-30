@@ -2,10 +2,10 @@
 
 namespace Src\bc\Author\Domain\ValueObject;
 
-use Src\shared\Domain\ValueObjects\StringVOB;
+use Src\shared\Domain\ValueObjects\StringValueObject;
 use InvalidArgumentException;
 
-class AuthorFirstName extends StringVOB
+class AuthorLastNameValueObject extends StringValueObject
 {
     public function __construct(string $value)
     {
