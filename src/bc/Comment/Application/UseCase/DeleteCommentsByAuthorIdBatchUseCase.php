@@ -6,12 +6,15 @@ use Src\bc\Comment\Application\Port\CommentRepositoryPort;
 
 class DeleteCommentsByAuthorIdBatchUseCase
 {
-    public function __construct(
-        private CommentRepositoryPort $repository
-    ) {}
+    private CommentRepositoryPort $repository;
 
-    public function execute(string $authorId, int $limit): void
+    public function __construct(CommentRepositoryPort $repository)
     {
-        $this->repository->deleteCommentsByAuthorIdBatch($authorId, $limit);
+        $this->repository = $repository;
+    }
+
+    public function execute(string $authorId, int $limit): int
+    {
+        return $this->repository->deleteCommentsByAuthorIdBatch($authorId, $limit);
     }
 }

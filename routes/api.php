@@ -38,10 +38,14 @@ Route::prefix('posts')->group(function () {
     Route::delete('/{id}', DeletePostController::class);
 });
 
-Route::post('/comments', CreateCommentController::class);
-Route::get('/comments/{id}', ReadCommentController::class);
-Route::put('/comments/{id}', UpdateCommentController::class);
-Route::delete('/comments/{id}', DeleteCommentController::class);
+
+Route::prefix('comments')->group(function () {
+    Route::post('/', CreateCommentController::class);          
+    Route::get('/{id}', ReadCommentController::class);        
+    Route::put('/{id}', UpdateCommentController::class);      
+    Route::delete('/{id}', DeleteCommentController::class);    
+});
+
 
 Route::get('/posts/{postId}/comments', ListCommentsByPostIdController::class);
 Route::get('/authors/{authorId}/comments', ListCommentsByAuthorIdController::class);

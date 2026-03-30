@@ -18,11 +18,11 @@ class CommentHydrator
         return new Comment(
             new CommentIdValueObject($model->id),
             new CommentDescriptionValueObject($model->description),
-            new CommentAuthorIdValueObject($model->author_id),
+            new CommentAuthorIdValueObject($model->author_id),   
             new CommentStatusValueObject($model->status),
-            new CommentPostIdValueObject($model->post_id),
-            new CommentDateValueObject($model->comment_date)
-        );
+            new CommentPostIdValueObject($model->post_id),        
+            new CommentDateValueObject($model->comment_date)     
+);
     }
 
     public static function toArray(Comment $entity): array

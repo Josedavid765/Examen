@@ -19,11 +19,11 @@ class UpdatePostController
         try {
             $dto = new PostDTO(
                 $id,
-                $request->input('author_id'),
                 $request->input('subject'),
                 $request->input('description'),
                 $request->input('publish_date'),
                 $request->input('status'),
+                $request->input('author_id'),
                 $request->input('num_comments') 
             );
             $this->updatePostUseCase->execute($dto);
