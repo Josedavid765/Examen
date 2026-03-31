@@ -11,7 +11,7 @@ class UuidValueObject
 
     public function __construct(?string $value = null)
     {
-        if($value == null){
+        if($value === null){
             $this->value = Uuid::uuid4()->toString();
         }else{
             $this->ensureIsValidUuid($value);
@@ -27,5 +27,10 @@ class UuidValueObject
             throw new InvalidArgumentException(
                 sprintf('<%s> no permite el valor <%s>. No es un UUID válido.', static::class, $id));
         }
+    }
+
+    public function __toString()
+    {
+        return $this->value;
     }
 }
