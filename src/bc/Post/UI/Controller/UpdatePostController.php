@@ -5,7 +5,7 @@ namespace Src\bc\Post\UI\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Src\bc\Post\Application\UseCase\UpdatePostUseCase;
-use Src\bc\Post\Application\DTO\PostDTO;
+use Src\bc\Post\Application\DTO\PostUpdateDTO;
 use Exception;
 
 class UpdatePostController
@@ -17,7 +17,7 @@ class UpdatePostController
     public function __invoke(Request $request, string $id): JsonResponse
     {
         try {
-            $dto = new PostDTO(
+            $dto = new PostUpdateDTO(
                 $id,
                 $request->input('subject'),
                 $request->input('description'),

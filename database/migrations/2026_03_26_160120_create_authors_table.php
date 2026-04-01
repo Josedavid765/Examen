@@ -15,7 +15,7 @@ return new class extends Migration
         $table->uuid('id')->primary();
         $table->string('first_name');
         $table->string('last_name');
-        $table->date('birth_date');
+        $table->date('birth_date')->nullable();
         $table->timestamps();
     });
 }

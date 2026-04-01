@@ -5,7 +5,7 @@ namespace Src\bc\Author\UI\Controller;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Src\bc\Author\Application\UseCase\UpdateAuthorUseCase;
-use Src\bc\Author\Application\DTO\AuthorDTO;
+use Src\bc\Author\Application\DTO\AuthorUpdateDTO;
 
 class UpdateAuthorController extends Controller
 {
@@ -15,11 +15,11 @@ class UpdateAuthorController extends Controller
     {
         try
         {
-            $dto = new AuthorDTO(
+            $dto = new AuthorUpdateDTO(
                 $id,
-                $request->input('first_name'),
-                $request->input('last_name'),
-                $request->input('birth_date')
+                $request->input('firstname'),
+                $request->input('lastname'),
+                $request->input('birthdate')
             );
 
             $author = $this->useCase->execute($dto);

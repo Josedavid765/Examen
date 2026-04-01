@@ -19,6 +19,11 @@ class DeleteAuthorUseCase
     {
         $authorId = new AuthorIdValueObject($id);
         $limit = 50;
+        $author = $this->repo->readAuthor($authorId);
+        
+        if (!$author) {
+            throw new \Exception("Author not found");
+        }
 
         do {
             $deletedCommentsCount = $this->commentRepo->deleteCommentsByAuthorIdBatch($authorId->value(), $limit);

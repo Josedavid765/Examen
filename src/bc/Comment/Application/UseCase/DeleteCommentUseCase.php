@@ -21,3 +21,5 @@ class DeleteCommentUseCase
         $this->repository->deleteComment($id);
     }
 }
+
+

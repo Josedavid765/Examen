@@ -2,12 +2,12 @@
 
 namespace Src\bc\Author\Domain\Entities;
 
+use JsonSerializable;
 use Src\bc\Author\Domain\ValueObject\AuthorBirthDateValueObject;
 use Src\bc\Author\Domain\ValueObject\AuthorFirstNameValueObject;
 use Src\bc\Author\Domain\ValueObject\AuthorIdValueObject;
 use Src\bc\Author\Domain\ValueObject\AuthorLastNameValueObject;
-
-class Author
+class Author implements JsonSerializable
 {
     private AuthorIdValueObject $authorId;
     private AuthorFirstNameValueObject $firstName;
@@ -20,6 +20,15 @@ class Author
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->birthDate = $birthDate;
+    }
+
+    public function jsonSerialize(): mixed{
+        return [
+            'id' => $this->getAuthorIdValue(),
+            'first_name' => $this->getAuthorFirstNameValue(),
+            'last_name' => $this->getAuthorLastNameValue(),
+            'birth_date' => $this->getAuthorBirthDateValue(),
+        ];
     }
 
     public function getAuthorId(): AuthorIdValueObject { return $this->authorId; }

@@ -22,12 +22,11 @@ class PostStatusValueObject
     }
 
     public function value(): string { return $this->value->value; }
+    public function getEnum(): PostStatusEnum { return $this->value; }
 
     public function isPublished(): bool { return $this->value === PostStatusEnum::PUBLISHED; }
     public function isDraft(): bool { return $this->value === PostStatusEnum::DRAFT; }
     public function isCancelled(): bool { return $this->value === PostStatusEnum::CANCELLED; }
 
     public function equals(PostStatusValueObject $other): bool { return $this->value === $other->value; }
-    
-    public function getEnum(): PostStatusEnum { return $this->value; }
 }

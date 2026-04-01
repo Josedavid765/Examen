@@ -16,9 +16,9 @@ class AuthorLastNameValueObject extends StringValueObject
 
     private function ensureHasValidLength(string $value): void
     {
-        if (strlen(trim($value)) < 3) {
+        if (strlen(trim($value)) < 5) {
             throw new InvalidArgumentException(
-                sprintf('<%s> no permite el valor <%s>. El nombre debe tener al menos 3 caracteres.', static::class, $value)
+                sprintf('<%s> no permite el valor <%s>. El nombre debe tener al menos 5 caracteres.', static::class, $value)
             );
         }
     }

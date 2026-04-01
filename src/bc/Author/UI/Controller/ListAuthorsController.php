@@ -16,7 +16,10 @@ class ListAuthorsController extends Controller
 
         $data = array_map(fn($author) => [
             'id' => $author->getAuthorIdValue(),
-            'name' => $author->getAuthorFirstNameValue() . ' ' . $author->getAuthorLastNameValue()
+            'fullname' => $author->getAuthorFirstNameValue() . ' ' . $author->getAuthorLastNameValue(),
+            'firstname' => $author->getAuthorFirstNameValue(),
+            'lastname' => $author->getAuthorLastNameValue(),
+            'birthdate' => $author->getAuthorBirthDateValue()
         ], $authors);
 
         return response()->json(['status' => 'success', 'data' => $data]);
