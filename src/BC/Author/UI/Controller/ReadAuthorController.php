@@ -21,9 +21,9 @@ class ReadAuthorController extends Controller
                 'status' => 'success',
                 'data' => [
                     'id' => $author->getAuthorIdValue(),
-                    'first_name' => $author->getAuthorFirstNameValue(),
-                    'last_name' => $author->getAuthorLastNameValue(),
-                    'birth_date' => $author->getAuthorBirthDateValue()
+                    'firstName' => $author->getAuthorFirstNameValue(),
+                    'lastName' => $author->getAuthorLastNameValue(),
+                    'birthDate' => $author->getAuthorBirthDateValue()
                 ]
             ]);
         } catch(\Exception $e){
