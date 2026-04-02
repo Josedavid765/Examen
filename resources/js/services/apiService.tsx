@@ -2,7 +2,7 @@ import { Author } from "../models/Author";
 import { Post } from "../models/Post";
 import { Comment } from "../models/Comment";
 
-const BASE_URL = "http://localhost:8000/api";
+const BASE_URL = "/api";
 
 const headers = {
     "Content-Type": "application/json",
