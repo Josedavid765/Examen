@@ -21,10 +21,10 @@ class CreatePostController
                 $request->input('id'),
                 $request->input('subject'),
                 $request->input('description'),
-                $request->input('publish_date'),
+                $request->input('publishDate'),
                 $request->input('status'),
-                $request->input('author_id'),
-                $request->input('num_comments', 0)
+                $request->input('authorId'),
+                $request->input('numComments', 0)
             );
 
             $this->createPostUseCase->execute($dto);
