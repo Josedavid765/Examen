@@ -16,7 +16,7 @@ class ListAuthorsController extends Controller
 
         $data = array_map(fn($author) => [
             'id' => $author->getAuthorIdValue(),
-            'fullname' => $author->getAuthorFirstNameValue() . ' ' . $author->getAuthorLastNameValue(),
+            'fullname' => $author->getFullName(),
             'firstname' => $author->getAuthorFirstNameValue(),
             'lastname' => $author->getAuthorLastNameValue(),
             'birthdate' => $author->getAuthorBirthDateValue()

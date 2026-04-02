@@ -2,8 +2,7 @@
 
 return [
     App\Providers\AppServiceProvider::class,
-    
-    Src\bc\Author\Infraestructure\service\DependencyInversionServices::class,
-    Src\bc\Post\Infraestructure\Service\DependencyInversionServices::class,
-    Src\bc\Comment\Infraestructure\Service\DependencyInversionServices::class,
+    Src\BC\Author\Infrastructure\Services\DependencyInversionServices::class,
+    Src\BC\Post\Infrastructure\Services\DependencyInversionServices::class,
+    Src\BC\Comment\Infrastructure\Services\DependencyInversionServices::class,
 ];
