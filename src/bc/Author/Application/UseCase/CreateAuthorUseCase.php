@@ -3,7 +3,7 @@
 namespace Src\bc\Author\Application\UseCase;
 
 use Src\bc\Author\Application\DTO\AuthorDTO;
-use Src\bc\Author\Application\Port\AuthorRepositoryport;
+use Src\bc\Author\Application\Port\AuthorRepositoryPort;
 use Src\bc\Author\Domain\Entities\Author;
 use Src\bc\Author\Domain\ValueObject\AuthorFirstNameValueObject;
 use Src\bc\Author\Domain\ValueObject\AuthorIdValueObject;
@@ -12,7 +12,7 @@ use Src\bc\Author\Domain\ValueObject\AuthorBirthDateValueObject;
 
 class CreateAuthorUseCase
 {
-    public function __construct(private AuthorRepositoryport $repo){}
+    public function __construct(private AuthorRepositoryPort $repo){}
 
     public function execute(AuthorDTO $dto): Author
     {

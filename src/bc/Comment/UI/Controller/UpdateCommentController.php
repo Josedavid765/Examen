@@ -1,6 +1,6 @@
 <?php
 
-namespace Src\bc\Post\Application\UseCase;
+namespace Src\bc\Comment\UI\Controller;
 
 // IMPORTANTE: Ahora importamos el UpdateDTO, no el normal
 use Src\bc\Post\Application\DTO\PostUpdateDTO; 
@@ -14,7 +14,7 @@ use Src\bc\Post\Domain\ValueObject\PostStatusValueObject;
 use Src\bc\Post\Domain\ValueObject\PostAuthorIdValueObject;
 use Src\bc\Post\Domain\ValueObject\PostCommentCount;
 
-class UpdatePostUseCase
+class UpdateCommentController
 {
     public function __construct(
         private PostRepositoryPort $repo
@@ -47,7 +47,7 @@ class UpdatePostUseCase
             new PostCommentCount((int)$numComments)
         );
 
-        
+
 
         $this->repo->updatePost($post);
     }

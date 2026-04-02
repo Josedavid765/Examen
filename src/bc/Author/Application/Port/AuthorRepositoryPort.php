@@ -5,7 +5,7 @@ namespace Src\bc\Author\Application\Port;
 use Src\bc\Author\Domain\Entities\Author;
 use Src\bc\Author\Domain\ValueObject\AuthorIdValueObject;
 
-interface AuthorRepositoryport
+interface AuthorRepositoryPort
 {
     public function createAuthor(Author $author): void;
 

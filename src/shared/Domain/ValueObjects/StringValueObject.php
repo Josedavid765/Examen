@@ -6,7 +6,7 @@ use InvalidArgumentException;
 
 class StringValueObject
 {
-    private string $value;
+    protected string $value;
 
     public function __construct(string $value)
     {

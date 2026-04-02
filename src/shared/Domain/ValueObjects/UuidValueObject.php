@@ -21,7 +21,7 @@ class UuidValueObject
 
     public function value(): string { return $this->value; }
 
-    public function ensureIsValidUuid(string $id)
+    public function ensureIsValidUuid(string $id): void
     {
         if(!Uuid::isValid($id)){
             throw new InvalidArgumentException(

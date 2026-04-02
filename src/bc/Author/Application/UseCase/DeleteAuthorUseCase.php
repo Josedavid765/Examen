@@ -2,7 +2,7 @@
 
 namespace Src\bc\Author\Application\UseCase;
 
-use Src\bc\Author\Application\Port\AuthorRepositoryport;
+use Src\bc\Author\Application\Port\AuthorRepositoryPort;
 use Src\bc\Author\Domain\ValueObject\AuthorIdValueObject;
 use Src\bc\Post\Application\Port\PostRepositoryPort;
 use Src\bc\Comment\Application\Port\CommentRepositoryPort;
@@ -10,7 +10,7 @@ use Src\bc\Comment\Application\Port\CommentRepositoryPort;
 class DeleteAuthorUseCase
 {
     public function __construct(
-        private AuthorRepositoryport $repo,
+        private AuthorRepositoryPort $repo,
         private PostRepositoryPort $postRepo,
         private CommentRepositoryPort $commentRepo
     ){}

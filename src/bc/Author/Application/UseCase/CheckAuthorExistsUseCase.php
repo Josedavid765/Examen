@@ -2,13 +2,13 @@
 
 namespace Src\bc\Author\Application\UseCase;
 
-use Src\bc\Author\Application\Port\AuthorRepositoryport;
+use Src\bc\Author\Application\Port\AuthorRepositoryPort;
 use Src\bc\Author\Domain\ValueObject\AuthorIdValueObject;
 
 class CheckAuthorExistsUseCase
 {
     public function __construct(
-        private AuthorRepositoryport $repo
+        private AuthorRepositoryPort $repo
     ) {}
 
     public function execute(string $authorId): bool

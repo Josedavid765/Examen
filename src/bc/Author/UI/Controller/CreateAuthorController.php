@@ -17,9 +17,9 @@ class CreateAuthorController extends Controller
         try{
             $dto = new AuthorDTO(
                     $request->input('id'),
-                    $request->input('firstname'),
-                    $request->input('lastname'),
-                    $request->input('birthdate')
+                    $request->input('firstName'),
+                    $request->input('lastName'),
+                    $request->input('birthDate')
                 );
 
             $author = $this->useCase->execute($dto);

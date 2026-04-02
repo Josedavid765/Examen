@@ -2,7 +2,7 @@
 
 namespace Src\bc\Post\Application\UseCase;
 
-use Src\bc\Post\Application\DTO\PostDTO;
+use Src\bc\Post\Application\DTO\PostUpdateDTO;
 use Src\bc\Post\Application\Port\PostRepositoryPort;
 use Src\bc\Post\Domain\Entities\Post;
 use Src\bc\Post\Domain\ValueObject\PostIdValueObject;
@@ -19,7 +19,7 @@ class UpdatePostUseCase
         private PostRepositoryPort $repo
     ) {}
 
-    public function execute(PostDTO $dto): void
+    public function execute(PostUpdateDTO $dto): void
     {
         $postId = new PostIdValueObject($dto->getPostId());
 

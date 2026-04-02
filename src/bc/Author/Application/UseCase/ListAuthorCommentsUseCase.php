@@ -2,7 +2,7 @@
 
 namespace Src\bc\Author\Application\UseCase;
 
-use Src\bc\Author\Application\Port\AuthorRepositoryport;
+use Src\bc\Author\Application\Port\AuthorRepositoryPort;
 use Src\bc\Comment\Application\Port\CommentRepositoryPort;
 use Src\bc\Author\Domain\ValueObject\AuthorIdValueObject;
 use Exception;
@@ -10,7 +10,7 @@ use Exception;
 class ListAuthorCommentsUseCase
 {
     public function __construct(
-        private AuthorRepositoryport $authorRepo,
+        private AuthorRepositoryPort $authorRepo,
         private CommentRepositoryPort $commentRepo
     ) {}
 
