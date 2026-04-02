@@ -3,8 +3,8 @@ import { Status } from "./Status";
 export interface Comment {
     id: string;
     description: string;
-    authorId: string;
+    authorid: string;
     status: Status;
-    postId: string;
-    commentDate: string;
+    postid: string;
+    commentdate: string;
 }

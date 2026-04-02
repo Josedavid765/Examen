@@ -10,7 +10,6 @@ const headers = {
 };
 
 export const apiService = {
-    // --- AUTHORS ---
     getAuthors: async () => {
         const response = await fetch(`${BASE_URL}/authors`, { headers });
         if (!response.ok) throw new Error("Error obteniendo autores");
@@ -62,8 +61,7 @@ export const apiService = {
         return await response.json();
     },
 
-    // --- POSTS ---
-    getPosts: async (): Promise<Post[]> => {
+    getPosts: async () => {
         const response = await fetch(`${BASE_URL}/posts`, { headers });
         if (!response.ok) throw new Error("Error obteniendo posts");
         return await response.json();
@@ -103,7 +101,6 @@ export const apiService = {
         if (!response.ok) throw new Error("Error eliminando post");
     },
 
-    // --- COMMENTS ---
     getComment: async (id: string): Promise<Comment> => {
         const response = await fetch(`${BASE_URL}/comments/${id}`, { headers });
         if (!response.ok) throw new Error("Error obteniendo comentario");
@@ -141,7 +138,6 @@ export const apiService = {
         if (!response.ok) throw new Error("Error eliminando comentario");
     },
 
-    // --- RELATIONSHIPS ---
     getCommentsByPost: async (postId: string): Promise<Comment[]> => {
         const response = await fetch(`${BASE_URL}/posts/${postId}/comments`, {
             headers,

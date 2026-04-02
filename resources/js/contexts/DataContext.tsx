@@ -1,4 +1,4 @@
-import React, {
+import {
     createContext,
     useContext,
     useState,
@@ -30,8 +30,8 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
                 apiService.getAuthors(),
                 apiService.getPosts(),
             ]);
-            setAuthors(authorsData.data);
-            setPosts(postsData);
+            setAuthors(authorsData.data || []);
+            setPosts(postsData.data || []);
         } catch (error) {
             console.error("Error en el Contexto:", error);
         } finally {

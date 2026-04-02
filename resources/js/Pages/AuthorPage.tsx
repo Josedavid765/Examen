@@ -19,15 +19,22 @@ const AuthorPage = () => {
                 "Apellido",
                 "Nombre Completo",
                 "Fecha Nacimiento",
+                "Acciones",
             ]}
             rows={authors}
             renderRow={(author: Author) => (
                 <TableRow key={author.id}>
                     <TableCell>{author.id}</TableCell>
-                    <TableCell>{author.firstName}</TableCell>
-                    <TableCell>{author.lastName}</TableCell>
-                    <TableCell>{author.fullName}</TableCell>
-                    <TableCell>{author.birthDate}</TableCell>
+                    <TableCell>{author.firstname}</TableCell>
+                    <TableCell>{author.lastname}</TableCell>
+                    <TableCell>{author.fullname}</TableCell>
+                    <TableCell>
+                        {`${new Date(author.birthdate).getDay()}/${new Date(author.birthdate).getMonth()}/${new Date(author.birthdate).getFullYear()}`}
+                    </TableCell>
+                    <TableCell>
+                        <button className="mx-4">Editar</button>
+                        <button>Eliminar</button>
+                    </TableCell>
                 </TableRow>
             )}
         />

@@ -1,7 +1,7 @@
 export interface Author {
     id: string;
-    firstName: string;
-    lastName: string;
-    fullName: string;
-    birthDate: string;
+    fullname: string;
+    firstname: string;
+    lastname: string;
+    birthdate: string;
 }
