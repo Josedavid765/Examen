@@ -1,0 +1,41 @@
+<?php
+
+namespace Src\BC\Post\UI\Controller;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Src\BC\Post\Application\UseCase\UpdatePostUseCase;
+use Src\BC\Post\Application\DTO\PostUpdateDTO;
+use Exception;
+
+class UpdatePostController
+{
+    public function __construct(
+        private UpdatePostUseCase $updatePostUseCase
+    ) {}
+
+    public function __invoke(Request $request, string $id): JsonResponse
+    {
+        try {
+            $dto = new PostUpdateDTO(
+                $id,
+                $request->input('subject'),
+                $request->input('description'),
+                $request->input('publishDate'),
+                $request->input('status'),
+                $request->input('authorId'),
+                $request->input('numComments')
+            );
+            $this->updatePostUseCase->execute($dto);
+
+            return response()->json([
+                'message' => 'Post actualizado correctamente'
+            ], 200);
+
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 400);
+        }
+    }
+}
