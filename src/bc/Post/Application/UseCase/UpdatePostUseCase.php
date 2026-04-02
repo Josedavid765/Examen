@@ -23,18 +23,27 @@ class UpdatePostUseCase
     {
         $postId = new PostIdValueObject($dto->getPostId());
 
-        if (!$this->repo->readPost($postId)) {
+        $existingPost = $this->repo->readPost($postId);
+
+        if (!$existingPost) {
             throw new \Exception("Post not found");
         }
 
+        $subject     = $dto->getSubject()     ?? $existingPost->getSubjectValue();
+        $description = $dto->getDescription() ?? $existingPost->getDescriptionValue();
+        $publishDate = $dto->getPublishDate() ?? $existingPost->getPublishDateValue();
+        $status      = $dto->getStatus()      ?? $existingPost->getStatusValue();
+        $authorId    = $dto->getAuthorId()    ?? $existingPost->getAuthorIdValue();
+        $numComments = $dto->getNumComments() ?? $existingPost->getNumCommentsValue();
+
         $post = new Post(
             $postId,
-            new PostSubjectValueObject($dto->getsubject()),
-            new PostDescriptionValueObject($dto->getDescription()),
-            new PostPublishDateValueObject($dto->getPublishdate()),
-            new PostStatusValueObject($dto->getStatus()),
-            new PostAuthorIdValueObject($dto->getAuthorId()),
-            new PostCommentCount((int)$dto->getNumComments())
+            new PostSubjectValueObject($subject),
+            new PostDescriptionValueObject($description),
+            new PostPublishDateValueObject($publishDate),
+            new PostStatusValueObject($status),
+            new PostAuthorIdValueObject($authorId),
+            new PostCommentCount((int)$numComments)
         );
 
         $this->repo->updatePost($post);

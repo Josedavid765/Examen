@@ -2,53 +2,40 @@
 
 namespace Src\bc\Comment\UI\Controller;
 
-// IMPORTANTE: Ahora importamos el UpdateDTO, no el normal
-use Src\bc\Post\Application\DTO\PostUpdateDTO; 
-use Src\bc\Post\Application\Port\PostRepositoryPort;
-use Src\bc\Post\Domain\Entities\Post;
-use Src\bc\Post\Domain\ValueObject\PostIdValueObject;
-use Src\bc\Post\Domain\ValueObject\PostSubjectValueObject;
-use Src\bc\Post\Domain\ValueObject\PostDescriptionValueObject;
-use Src\bc\Post\Domain\ValueObject\PostPublishDateValueObject;
-use Src\bc\Post\Domain\ValueObject\PostStatusValueObject;
-use Src\bc\Post\Domain\ValueObject\PostAuthorIdValueObject;
-use Src\bc\Post\Domain\ValueObject\PostCommentCount;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Src\bc\Comment\Application\UseCase\UpdateCommentUseCase;
+use Src\bc\Comment\Application\DTO\CommentUpdateDTO;
+use Exception;
 
 class UpdateCommentController
 {
     public function __construct(
-        private PostRepositoryPort $repo
+        private UpdateCommentUseCase $updateCommentUseCase
     ) {}
 
-    public function __invoke(PostUpdateDTO $dto): void
+    public function __invoke(Request $request, string $id): JsonResponse
     {
-        $postId = new PostIdValueObject($dto->getPostId());
+        try {
+            $dto = new CommentUpdateDTO(
+                $id,
+                $request->input('description'),
+                $request->input('authorId'),
+                $request->input('status'),
+                $request->input('postId'),
+                $request->input('commentDate')
+            );
 
-        $existingPost = $this->repo->readPost($postId);
+            $this->updateCommentUseCase->execute($dto);
 
-        if (!$existingPost) {
-            throw new \Exception("Post not found");
+            return response()->json([
+                'message' => 'Comment actualizado correctamente'
+            ], 200);
+
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 400);
         }
-
-        $subject     = $dto->getsubject()     ?? $existingPost->getSubjectValue();
-        $description = $dto->getDescription() ?? $existingPost->getDescriptionValue();
-        $publishDate = $dto->getPublishdate() ?? $existingPost->getPublishDateValue();
-        $status      = $dto->getStatus()      ?? $existingPost->getStatusValue();
-        $authorId    = $dto->getAuthorId()    ?? $existingPost->getAuthorIdValue();
-        $numComments = $dto->getNumComments() ?? $existingPost->getNumCommentsValue();
-
-        $post = new Post(
-            $postId,
-            new PostSubjectValueObject($subject),
-            new PostDescriptionValueObject($description),
-            new PostPublishDateValueObject($publishDate),
-            new PostStatusValueObject($status),
-            new PostAuthorIdValueObject($authorId),
-            new PostCommentCount((int)$numComments)
-        );
-
-
-
-        $this->repo->updatePost($post);
     }
 }

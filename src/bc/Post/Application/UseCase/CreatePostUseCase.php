@@ -30,9 +30,9 @@ class CreatePostUseCase
 
         $post = new Post(
             new PostIdValueObject($dto->getPostId()),
-            new PostSubjectValueObject($dto->getsubject()),
+            new PostSubjectValueObject($dto->getSubject()),
             new PostDescriptionValueObject($dto->getDescription()),
-            new PostPublishDateValueObject($dto->getPublishdate()),
+            new PostPublishDateValueObject($dto->getPublishDate()),
             new PostStatusValueObject($dto->getStatus()),
             new PostAuthorIdValueObject($dto->getAuthorId()),
             new PostCommentCount((int)$dto->getNumComments())
