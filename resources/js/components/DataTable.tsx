@@ -9,12 +9,14 @@ import {
     Paper,
     Typography,
 } from "@mui/material";
-
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
 interface DataTableProps {
     title: string;
     headers: string[];
     rows: any[];
     renderRow: (row: any) => React.ReactNode;
+    onAdd?: () => void;
 }
 
 export default function DataTable({
@@ -22,12 +24,28 @@ export default function DataTable({
     headers,
     rows,
     renderRow,
+    onAdd,
 }: DataTableProps) {
     return (
-        <TableContainer component={Paper} sx={{ mb: 4, boxShadow: 3 }}>
-            <Typography variant="h6" sx={{ p: 2, backgroundColor: "#f5f5f5" }}>
-                {title} ({rows.length})
-            </Typography>
+        <TableContainer
+            component={Paper}
+            sx={{ mb: 4, boxShadow: 3, overflow: "hidden" }}
+        >
+            <div className="flex items-center justify-between p-4 bg-slate-50 border-b">
+                <Typography variant="h6" className="font-bold text-slate-700">
+                    {title}: {rows.length}
+                </Typography>
+
+                {onAdd && (
+                    <Button
+                        onClick={onAdd}
+                        className={"gap-2 bg-slate-700 p-2"}
+                    >
+                        <Plus className="w-4 h-4" />
+                        Nuevo
+                    </Button>
+                )}
+            </div>
             <Table sx={{ minWidth: 650 }} aria-label="custom table">
                 <TableHead sx={{ backgroundColor: "#1976d2" }}>
                     <TableRow>
@@ -43,7 +61,7 @@ export default function DataTable({
                 </TableHead>
                 <TableBody>
                     {rows.length > 0 ? (
-                        rows.map((row, index) => renderRow(row))
+                        rows.map((row) => renderRow(row))
                     ) : (
                         <TableRow>
                             <TableCell colSpan={headers.length} align="center">
