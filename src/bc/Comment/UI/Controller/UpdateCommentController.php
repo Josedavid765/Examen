@@ -47,6 +47,8 @@ class UpdatePostUseCase
             new PostCommentCount((int)$numComments)
         );
 
+        
+
         $this->repo->updatePost($post);
     }
 }
