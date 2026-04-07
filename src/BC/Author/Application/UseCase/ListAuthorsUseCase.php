@@ -8,8 +8,8 @@ class ListAuthorsUseCase
 {
     public function __construct(private AuthorRepositoryPort $repo){}
 
-    public function execute(?string $fullName = null, int $page = 1, int $perPage = 10, string $column='id', string $direction = 'asc'): array
+    public function execute(?string $fullName = null, int $page = 1, int $perPage = 10, string $order='id', string $direction = 'asc'): array
     {
-        return $this->repo->listAuthors($fullName, $page, $perPage, $column, $direction);
+        return $this->repo->listAuthors($fullName, $page, $perPage, $order, $direction);
     }
 }
