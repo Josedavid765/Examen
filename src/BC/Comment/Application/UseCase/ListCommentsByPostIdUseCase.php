@@ -3,6 +3,7 @@
 namespace Src\BC\Comment\Application\UseCase;
 
 use Src\BC\Comment\Application\Port\CommentRepositoryPort;
+use Src\BC\Comment\Domain\ValueObject\CommentPostIdValueObject;
 
 class ListCommentsByPostIdUseCase
 {
@@ -12,7 +13,7 @@ class ListCommentsByPostIdUseCase
 
     public function execute(string $postId): array
     {
-        $postIdVO = new \Src\BC\Comment\Domain\ValueObject\CommentPostIdValueObject($postId);
+        $postIdVO = new CommentPostIdValueObject($postId);
         return $this->repository->listByPostID($postIdVO);
     }
 }

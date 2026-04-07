@@ -4,10 +4,11 @@ namespace Src\BC\Comment\Infrastructure\Traits;
 
 use Src\BC\Comment\Infrastructure\Models\CommentModel;
 use Src\BC\Post\Infrastructure\Models\PostModel;
+use Src\BC\Comment\Domain\ValueObject\CommentAuthorIdValueObject;
 
 trait DeleteCommentsByAuthorIdBatchTrait
 {
-    public function deleteCommentsByAuthorIdBatch(\Src\BC\Comment\Domain\ValueObject\CommentAuthorIdValueObject $authorId, int $limit): int
+    public function deleteCommentsByAuthorIdBatch(CommentAuthorIdValueObject $authorId, int $limit): int
     {
         $commentsToDelete = CommentModel::where('author_id', $authorId->value())
             ->limit($limit)

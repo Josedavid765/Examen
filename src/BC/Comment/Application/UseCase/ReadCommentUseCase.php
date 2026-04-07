@@ -4,6 +4,7 @@ namespace Src\BC\Comment\Application\UseCase;
 
 use Src\BC\Comment\Application\Port\CommentRepositoryPort;
 use Src\BC\Comment\Domain\Entities\Comment;
+use Src\BC\Comment\Domain\ValueObject\CommentIdValueObject;
 
 class ReadCommentUseCase
 {
@@ -13,7 +14,7 @@ class ReadCommentUseCase
 
     public function execute(string $id): Comment
     {
-        $commentId = new \Src\BC\Comment\Domain\ValueObject\CommentIdValueObject($id);
+        $commentId = new CommentIdValueObject($id);
         $comment = $this->repository->readComment($commentId);
 
         if (!$comment) {

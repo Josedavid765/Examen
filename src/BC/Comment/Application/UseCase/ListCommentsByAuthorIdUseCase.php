@@ -3,7 +3,7 @@
 namespace Src\BC\Comment\Application\UseCase;
 
 use Src\BC\Comment\Application\Port\CommentRepositoryPort;
-use \Src\BC\Comment\Domain\ValueObject\CommentAuthorIdValueObject;
+use Src\BC\Comment\Domain\ValueObject\CommentAuthorIdValueObject;
 
 class ListCommentsByAuthorIdUseCase
 {
