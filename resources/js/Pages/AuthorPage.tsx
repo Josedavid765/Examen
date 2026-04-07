@@ -21,7 +21,6 @@ import {
     PopoverContent,
 } from "@/components/ui/popover";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
-import { useState } from "react";
 
 const AuthorPage = () => {
     const { authors, loading } = useData();
@@ -36,9 +35,9 @@ const AuthorPage = () => {
         setPerPage,
         filter,
         setFilter,
+        order,
+        setOrder,
     } = useData();
-
-    const [order, setOrder] = useState("birthDate");
 
     console.log(authors);
 
@@ -55,16 +54,14 @@ const AuthorPage = () => {
     return (
         <>
             <Input
+                className={"border border-gray-600/20"}
                 placeholder="Buscar..."
                 onChange={(e) => setFilter(e.target.value)}
                 value={filter}
             />
-            <Popover>
-                <PopoverTrigger>Ordenar...</PopoverTrigger>
-                <PopoverContent></PopoverContent>
-            </Popover>
 
             <DataTable
+                loading={loading}
                 title={
                     "Autores: " +
                     totalAuthors +
@@ -84,6 +81,9 @@ const AuthorPage = () => {
                     { id: "actions", name: "Acciones" },
                 ]}
                 rows={authors}
+                order={order}
+                setOrder={setOrder}
+                perPage={perPage}
                 onAdd={() => navigate("/authors/new")}
                 renderRow={(author: Author) => (
                     <TableRow key={author.id}>

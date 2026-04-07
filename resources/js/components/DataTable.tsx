@@ -12,6 +12,7 @@ import {
 import { LucideChevronDown, LucideChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type Header = {
     id: string;
@@ -26,6 +27,8 @@ interface DataTableProps {
     filter?: string;
     order?: string;
     setOrder?: (order: string) => void;
+    loading?: boolean;
+    perPage?: number;
 }
 
 export default function DataTable({
@@ -36,14 +39,18 @@ export default function DataTable({
     onAdd,
     order,
     setOrder,
+    loading,
+    perPage = 5,
 }: DataTableProps) {
     const handleSort = (id: string) => {
-        if (!setOrder) return;
+        if (!setOrder || id === "actions") return;
 
-        if (order === `${id},ASC`) {
-            setOrder(`${id},DESC`);
+        if (order === id) {
+            setOrder("-" + id);
+        } else if (order === "-" + id) {
+            setOrder("");
         } else {
-            setOrder(`${id},ASC`);
+            setOrder(id);
         }
     };
     return (
@@ -75,14 +82,23 @@ export default function DataTable({
                                 sx={{
                                     color: "white",
                                     fontWeight: "bold",
-                                    cursor: "pointer",
-                                    "&:hover": { backgroundColor: "#1565c0" },
+                                    cursor:
+                                        header.id === "actions"
+                                            ? "default"
+                                            : "pointer",
+                                    "&:hover": {
+                                        backgroundColor:
+                                            header.id === "actions"
+                                                ? "#1976d2"
+                                                : "#1565c0",
+                                    },
                                 }}
                                 onClick={() => handleSort(header.id)}
                             >
                                 <div className="flex items-center gap-1">
-                                    {order?.split("-")[0] === header.id &&
-                                        (order.split("-")[1] === "ASC" ? (
+                                    {(order === header.id ||
+                                        order === "-" + header.id) &&
+                                        (order === header.id ? (
                                             <LucideChevronUp className="w-4 h-4" />
                                         ) : (
                                             <LucideChevronDown className="w-4 h-4" />
@@ -94,11 +110,34 @@ export default function DataTable({
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rows.length > 0 ? (
+                    {loading ? (
+                        Array.from({ length: perPage }).map((_, rowIndex) => (
+                            <TableRow key={`skeleton-row-${rowIndex}`}>
+                                {headers.map((header) => (
+                                    <TableCell
+                                        key={`skeleton-cell-${header.id}-${rowIndex}`}
+                                    >
+                                        {header.id === "actions" ? (
+                                            <div className="flex justify-center gap-1">
+                                                <Skeleton className="h-8 w-14 rounded-md bg-slate-200/60" />
+                                                <Skeleton className="h-8 w-16 rounded-md bg-slate-200/60" />
+                                            </div>
+                                        ) : (
+                                            <Skeleton className="h-4 w-[85%] bg-slate-200/60" />
+                                        )}
+                                    </TableCell>
+                                ))}
+                            </TableRow>
+                        ))
+                    ) : rows.length > 0 ? (
                         rows.map((row) => renderRow(row))
                     ) : (
                         <TableRow>
-                            <TableCell colSpan={headers.length} align="center">
+                            <TableCell
+                                colSpan={headers.length}
+                                align="center"
+                                sx={{ py: 6, color: "text.secondary" }}
+                            >
                                 No hay datos disponibles
                             </TableCell>
                         </TableRow>

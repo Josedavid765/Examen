@@ -68,7 +68,6 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
-    // useEffect para la carga inicial automática
     useEffect(() => {
         loadInitialData();
     }, [page, perPage, order]);
