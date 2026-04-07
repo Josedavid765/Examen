@@ -5,10 +5,10 @@ namespace Src\BC\Comment\Infrastructure\Traits;
 use Src\BC\Comment\Domain\Entities\Comment;
 use Src\BC\Comment\Infrastructure\Models\CommentModel;
 use Src\BC\Comment\Infrastructure\Hydrator\CommentHydrator;
-
+use Src\BC\Comment\Domain\ValueObject\CommentIdValueObject;
 trait ReadCommentTrait
 {
-    public function readComment(\Src\BC\Comment\Domain\ValueObject\CommentIdValueObject $id): ?Comment
+    public function readComment(CommentIdValueObject $id): ?Comment
     {
         $model = CommentModel::find($id->value());
         return $model ? CommentHydrator::toDomain($model) : null;

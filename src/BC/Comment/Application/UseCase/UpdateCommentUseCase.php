@@ -14,9 +14,7 @@ use Src\BC\Comment\Domain\ValueObject\CommentPostIdValueObject;
 
 class UpdateCommentUseCase
 {
-    public function __construct(
-        private CommentRepositoryPort $repo
-    ) {}
+    public function __construct(private CommentRepositoryPort $repo) {}
 
     public function execute(CommentUpdateDTO $dto): Comment
     {

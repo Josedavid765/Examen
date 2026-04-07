@@ -3,6 +3,7 @@
 namespace Src\BC\Comment\Application\UseCase;
 
 use Src\BC\Comment\Application\Port\CommentRepositoryPort;
+use Src\BC\Comment\Domain\ValueObject\CommentIdValueObject;
 
 class DeleteCommentUseCase
 {
@@ -12,7 +13,7 @@ class DeleteCommentUseCase
 
     public function execute(string $id): void
     {
-        $commentId = new \Src\BC\Comment\Domain\ValueObject\CommentIdValueObject($id);
+        $commentId = new CommentIdValueObject($id);
         $comment = $this->repository->readComment($commentId);
 
         if (!$comment) {
