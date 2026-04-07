@@ -3,6 +3,7 @@
 namespace Src\BC\Comment\Application\UseCase;
 
 use Src\BC\Comment\Application\Port\CommentRepositoryPort;
+use Src\BC\Comment\Domain\ValueObject\CommentPostIdValueObject;
 
 class DeleteCommentsByPostIdUseCase
 {
@@ -12,7 +13,7 @@ class DeleteCommentsByPostIdUseCase
 
     public function execute(string $postId): void
     {
-        $postIdVO = new \Src\BC\Comment\Domain\ValueObject\CommentPostIdValueObject($postId);
+        $postIdVO = new CommentPostIdValueObject($postId);
         $this->repository->deleteCommentsByPostId($postIdVO);
     }
 }
