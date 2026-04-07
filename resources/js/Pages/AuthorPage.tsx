@@ -4,10 +4,12 @@ import { Author } from "../models/Author";
 import { useData } from "../contexts/DataContext";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { apiService } from "../services/apiService";
 
 const AuthorPage = () => {
     const { authors, loading } = useData();
     const navigate = useNavigate();
+    const { refreshData } = useData();
     console.log(authors);
 
     if (loading)
@@ -16,6 +18,16 @@ const AuthorPage = () => {
                 <CircularProgress className="absolute right-1/2 top-1/2" />
             </div>
         );
+
+    const handleDelete = async (id: string) => {
+        try {
+            await apiService.deleteAuthor(String(id));
+            await refreshData();
+        } catch (error) {
+            console.log(error);
+            alert("Hubo un error al eliminar el autor");
+        }
+    };
 
     return (
         <DataTable
@@ -49,7 +61,11 @@ const AuthorPage = () => {
                         >
                             Editar
                         </Button>
-                        <Button className={"px-2"} variant="destructive">
+                        <Button
+                            onClick={() => handleDelete(author.id)}
+                            className={"px-2"}
+                            variant="destructive"
+                        >
                             Eliminar
                         </Button>
                     </TableCell>

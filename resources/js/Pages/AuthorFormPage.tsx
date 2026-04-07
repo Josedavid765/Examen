@@ -7,10 +7,13 @@ import { Form } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Author } from "@/models/Author";
+import { useData } from "@/contexts/DataContext";
 
 const AuthorFormPage = () => {
     const { id } = useParams<{ id: string }>(); // Captura el ID de la URL si existe
     const navigate = useNavigate();
+
+    const { refreshData } = useData();
 
     const [loading, setLoading] = useState(false);
     const [initialLoading, setInitialLoading] = useState(false);
@@ -53,6 +56,7 @@ const AuthorFormPage = () => {
             } else {
                 await apiService.createAuthor(payload as any);
             }
+            await refreshData();
             navigate("/authors"); // Volver a la tabla tras el éxito
         } catch (error) {
             console.error("Error al guardar:", error);

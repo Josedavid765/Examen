@@ -4,8 +4,8 @@ export interface Post {
     id: string;
     subject: string;
     description: string;
-    publishdate: string;
+    publishDate: string;
     status: Status;
-    authorid: string;
-    numcomments: number;
+    authorId: string;
+    numComments: number;
 }
