@@ -21,6 +21,7 @@ import {
     PopoverContent,
 } from "@/components/ui/popover";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
+import { useState } from "react";
 
 const AuthorPage = () => {
     const { authors, loading } = useData();
@@ -37,14 +38,9 @@ const AuthorPage = () => {
         setFilter,
     } = useData();
 
-    console.log(authors);
+    const [order, setOrder] = useState("birthDate:ASC");
 
-    if (loading)
-        return (
-            <div className="relative h-screen">
-                <CircularProgress className="absolute right-1/2 top-1/2" />
-            </div>
-        );
+    console.log(authors);
 
     const handleDelete = async (id: string) => {
         try {
@@ -63,6 +59,11 @@ const AuthorPage = () => {
                 onChange={(e) => setFilter(e.target.value)}
                 value={filter}
             />
+            <Popover>
+                <PopoverTrigger>Ordenar...</PopoverTrigger>
+                <PopoverContent></PopoverContent>
+            </Popover>
+
             <DataTable
                 title={
                     "Autores: " +
@@ -75,12 +76,12 @@ const AuthorPage = () => {
                     totalPages
                 }
                 headers={[
-                    "ID",
-                    "Nombre",
-                    "Apellido",
-                    "Nombre Completo",
-                    "Fecha Nacimiento",
-                    "Acciones",
+                    { id: "id", name: "ID" },
+                    { id: "firstName", name: "Nombre" },
+                    { id: "lastName", name: "Apellido" },
+                    { id: "fullName", name: "Nombre Completo" },
+                    { id: "birthDate", name: "Fecha Nacimiento" },
+                    { id: "actions", name: "Acciones" },
                 ]}
                 rows={authors}
                 onAdd={() => navigate("/authors/new")}

@@ -21,10 +21,18 @@ class ListAuthorsController extends Controller
         $perPage  = (int) $request->query('perPage', 3);
 
 
-        
-        $direction = $request->query('direction', 'asc');
+        $allowedColumns = ['id', 'first_name', 'last_name', 'birth_date'];
+        $column = $request->query('column', 'id');
 
-        $result = $this->useCase->execute($fullName, $page, $perPage, $direction);
+        if (!in_array($column, $allowedColumns)) 
+        {
+            $column = 'id';
+        }
+
+        $direction = $request->query('direction', 'asc');
+        $direction = strtolower($direction) === 'desc' ? 'desc' : 'asc';
+
+        $result = $this->useCase->execute($fullName, $page, $perPage, $column,$direction);
 
         $authors = array_map(fn($author) => [
             'id'        => $author->getAuthorIdValue(),

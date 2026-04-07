@@ -11,13 +11,20 @@ import {
 } from "@mui/material";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
+
+type Header = {
+    id: string;
+    name: string;
+};
 interface DataTableProps {
     title: string;
-    headers: string[];
+    headers: Header[];
     rows: any[];
     renderRow: (row: any) => React.ReactNode;
     onAdd?: () => void;
     filter?: string;
+    order: string;
+    setOrder?: (order: string) => void;
 }
 
 export default function DataTable({
@@ -26,6 +33,8 @@ export default function DataTable({
     rows,
     renderRow,
     onAdd,
+    order,
+    setOrder,
 }: DataTableProps) {
     return (
         <TableContainer
@@ -52,10 +61,10 @@ export default function DataTable({
                     <TableRow>
                         {headers.map((header) => (
                             <TableCell
-                                key={header}
+                                key={header.id}
                                 sx={{ color: "white", fontWeight: "bold" }}
                             >
-                                {header}
+                                {header.name}
                             </TableCell>
                         ))}
                     </TableRow>

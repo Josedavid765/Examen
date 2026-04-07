@@ -15,5 +15,5 @@ interface AuthorRepositoryPort
 
     public function deleteAuthor(AuthorIdValueObject $id): void;
 
-    public function listAuthors(?string $fullName = null, int $page=1, int $perPage=10, string $direction = 'asc') : array;
+    public function listAuthors(?string $fullName = null, int $page=1, int $perPage=10, string $column='id',  string $direction = 'asc') : array;
 }
