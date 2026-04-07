@@ -28,6 +28,7 @@ Route::prefix('authors')->group(function () {
     Route::put('/{id}', UpdateAuthorController::class);
     Route::delete('/{id}', DeleteAuthorController::class);
     Route::get('/{id}/posts', ListAuthorPostsController::class);
+    Route::get('/{id}/comments', ListCommentsByAuthorIdController::class);
 });
 
 Route::prefix('posts')->group(function () {
@@ -36,16 +37,13 @@ Route::prefix('posts')->group(function () {
     Route::get('/{id}', ReadPostController::class);
     Route::put('/{id}', UpdatePostController::class);
     Route::delete('/{id}', DeletePostController::class);
+    Route::get('/{id}/comments', ListCommentsByPostIdController::class);
 });
 
 
 Route::prefix('comments')->group(function () {
-    Route::post('/', CreateCommentController::class);          
-    Route::get('/{id}', ReadCommentController::class);        
+    Route::post('/', CreateCommentController::class);
+    Route::get('/{id}', ReadCommentController::class);
     Route::put('/{id}', UpdateCommentController::class);      
-    Route::delete('/{id}', DeleteCommentController::class);    
+    Route::delete('/{id}', DeleteCommentController::class);
 });
-
-
-Route::get('/posts/{postId}/comments', ListCommentsByPostIdController::class);
-Route::get('/authors/{authorId}/comments', ListCommentsByAuthorIdController::class);
