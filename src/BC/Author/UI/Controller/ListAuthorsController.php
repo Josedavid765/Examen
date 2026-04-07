@@ -13,7 +13,6 @@ class ListAuthorsController extends Controller
 
     public function __invoke(Request $request): JsonResponse
     {
-
         $fullName = $request->query('fullname');
         $fullName = $fullName ? mb_strtolower($fullName, 'UTF-8') : null;
 
@@ -21,18 +20,20 @@ class ListAuthorsController extends Controller
         $perPage  = (int) $request->query('perPage', 3);
 
 
-        $allowedColumns = ['id', 'first_name', 'last_name', 'birth_date'];
-        $column = $request->query('column', 'id');
+        $sortParam = $request->query('order', '+id');
+        $direction = str_starts_with($sortParam, '-') ? 'desc' : 'asc';
+        $orderInput = ltrim($sortParam, '+-');
 
-        if (!in_array($column, $allowedColumns)) 
-        {
-            $column = 'id';
-        }
+        $sortMap = [
+            'id'        => 'id',
+            'firstName' => 'first_name',
+            'lastName'  => 'last_name',
+            'birthDate' => 'birth_date',
+        ];
 
-        $direction = $request->query('direction', 'asc');
-        $direction = strtolower($direction) === 'desc' ? 'desc' : 'asc';
+        $order = $sortMap[$orderInput] ?? 'id';
 
-        $result = $this->useCase->execute($fullName, $page, $perPage, $column,$direction);
+        $result = $this->useCase->execute($fullName, $page, $perPage, $order, $direction);
 
         $authors = array_map(fn($author) => [
             'id'        => $author->getAuthorIdValue(),
@@ -45,7 +46,7 @@ class ListAuthorsController extends Controller
         return response()->json([
             'status' => 'success',
             'data'   => $authors,
-            'meta'   => $result['pagination']       
+            'meta'   => $result['pagination']
         ]);
     }
 }
