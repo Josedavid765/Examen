@@ -19,7 +19,7 @@ class ListAuthorCommentsController extends Controller
 
             $data = array_map(fn($comment) => [
                 'id'      => $comment->getCommentIdValue(),
-                'post_id' => $comment->getPostIdValue(),
+                'postId' => $comment->getPostIdValue(),
                 'content' => $comment->getDescriptionValue()
             ], $comments);
 
