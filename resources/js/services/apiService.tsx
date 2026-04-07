@@ -23,6 +23,7 @@ export const apiService = {
     },
 
     createAuthor: async (data: Omit<Author, "id">): Promise<Author> => {
+        console.log(data);
         const response = await fetch(`${BASE_URL}/authors`, {
             method: "POST",
             headers,

@@ -33,11 +33,11 @@ const AuthorPage = () => {
             renderRow={(author: Author) => (
                 <TableRow key={author.id}>
                     <TableCell>{author.id}</TableCell>
-                    <TableCell>{author.firstname}</TableCell>
-                    <TableCell>{author.lastname}</TableCell>
-                    <TableCell>{author.fullname}</TableCell>
+                    <TableCell>{author.firstName}</TableCell>
+                    <TableCell>{author.lastName}</TableCell>
+                    <TableCell>{author.fullName}</TableCell>
                     <TableCell>
-                        {`${new Date(author.birthdate).getDate()}/${new Date(author.birthdate).getMonth() + 1}/${new Date(author.birthdate).getFullYear()}`}
+                        {`${new Date(author.birthDate).getDate()}/${new Date(author.birthDate).getMonth() + 1}/${new Date(author.birthDate).getFullYear()}`}
                     </TableCell>
                     <TableCell className="flex justify-center align-middle space-x-1">
                         <Button

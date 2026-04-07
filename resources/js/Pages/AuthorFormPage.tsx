@@ -6,6 +6,7 @@ import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Form } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Author } from "@/models/Author";
 
 const AuthorFormPage = () => {
     const { id } = useParams<{ id: string }>(); // Captura el ID de la URL si existe
@@ -40,7 +41,7 @@ const AuthorFormPage = () => {
         setLoading(true);
 
         const formData = new FormData(e.currentTarget);
-        const payload = {
+        const payload: Partial<Author> = {
             firstName: String(formData.get("firstname")),
             lastName: String(formData.get("lastname")),
             birthDate: String(formData.get("birthdate")), // Formato YYYY-MM-DD
