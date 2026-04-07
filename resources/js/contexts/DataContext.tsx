@@ -50,14 +50,13 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
                 apiService.getAuthors(filter, page, perPage),
                 apiService.getPosts(),
             ]);
-            setTotalPages(authorsData.meta?.lastPage || 1);
-            setTotalAuthors(authorsData.meta?.total || 0);
-            setAuthors(authorsData.data || []);
 
-            if (authorsData.meta && authorsData.meta.lastPage) {
-                setTotalPages(authorsData.meta.lastPage);
+            if (authorsData.meta) {
+                setTotalPages(authorsData.meta.lastPage || 1);
+                setTotalAuthors(authorsData.meta?.total || 0);
             }
 
+            setAuthors(authorsData.data || []);
             setPosts(postsData.data || []);
         } catch (error) {
             console.error("Error en el Contexto:", error);
@@ -70,6 +69,17 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     useEffect(() => {
         loadInitialData();
     }, [page, perPage]);
+
+    useEffect(() => {
+        const timerId = setTimeout(() => {
+            setPage(1);
+            loadInitialData();
+        }, 700);
+
+        return () => {
+            clearTimeout(timerId);
+        };
+    }, [filter]);
 
     return (
         <DataContext.Provider

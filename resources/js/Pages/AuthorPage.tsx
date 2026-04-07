@@ -16,10 +16,10 @@ import {
     PaginationPrevious,
 } from "@/components/ui/pagination";
 import {
-    Collapsible,
-    CollapsiblePanel,
-    CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+    Popover,
+    PopoverTrigger,
+    PopoverContent,
+} from "@/components/ui/popover";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
 
 const AuthorPage = () => {
@@ -33,6 +33,7 @@ const AuthorPage = () => {
         perPage,
         setPage,
         setPerPage,
+        filter,
         setFilter,
     } = useData();
 
@@ -60,6 +61,7 @@ const AuthorPage = () => {
             <Input
                 placeholder="Buscar..."
                 onChange={(e) => setFilter(e.target.value)}
+                value={filter}
             />
             <DataTable
                 title={
@@ -155,18 +157,23 @@ const AuthorPage = () => {
                             onClick={() => setPage(totalPages)}
                         ></ChevronsRight>
                     </PaginationItem>
-                    <PaginationItem className="relative">
-                        <Collapsible>
-                            <CollapsibleTrigger className="h-9 w-9 p-0 flex items-center justify-center hover:bg-accent rounded-md transition-colors">
-                                <PaginationEllipsis />
-                            </CollapsibleTrigger>
-                            <CollapsiblePanel
+                    <PaginationItem>
+                        <Popover>
+                            <PopoverTrigger
                                 className={
-                                    "absolute top-full right-0 z-50 mt-2 min-w-[100px] rounded-md border bg-popover p-2 shadow-md"
+                                    "flex h-9 w-9 items-center justify-center rounded-md hover:bg-accent transition-colors cursor-pointer"
                                 }
                             >
-                                <h6 className="mb-2 px-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-                                    Autores por página
+                                <PaginationEllipsis />
+                            </PopoverTrigger>
+
+                            <PopoverContent
+                                className="w-32 p-2 bg-gray-800/60"
+                                align="end"
+                                side="top"
+                            >
+                                <h6 className="mb-2 px-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground text-white">
+                                    Autores por pagina
                                 </h6>
                                 <div className="flex flex-col gap-1">
                                     {[3, 5, 10].map((value) => (
@@ -178,14 +185,17 @@ const AuthorPage = () => {
                                                     : "ghost"
                                             }
                                             className="h-7 justify-start px-2 text-xs"
-                                            onClick={() => setPerPage(value)}
+                                            onClick={() => {
+                                                setPerPage(value);
+                                                setPage(1);
+                                            }}
                                         >
                                             {value} autores
                                         </Button>
                                     ))}
                                 </div>
-                            </CollapsiblePanel>
-                        </Collapsible>
+                            </PopoverContent>
+                        </Popover>
                     </PaginationItem>
                 </PaginationContent>
             </Pagination>
