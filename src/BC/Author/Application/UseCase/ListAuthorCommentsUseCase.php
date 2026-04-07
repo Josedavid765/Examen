@@ -23,6 +23,6 @@ class ListAuthorCommentsUseCase
         if (!$author) {
             throw new Exception("Author not found");
         }
-        return $this->commentRepo->listCommentsByAuthorId($id->value());
+        return $this->commentRepo->listCommentsByAuthorId($author->getAuthorIdValue());
     }
 }

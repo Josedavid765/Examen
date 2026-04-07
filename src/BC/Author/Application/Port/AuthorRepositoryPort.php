@@ -16,4 +16,6 @@ interface AuthorRepositoryPort
     public function deleteAuthor(AuthorIdValueObject $id): void;
 
     public function listAuthors() : array;
+
+    public function filterAuthors(?string $fullname, int $page = 1, int $perPage=10) : array;
 }

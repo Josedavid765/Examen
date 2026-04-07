@@ -26,7 +26,7 @@ class DeleteAuthorUseCase
         }
 
         do {
-            $deletedCommentsCount = $this->commentRepo->deleteCommentsByAuthorIdBatch($authorId->value(), $limit);
+            $deletedCommentsCount = $this->commentRepo->deleteCommentsByAuthorIdBatch($author->getAuthorIdValue(), $limit);
         } while ($deletedCommentsCount >= $limit);
 
         do {
