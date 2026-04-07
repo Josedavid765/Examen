@@ -10,17 +10,17 @@ trait ListAuthorTrait
     {   
         $query = AuthorModel::query();
 
-        if($fullName)
-        {
-            $query->where(function ($q) use ($fullName)
-                    {
-                        $q->where('first_name', 'LIKE', "%{$fullName}%")
-                          ->orWhere('last_name', 'LIKE', "%{$fullName}%");
-                    });
-        }
+    if (!empty($fullName)) {
+        $filter = mb_strtolower($fullName, 'UTF-8');
 
-        $paginator = $query->paginate($perPage, ['*'], 'page', $page);
+        $query->where(function ($q) use ($filter) {
+            $q->whereRaw('LOWER(first_name) LIKE ?', ["%{$filter}%"])
+              ->orWhereRaw('LOWER(last_name) LIKE ?', ["%{$filter}%"]);
+        });
+    }
 
+        $paginator = $query->paginate(perPage: $perPage, page: $page);
+        
         return [
             'items' => array_map(
                 fn($model) => AuthorHydrators::toDomain($model), 
