@@ -21,7 +21,9 @@ class ListAuthorsController extends Controller
         $perPage  = (int) $request->query('perPage', 3);
 
 
-        $result = $this->useCase->execute($fullName, $page, $perPage);
+        $direction = $request->query('direction', 'asc');
+
+        $result = $this->useCase->execute($fullName, $page, $perPage, $direction);
 
         $authors = array_map(fn($author) => [
             'id'        => $author->getAuthorIdValue(),

@@ -6,7 +6,7 @@ use Src\BC\Author\Infrastructure\Hydrators\AuthorHydrators;
 
 trait ListAuthorTrait
 {
-    public function listAuthors(?string $fullName = null, int $page = 1, int $perPage = 10): array
+    public function listAuthors(?string $fullName = null, int $page = 1, int $perPage = 10, string $direction = 'asc'): array
     {
         $query = AuthorModel::query();
 
@@ -19,8 +19,11 @@ trait ListAuthorTrait
         });
     }
 
-        $paginator = $query->paginate(perPage: $perPage, page: $page);
-        
+    $query->orderBy('first_name', $direction)
+          ->orderBy('last_name', $direction);
+
+    $paginator = $query->paginate(perPage: $perPage, page: $page);
+
         return [
             'items' => array_map(
                 fn($model) => AuthorHydrators::toDomain($model),
