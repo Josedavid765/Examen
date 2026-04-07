@@ -13,15 +13,15 @@ class ListAuthorsController extends Controller
 
     public function __invoke(Request $request): JsonResponse
     {
-        
+
         $fullName = $request->query('fullname');
         $page     = (int) $request->query('page', 1);
-        $perPage  = (int) $request->query('perPage', 10);
+        $perPage  = (int) $request->query('perPage', 3);
 
-        
+
         $result = $this->useCase->execute($fullName, $page, $perPage);
 
-        
+
         $authors = array_map(fn($author) => [
             'id'        => $author->getAuthorIdValue(),
             'fullName'  => $author->getFullName(),

@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Author } from "@/models/Author";
 import { useData } from "@/contexts/DataContext";
+import { Spinner } from "@/components/ui/spinner";
 
 const AuthorFormPage = () => {
     const { id } = useParams<{ id: string }>(); // Captura el ID de la URL si existe
@@ -21,14 +22,13 @@ const AuthorFormPage = () => {
 
     const isEditMode = Boolean(id);
 
-    // 1. Si estamos en modo edición, cargamos los datos del autor
+    // Si estamos en modo edición, cargamos los datos del autor
     useEffect(() => {
         if (isEditMode && id) {
             setInitialLoading(true);
             apiService
                 .getAuthor(id)
                 .then((res: any) => {
-                    // Ajustamos dependiendo de si tu API devuelve .data o el objeto directo
                     const data = res.data || res;
                     setAuthor(data);
                     console.log(data);
@@ -38,7 +38,6 @@ const AuthorFormPage = () => {
         }
     }, [id, isEditMode]);
 
-    // 2. Manejador del envío del formulario (FormData para no usar mil estados)
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
@@ -68,7 +67,12 @@ const AuthorFormPage = () => {
 
     if (initialLoading)
         return (
-            <div className="p-10 text-center">Cargando datos del autor...</div>
+            <>
+                <div className="p-10 text-center">
+                    Cargando datos del autor...
+                </div>
+                <Spinner className="absolute top-1/4 left-1/2 size-16" />
+            </>
         );
 
     return (

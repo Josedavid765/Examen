@@ -10,8 +10,23 @@ const headers = {
 };
 
 export const apiService = {
-    getAuthors: async () => {
-        const response = await fetch(`${BASE_URL}/authors`, { headers });
+    getAuthors: async (
+        fullname?: string,
+        page: number = 1,
+        perPage: number = 3,
+    ) => {
+        const params = new URLSearchParams();
+        console.log(params.toString());
+        if (fullname && fullname.trim() !== "") {
+            params.append("fullname", fullname);
+        }
+        params.append("page", page.toString());
+        params.append("perPage", perPage.toString());
+
+        const response = await fetch(
+            `${BASE_URL}/authors?${params.toString()}`,
+            { headers },
+        );
         if (!response.ok) throw new Error("Error obteniendo autores");
         return await response.json();
     },

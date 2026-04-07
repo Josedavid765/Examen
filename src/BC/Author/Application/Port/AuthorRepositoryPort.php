@@ -11,9 +11,9 @@ interface AuthorRepositoryPort
 
     public function readAuthor(AuthorIdValueObject $id): ?Author;
 
-    public function updateAuthor(Author $author): void ; 
+    public function updateAuthor(Author $author): void ;
 
     public function deleteAuthor(AuthorIdValueObject $id): void;
 
-    public function listAuthors(?string $fullName = null, int $page=1, int $perPage=10) : array;
+    public function listAuthors(?string $fullName = null, int $page=1, int $perPage=3) : array;
 }
