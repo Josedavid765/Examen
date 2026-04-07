@@ -11,13 +11,14 @@ import { Post } from "../models/Post";
 
 interface DataContextType {
     authors: Author[];
+    totalAuthors: number;
     posts: Post[];
     loading: boolean;
     page: number;
     setPage: (page: number) => void;
     totalPages: number;
-    fullname: string;
-    setFullname: (fullname: string) => void;
+    filter: string;
+    setFilter: (filter: string) => void;
     perPage: number;
     setPerPage: (perPage: number) => void;
     refreshData: () => Promise<void>;
@@ -26,26 +27,31 @@ interface DataContextType {
 const DataContext = createContext<DataContextType | undefined>(undefined);
 
 export const DataProvider = ({ children }: { children: ReactNode }) => {
+    const queryParams = new URLSearchParams(window.location.search);
     const [authors, setAuthors] = useState<Author[]>([]);
     const [posts, setPosts] = useState<Post[]>([]);
     const [loading, setLoading] = useState(true);
-    const [fullname, setFullname] = useState("");
-    const [page, setPage] = useState(1);
+    const [filter, setFilter] = useState(queryParams.get("fullname") || "");
+    const [page, setPage] = useState(
+        queryParams.get("page") ? parseInt(queryParams.get("page") || "1") : 1,
+    );
     const [totalPages, setTotalPages] = useState(1);
-    const [perPage, setPerPage] = useState(3);
+    const [totalAuthors, setTotalAuthors] = useState(0);
+    const [perPage, setPerPage] = useState(
+        queryParams.get("perPage")
+            ? parseInt(queryParams.get("perPage") || "3")
+            : 3,
+    );
 
     const loadInitialData = async () => {
         setLoading(true);
         try {
-            const queryParams = new URLSearchParams(window.location.search);
-            setFullname(queryParams.get("fullname") || "");
-            setPage(parseInt(queryParams.get("page") || "1"));
-            setPerPage(parseInt(queryParams.get("perPage") || "3"));
             const [authorsData, postsData] = await Promise.all([
-                apiService.getAuthors(fullname, page, perPage),
+                apiService.getAuthors(filter, page, perPage),
                 apiService.getPosts(),
             ]);
-
+            setTotalPages(authorsData.meta?.lastPage || 1);
+            setTotalAuthors(authorsData.meta?.total || 0);
             setAuthors(authorsData.data || []);
 
             if (authorsData.meta && authorsData.meta.lastPage) {
@@ -63,19 +69,20 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     // useEffect para la carga inicial automática
     useEffect(() => {
         loadInitialData();
-    }, [fullname, page, perPage]);
+    }, [page, perPage]);
 
     return (
         <DataContext.Provider
             value={{
                 authors,
+                totalAuthors,
                 posts,
                 loading,
                 page,
                 setPage,
                 totalPages,
-                fullname,
-                setFullname,
+                filter,
+                setFilter,
                 perPage,
                 setPerPage,
                 refreshData: loadInitialData,

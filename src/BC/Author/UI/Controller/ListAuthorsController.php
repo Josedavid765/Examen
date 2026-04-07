@@ -15,7 +15,7 @@ class ListAuthorsController extends Controller
     {
 
         $fullName = $request->query('fullname');
-        $fullName = $fullName ? mb_strtolower($fullName, 'UTF-8') : null; 
+        $fullName = $fullName ? mb_strtolower($fullName, 'UTF-8') : null;
 
         $page     = (int) $request->query('page', 1);
         $perPage  = (int) $request->query('perPage', 3);
@@ -23,10 +23,6 @@ class ListAuthorsController extends Controller
 
         $result = $this->useCase->execute($fullName, $page, $perPage);
 
-<<<<<<< HEAD
-
-=======
->>>>>>> febe96d3e96963b5f9d07ed5460efda4f53af213
         $authors = array_map(fn($author) => [
             'id'        => $author->getAuthorIdValue(),
             'fullName'  => $author->getFullName(),

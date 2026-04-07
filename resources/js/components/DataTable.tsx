@@ -17,6 +17,7 @@ interface DataTableProps {
     rows: any[];
     renderRow: (row: any) => React.ReactNode;
     onAdd?: () => void;
+    filter?: string;
 }
 
 export default function DataTable({
@@ -29,11 +30,11 @@ export default function DataTable({
     return (
         <TableContainer
             component={Paper}
-            sx={{ mb: 4, boxShadow: 3, overflow: "hidden" }}
+            sx={{ mb: 4, boxShadow: 3, overflow: "hidden", borderRadius: 6 }}
         >
             <div className="flex items-center justify-between p-4 bg-slate-50 border-b">
                 <Typography variant="h6" className="font-bold text-slate-700">
-                    {title}: {rows.length}
+                    {title}
                 </Typography>
 
                 {onAdd && (
