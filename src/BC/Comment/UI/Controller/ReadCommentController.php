@@ -20,10 +20,10 @@ class ReadCommentController extends Controller
             return response()->json([
                 'id'           => $comment->getCommentIdValue(),
                 'description'  => $comment->getDescriptionValue(),
-                'author_id'    => $comment->getAuthorIdValue(),
+                'authorId'    => $comment->getAuthorIdValue(),
                 'status'       => $comment->getStatusValue(),
-                'post_id'      => $comment->getPostIdValue(),
-                'comment_date' => $comment->getCommentDateValue(),
+                'postId'      => $comment->getPostIdValue(),
+                'commentDate' => $comment->getCommentDateValue(),
             ], 200);
 
         } catch (\Exception $e) {
