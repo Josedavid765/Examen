@@ -20,12 +20,12 @@ class ListPostsController
             $data = array_map(function ($post) {
                 return [
                     'id'           => $post->getPostIdValue(),
-                    'author_id'    => $post->getAuthorIdValue(),
+                    'authorId'    => $post->getAuthorIdValue(),
                     'subject'      => $post->getSubjectValue(),
                     'description'  => $post->getDescriptionValue(),
-                    'publish_date' => $post->getPublishDateValue(),
+                    'publishDate' => $post->getPublishDateValue(),
                     'status'       => $post->getStatusValue(),
-                    'num_comments' => $post->getNumCommentsValue(),
+                    'numComments' => $post->getNumCommentsValue(),
                 ];
             }, $posts);
 
