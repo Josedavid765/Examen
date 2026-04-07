@@ -14,14 +14,15 @@ export const apiService = {
         fullname?: string,
         page: number = 1,
         perPage: number = 3,
+        order?: string,
     ) => {
         const params = new URLSearchParams();
-        console.log(params.toString());
         if (fullname && fullname.trim() !== "") {
             params.append("fullname", fullname);
         }
         params.append("page", page.toString());
         params.append("perPage", perPage.toString());
+        if (order) params.append("order", order);
 
         const response = await fetch(
             `${BASE_URL}/authors?${params.toString()}`,

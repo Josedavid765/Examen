@@ -21,6 +21,8 @@ interface DataContextType {
     setFilter: (filter: string) => void;
     perPage: number;
     setPerPage: (perPage: number) => void;
+    order?: string;
+    setOrder?: (order: string) => void;
     refreshData: () => Promise<void>;
 }
 
@@ -42,12 +44,13 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
             ? parseInt(queryParams.get("perPage") || "3")
             : 3,
     );
+    const [order, setOrder] = useState(queryParams.get("order") || "birthDate");
 
     const loadInitialData = async () => {
         setLoading(true);
         try {
             const [authorsData, postsData] = await Promise.all([
-                apiService.getAuthors(filter, page, perPage),
+                apiService.getAuthors(filter, page, perPage, order),
                 apiService.getPosts(),
             ]);
 
@@ -68,7 +71,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     // useEffect para la carga inicial automática
     useEffect(() => {
         loadInitialData();
-    }, [page, perPage]);
+    }, [page, perPage, order]);
 
     useEffect(() => {
         const timerId = setTimeout(() => {
@@ -95,6 +98,8 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
                 setFilter,
                 perPage,
                 setPerPage,
+                order,
+                setOrder,
                 refreshData: loadInitialData,
             }}
         >

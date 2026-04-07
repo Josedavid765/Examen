@@ -9,6 +9,7 @@ import {
     Paper,
     Typography,
 } from "@mui/material";
+import { LucideChevronDown, LucideChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 
@@ -23,7 +24,7 @@ interface DataTableProps {
     renderRow: (row: any) => React.ReactNode;
     onAdd?: () => void;
     filter?: string;
-    order: string;
+    order?: string;
     setOrder?: (order: string) => void;
 }
 
@@ -36,6 +37,15 @@ export default function DataTable({
     order,
     setOrder,
 }: DataTableProps) {
+    const handleSort = (id: string) => {
+        if (!setOrder) return;
+
+        if (order === `${id},ASC`) {
+            setOrder(`${id},DESC`);
+        } else {
+            setOrder(`${id},ASC`);
+        }
+    };
     return (
         <TableContainer
             component={Paper}
@@ -59,12 +69,26 @@ export default function DataTable({
             <Table sx={{ minWidth: 650 }} aria-label="custom table">
                 <TableHead sx={{ backgroundColor: "#1976d2" }}>
                     <TableRow>
-                        {headers.map((header) => (
+                        {headers.map((header: Header) => (
                             <TableCell
                                 key={header.id}
-                                sx={{ color: "white", fontWeight: "bold" }}
+                                sx={{
+                                    color: "white",
+                                    fontWeight: "bold",
+                                    cursor: "pointer",
+                                    "&:hover": { backgroundColor: "#1565c0" },
+                                }}
+                                onClick={() => handleSort(header.id)}
                             >
-                                {header.name}
+                                <div className="flex items-center gap-1">
+                                    {order?.split("-")[0] === header.id &&
+                                        (order.split("-")[1] === "ASC" ? (
+                                            <LucideChevronUp className="w-4 h-4" />
+                                        ) : (
+                                            <LucideChevronDown className="w-4 h-4" />
+                                        ))}
+                                    {header.name}
+                                </div>
                             </TableCell>
                         ))}
                     </TableRow>

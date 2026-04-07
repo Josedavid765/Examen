@@ -1,4 +1,4 @@
-import { CircularProgress, TableCell, TableRow } from "@mui/material";
+import { TableCell, TableRow } from "@mui/material";
 import DataTable from "../components/DataTable";
 import { Author } from "../models/Author";
 import { useData } from "../contexts/DataContext";
@@ -38,7 +38,7 @@ const AuthorPage = () => {
         setFilter,
     } = useData();
 
-    const [order, setOrder] = useState("birthDate:ASC");
+    const [order, setOrder] = useState("birthDate");
 
     console.log(authors);
 
