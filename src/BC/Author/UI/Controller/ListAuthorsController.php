@@ -21,6 +21,7 @@ class ListAuthorsController extends Controller
         $perPage  = (int) $request->query('perPage', 3);
 
 
+        
         $direction = $request->query('direction', 'asc');
 
         $result = $this->useCase->execute($fullName, $page, $perPage, $direction);
@@ -36,7 +37,7 @@ class ListAuthorsController extends Controller
         return response()->json([
             'status' => 'success',
             'data'   => $authors,
-            'meta'   => $result['pagination']
+            'meta'   => $result['pagination']       
         ]);
     }
 }
