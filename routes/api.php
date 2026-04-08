@@ -23,20 +23,20 @@ use Src\BC\Comment\UI\Controller\ListCommentsByAuthorIdController;
 
 Route::prefix('authors')->group(function () {
     Route::post('/', CreateAuthorController::class);
-    Route::get('/', ListAuthorsController::class);
     Route::get('/{id}', ReadAuthorController::class);
     Route::put('/{id}', UpdateAuthorController::class);
     Route::delete('/{id}', DeleteAuthorController::class);
     Route::get('/{id}/posts', ListAuthorPostsController::class);
+    Route::get('/', ListAuthorsController::class);
     Route::get('/{id}/comments', ListCommentsByAuthorIdController::class);
 });
 
 Route::prefix('posts')->group(function () {
-    Route::get('/', ListPostsController::class);
     Route::post('/', CreatePostController::class);
     Route::get('/{id}', ReadPostController::class);
     Route::put('/{id}', UpdatePostController::class);
     Route::delete('/{id}', DeletePostController::class);
+    Route::get('/', ListPostsController::class);
     Route::get('/{id}/comments', ListCommentsByPostIdController::class);
 });
 
