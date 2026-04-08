@@ -19,18 +19,18 @@ class ListAuthorsController extends Controller
         $page     = (int) $request->query('page', 1);
         $perPage  = (int) $request->query('perPage', 10);
 
-        $sortParam = $request->query('order', '+id');
-        $direction = str_starts_with($sortParam, '-') ? 'desc' : 'asc';
-        $orderInput = ltrim($sortParam, '+-');
+        $orderParam = $request->query('order', '+id');
+        $direction = str_starts_with($orderParam, '-') ? 'desc' : 'asc';
+        $orderInput = ltrim($orderParam, '+-');
 
-        $sortMap = [
+        $orderMap = [
             'id'        => 'id',
             'firstName' => 'first_name',
             'lastName'  => 'last_name',
             'birthDate' => 'birth_date',
         ];
 
-        $order = $sortMap[$orderInput] ?? 'id';
+        $order = $orderMap[$orderInput] ?? 'id';
 
         $result = $this->useCase->execute($fullName, $page, $perPage, $order, $direction);
 
