@@ -7,15 +7,25 @@ use Src\BC\Post\Infrastructure\Hydrators\PostHydrator;
 
 trait ListPostsTrait
 {
-    public function listPosts(): array
+    public function listPosts(string $order='publishDate', string $direction='asc',int $page=1, int $perPage=10): array
     {
-        $postModels = PostModel::all();
-        $posts = [];
+        $query = PostModel::query();
 
-        foreach ($postModels as $model) {
-            $posts[] = PostHydrator::toDomain($model);
-        }
+        $query->orderBy($order, $direction);
 
-        return $posts;
+        $paginator = $query->paginate(perPage: $perPage, page: $page);
+
+        return [
+            'items' => array_map(
+                fn($model) => PostHydrator::toDomain($model),
+                $paginator->items()
+            ),
+            'pagination' => [
+                'total'         => $paginator->total(),
+                'perPage'       => $paginator->perPage(),
+                'currentPage'   => $paginator->currentPage(),
+                'lastPage'      => $paginator->lastPage(),
+            ]
+        ];
     }
 }
