@@ -9,14 +9,26 @@ import {
     Paper,
     Typography,
 } from "@mui/material";
+import { LucideChevronDown, LucideChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+
+type Header = {
+    id: string;
+    name: string;
+};
 interface DataTableProps {
     title: string;
-    headers: string[];
+    headers: Header[];
     rows: any[];
     renderRow: (row: any) => React.ReactNode;
     onAdd?: () => void;
+    filter?: string;
+    order?: string;
+    setOrder?: (order: string) => void;
+    loading?: boolean;
+    perPage?: number;
 }
 
 export default function DataTable({
@@ -25,15 +37,30 @@ export default function DataTable({
     rows,
     renderRow,
     onAdd,
+    order,
+    setOrder,
+    loading,
+    perPage = 5,
 }: DataTableProps) {
+    const handleSort = (id: string) => {
+        if (!setOrder || id === "actions") return;
+
+        if (order === id) {
+            setOrder("-" + id);
+        } else if (order === "-" + id) {
+            setOrder("");
+        } else {
+            setOrder(id);
+        }
+    };
     return (
         <TableContainer
             component={Paper}
-            sx={{ mb: 4, boxShadow: 3, overflow: "hidden" }}
+            sx={{ mb: 4, boxShadow: 3, overflow: "hidden", borderRadius: 6 }}
         >
             <div className="flex items-center justify-between p-4 bg-slate-50 border-b">
                 <Typography variant="h6" className="font-bold text-slate-700">
-                    {title}: {rows.length}
+                    {title}
                 </Typography>
 
                 {onAdd && (
@@ -49,22 +76,68 @@ export default function DataTable({
             <Table sx={{ minWidth: 650 }} aria-label="custom table">
                 <TableHead sx={{ backgroundColor: "#1976d2" }}>
                     <TableRow>
-                        {headers.map((header) => (
+                        {headers.map((header: Header) => (
                             <TableCell
-                                key={header}
-                                sx={{ color: "white", fontWeight: "bold" }}
+                                key={header.id}
+                                sx={{
+                                    color: "white",
+                                    fontWeight: "bold",
+                                    cursor:
+                                        header.id === "actions"
+                                            ? "default"
+                                            : "pointer",
+                                    "&:hover": {
+                                        backgroundColor:
+                                            header.id === "actions"
+                                                ? "#1976d2"
+                                                : "#1565c0",
+                                    },
+                                }}
+                                onClick={() => handleSort(header.id)}
                             >
-                                {header}
+                                <div className="flex items-center gap-1">
+                                    {(order === header.id ||
+                                        order === "-" + header.id) &&
+                                        (order === header.id ? (
+                                            <LucideChevronUp className="w-4 h-4" />
+                                        ) : (
+                                            <LucideChevronDown className="w-4 h-4" />
+                                        ))}
+                                    {header.name}
+                                </div>
                             </TableCell>
                         ))}
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rows.length > 0 ? (
+                    {loading ? (
+                        Array.from({ length: perPage }).map((_, rowIndex) => (
+                            <TableRow key={`skeleton-row-${rowIndex}`}>
+                                {headers.map((header) => (
+                                    <TableCell
+                                        key={`skeleton-cell-${header.id}-${rowIndex}`}
+                                    >
+                                        {header.id === "actions" ? (
+                                            <div className="flex justify-center gap-1">
+                                                <Skeleton className="h-8 w-14 rounded-md bg-slate-200/60" />
+                                                <Skeleton className="h-8 w-16 rounded-md bg-slate-200/60" />
+                                            </div>
+                                        ) : (
+                                            <Skeleton className="h-4 w-[85%] bg-slate-200/60" />
+                                        )}
+                                    </TableCell>
+                                ))}
+                            </TableRow>
+                        ))
+                    ) : rows.length > 0 ? (
                         rows.map((row) => renderRow(row))
                     ) : (
                         <TableRow>
-                            <TableCell colSpan={headers.length} align="center">
+                            <TableCell
+                                colSpan={headers.length}
+                                align="center"
+                                sx={{ py: 6, color: "text.secondary" }}
+                            >
                                 No hay datos disponibles
                             </TableCell>
                         </TableRow>

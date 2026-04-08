@@ -11,7 +11,7 @@ interface AuthorRepositoryPort
 
     public function readAuthor(AuthorIdValueObject $id): ?Author;
 
-    public function updateAuthor(Author $author): void ; 
+    public function updateAuthor(Author $author): void ;
 
     public function deleteAuthor(AuthorIdValueObject $id): void;
 

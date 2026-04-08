@@ -5,6 +5,6 @@ export interface Comment {
     description: string;
     authorid: string;
     status: Status;
-    postid: string;
-    commentdate: string;
+    postId: string;
+    commentDate: string;
 }

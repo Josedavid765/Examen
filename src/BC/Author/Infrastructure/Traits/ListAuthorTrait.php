@@ -7,7 +7,7 @@ use Src\BC\Author\Infrastructure\Hydrators\AuthorHydrators;
 trait ListAuthorTrait
 {
     public function listAuthors(?string $fullName = null, int $page = 1, int $perPage = 10, string $order='id', string $direction = 'asc'): array
-    {   
+    {
         $query = AuthorModel::query();
 
     if (!empty($fullName)) {
@@ -25,7 +25,7 @@ trait ListAuthorTrait
 
         return [
             'items' => array_map(
-                fn($model) => AuthorHydrators::toDomain($model), 
+                fn($model) => AuthorHydrators::toDomain($model),
                 $paginator->items()
             ),
             'pagination' => [

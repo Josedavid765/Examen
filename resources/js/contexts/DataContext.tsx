@@ -11,25 +11,54 @@ import { Post } from "../models/Post";
 
 interface DataContextType {
     authors: Author[];
+    totalAuthors: number;
     posts: Post[];
     loading: boolean;
+    page: number;
+    setPage: (page: number) => void;
+    totalPages: number;
+    filter: string;
+    setFilter: (filter: string) => void;
+    perPage: number;
+    setPerPage: (perPage: number) => void;
+    order?: string;
+    setOrder?: (order: string) => void;
     refreshData: () => Promise<void>;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
 
 export const DataProvider = ({ children }: { children: ReactNode }) => {
+    const queryParams = new URLSearchParams(window.location.search);
     const [authors, setAuthors] = useState<Author[]>([]);
     const [posts, setPosts] = useState<Post[]>([]);
     const [loading, setLoading] = useState(true);
+    const [filter, setFilter] = useState(queryParams.get("fullname") || "");
+    const [page, setPage] = useState(
+        queryParams.get("page") ? parseInt(queryParams.get("page") || "1") : 1,
+    );
+    const [totalPages, setTotalPages] = useState(1);
+    const [totalAuthors, setTotalAuthors] = useState(0);
+    const [perPage, setPerPage] = useState(
+        queryParams.get("perPage")
+            ? parseInt(queryParams.get("perPage") || "3")
+            : 3,
+    );
+    const [order, setOrder] = useState(queryParams.get("order") || "birthDate");
 
     const loadInitialData = async () => {
         setLoading(true);
         try {
             const [authorsData, postsData] = await Promise.all([
-                apiService.getAuthors(),
+                apiService.getAuthors(filter, page, perPage, order),
                 apiService.getPosts(),
             ]);
+
+            if (authorsData.meta) {
+                setTotalPages(authorsData.meta.lastPage || 1);
+                setTotalAuthors(authorsData.meta?.total || 0);
+            }
+
             setAuthors(authorsData.data || []);
             setPosts(postsData.data || []);
         } catch (error) {
@@ -39,14 +68,39 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
-    // useEffect para la carga inicial automática
     useEffect(() => {
         loadInitialData();
-    }, []);
+    }, [page, perPage, order]);
+
+    useEffect(() => {
+        const timerId = setTimeout(() => {
+            setPage(1);
+            loadInitialData();
+        }, 700);
+
+        return () => {
+            clearTimeout(timerId);
+        };
+    }, [filter]);
 
     return (
         <DataContext.Provider
-            value={{ authors, posts, loading, refreshData: loadInitialData }}
+            value={{
+                authors,
+                totalAuthors,
+                posts,
+                loading,
+                page,
+                setPage,
+                totalPages,
+                filter,
+                setFilter,
+                perPage,
+                setPerPage,
+                order,
+                setOrder,
+                refreshData: loadInitialData,
+            }}
         >
             {children}
         </DataContext.Provider>

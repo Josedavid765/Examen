@@ -9,9 +9,26 @@ const headers = {
     Accept: "application/json",
 };
 
+//necesito esto para hacer el push XD
 export const apiService = {
-    getAuthors: async () => {
-        const response = await fetch(`${BASE_URL}/authors`, { headers });
+    getAuthors: async (
+        fullname?: string,
+        page: number = 1,
+        perPage: number = 3,
+        order?: string,
+    ) => {
+        const params = new URLSearchParams();
+        if (fullname && fullname.trim() !== "") {
+            params.append("fullname", fullname);
+        }
+        params.append("page", page.toString());
+        params.append("perPage", perPage.toString());
+        if (order) params.append("order", order);
+
+        const response = await fetch(
+            `${BASE_URL}/authors?${params.toString()}`,
+            { headers },
+        );
         if (!response.ok) throw new Error("Error obteniendo autores");
         return await response.json();
     },
@@ -23,6 +40,7 @@ export const apiService = {
     },
 
     createAuthor: async (data: Omit<Author, "id">): Promise<Author> => {
+        console.log(data);
         const response = await fetch(`${BASE_URL}/authors`, {
             method: "POST",
             headers,
