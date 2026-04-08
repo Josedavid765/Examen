@@ -11,9 +11,9 @@ class ListCommentsByPostIdUseCase
         private CommentRepositoryPort $repository
     ) {}
 
-    public function execute(string $postId): array
+    public function execute(string $postId, string $order = 'commentDate', string $direction = 'desc', int $page = 1, int $perPage = 10): array
     {
         $postIdVO = new CommentPostIdValueObject($postId);
-        return $this->repository->listByPostID($postIdVO);
+        return $this->repository->listByPostID($postIdVO, $order, $direction, $page, $perPage);
     }
 }

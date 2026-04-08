@@ -11,9 +11,9 @@ class ListCommentsByAuthorIdUseCase
         private CommentRepositoryPort $repository
     ) {}
 
-    public function execute(string $authorId): array
+    public function execute(string $authorId, string $order = 'commentDate', string $direction = 'desc', int $page = 1, int $perPage = 10): array
     {
         $authorIdVO = new CommentAuthorIdValueObject($authorId);
-        return $this->repository->listCommentsByAuthorId($authorIdVO);
+        return $this->repository->listCommentsByAuthorId($authorIdVO, $order, $direction, $page, $perPage);
     }
 }

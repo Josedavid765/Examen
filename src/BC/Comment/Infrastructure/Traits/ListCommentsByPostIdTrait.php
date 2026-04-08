@@ -8,11 +8,25 @@ use Src\BC\Comment\Domain\ValueObject\CommentPostIdValueObject ;
 
 trait ListCommentsByPostIdTrait
 {
-    public function listByPostID(CommentPostIdValueObject $postId): array
+    public function listByPostID(CommentPostIdValueObject $postId, string $order = 'commentDate', string $direction = 'desc', int $page = 1, int $perPage = 10): array
     {
-        return CommentModel::where('post_id', $postId->value())
-            ->get()
-            ->map(fn($model) => CommentHydrator::toDomain($model))
-            ->toArray();
+        $query = CommentModel::where('post_id', $postId->value());
+
+        $query->orderBy($order, $direction);
+
+        $paginator = $query->paginate(perPage: $perPage, page: $page);
+
+        return [
+            'items' => array_map(
+                fn($model) => CommentHydrator::toDomain($model),
+                $paginator->items()
+            ),
+            'pagination' => [
+                'total'         => $paginator->total(),
+                'perPage'       => $paginator->perPage(),
+                'currentPage'   => $paginator->currentPage(),
+                'lastPage'      => $paginator->lastPage(),
+            ]
+        ];
     }
 }

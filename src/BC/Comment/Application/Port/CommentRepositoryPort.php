@@ -15,11 +15,11 @@ interface CommentRepositoryPort
 
     public function deleteComment(CommentIdValueObject $id):void;
 
-    public function listCommentsByAuthorId(string $authorId):array;
+    public function listCommentsByAuthorId(string $authorId, string $order = 'commentDate', string $direction = 'desc', int $page = 1, int $perPage = 10 ):array;
 
     public function deleteCommentsByAuthorIdBatch(string $authorId, int $limit):int;
     
-    public function listByPostID(CommentPostIdValueObject $postId):array;
+    public function listByPostID(CommentPostIdValueObject $postId, string $order = 'commentDate', string $direction = 'desc', int $page = 1, int $perPage = 10):array;
     
     public function deleteCommentsByPostId(CommentPostIdValueObject $postId):void;
 }
