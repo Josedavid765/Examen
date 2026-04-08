@@ -11,7 +11,9 @@ import {
 // Contextos y Páginas
 import { DataProvider } from "./contexts/DataContext.tsx";
 import AuthorPage from "./Pages/AuthorPage.tsx";
-import AuthorFormPage from "./Pages/AuthorFormPage.tsx"; // Asegúrate de crear este archivo
+import AuthorFormPage from "./Pages/AuthorFormPage.tsx";
+// NUEVO: Importamos la página de Posts
+import PostPage from "./Pages/PostPage.tsx"; 
 
 const App: React.FC = () => {
     return (
@@ -39,6 +41,12 @@ const App: React.FC = () => {
                             <Route
                                 path="/authors/edit/:id"
                                 element={<AuthorFormPage />}
+                            />
+
+                            {/* NUEVO: Ruta para ver los posts de un autor específico */}
+                            <Route 
+                                path="/authors/:id/posts" 
+                                element={<PostPage />} 
                             />
 
                             {/* Ruta 404 simple */}

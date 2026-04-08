@@ -26,8 +26,8 @@ Route::prefix('authors')->group(function () {
     Route::get('/{id}', ReadAuthorController::class);
     Route::put('/{id}', UpdateAuthorController::class);
     Route::delete('/{id}', DeleteAuthorController::class);
-    Route::get('/{id}/posts', ListAuthorPostsController::class);
     Route::get('/', ListAuthorsController::class);
+    Route::get('/{id}/posts', ListAuthorPostsController::class);
     Route::get('/{id}/comments', ListCommentsByAuthorIdController::class);
 });
 

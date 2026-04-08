@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { TableCell, TableRow } from "@mui/material";
 import DataTable from "../components/DataTable";
 import { Author } from "../models/Author";
@@ -21,6 +22,15 @@ import {
     PopoverContent,
 } from "@/components/ui/popover";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
+// Borra el import de alert-dialog y pega este:
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 const AuthorPage = () => {
     const { authors, loading } = useData();
@@ -39,7 +49,15 @@ const AuthorPage = () => {
         setOrder,
     } = useData();
 
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+    const [authorIdToDelete, setAuthorIdToDelete] = useState<string | null>(null);
+
     console.log(authors);
+
+    const handleOpenDeleteDialog = (id: string) => {
+        setAuthorIdToDelete(id);
+        setIsDeleteDialogOpen(true);
+    };
 
     const handleDelete = async (id: string) => {
         try {
@@ -48,6 +66,9 @@ const AuthorPage = () => {
         } catch (error) {
             console.log(error);
             alert("Hubo un error al eliminar el autor");
+        } finally {
+            setIsDeleteDialogOpen(false);
+            setAuthorIdToDelete(null);
         }
     };
 
@@ -95,17 +116,24 @@ const AuthorPage = () => {
                             {`${new Date(author.birthDate).getDate()}/${new Date(author.birthDate).getMonth() + 1}/${new Date(author.birthDate).getFullYear()}`}
                         </TableCell>
                         <TableCell className="flex justify-center align-middle space-x-1">
+                            {/* NUEVO BOTÓN PARA VER LOS POSTS */}
+                            <Button
+                                className={"border border-blue-600/20 px-2 bg-blue-100 text-blue-700 hover:bg-blue-200"}
+                                variant="secondary"
+                                onClick={() => navigate(`/authors/${author.id}/posts`)}
+                            >
+                                Mostrar Posts
+                            </Button>
+
                             <Button
                                 className={"border border-black/20 px-2"}
                                 variant="secondary"
-                                onClick={() =>
-                                    navigate(`/authors/edit/${author.id}`)
-                                }
+                                onClick={() => navigate(`/authors/edit/${author.id}`)}
                             >
                                 Editar
                             </Button>
                             <Button
-                                onClick={() => handleDelete(author.id)}
+                                onClick={() => handleOpenDeleteDialog(author.id)}
                                 className={"px-2"}
                                 variant="destructive"
                             >
@@ -200,6 +228,40 @@ const AuthorPage = () => {
                     </PaginationItem>
                 </PaginationContent>
             </Pagination>
+
+            {/* PEGAMOS EL NUEVO MODAL AQUÍ */}
+            <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>¿Estás completamente seguro?</DialogTitle>
+                        <DialogDescription>
+                            Esta acción no se puede deshacer. Esto eliminará permanentemente al autor
+                            y todos los posts o comentarios asociados.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter className="flex justify-end space-x-2 mt-4">
+                        <Button 
+                            variant="secondary" 
+                            onClick={() => {
+                                setAuthorIdToDelete(null);
+                                setIsDeleteDialogOpen(false); // ESTO CIERRA LA VENTANA
+                            }}
+                        >
+                            Cancelar
+                        </Button>
+                        <Button 
+                            variant="destructive"
+                            onClick={() => {
+                                if (authorIdToDelete) {
+                                    handleDelete(authorIdToDelete);
+                                }
+                            }}
+                        >
+                            Sí, eliminar autor
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </>
     );
 };
