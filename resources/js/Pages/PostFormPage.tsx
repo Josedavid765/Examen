@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { apiService } from "../services/apiService";
@@ -7,7 +7,8 @@ import { Status } from "../models/Status";
 import { Author } from "@/models/Author";
 
 const PostFormPage = () => {
-    const postId = "";
+    const { id } = useParams();
+    const postId = id || "";
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [authors, setAuthors] = useState<Author[]>([]);
