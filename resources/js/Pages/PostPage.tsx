@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { TableCell, TableRow } from "@mui/material";
 import DataTable from "../components/DataTable";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { apiService } from "../services/apiService";
 import { Post } from "../models/Post"; // Asegúrate de que este archivo existe
 import {
@@ -29,44 +28,39 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
+import { useData } from "../contexts/DataContext";
 
 const PostPage = () => {
-    const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
 
-    const [posts, setPosts] = useState<Post[]>([]);
-    const [loading, setLoading] = useState(false);
-    const [page, setPage] = useState(1);
-    const [perPage, setPerPage] = useState(10);
-    const [totalPages, setTotalPages] = useState(1);
-    const [totalPosts, setTotalPosts] = useState(0);
-    const [filter, setFilter] = useState("");
+    const {
+        posts,
+        authorId,
+        //setAuthorId,
+        loading,
+        page,
+        setPage,
+        perPage,
+        setPerPage,
+        totalPages,
+        totalPosts,
+        refreshData,
+        orderPost,
+        setOrderPost,
+    } = useData();
 
-    const [order, setOrder] = useState("-publishDate");
+    // const [posts, setPosts] = useState<Post[]>([]);
+    // const [loading, setLoading] = useState(false);
+    // const [page, setPage] = useState(1);
+    // const [perPage, setPerPage] = useState(10);
+    // const [totalPages, setTotalPages] = useState(1);
+    // const [totalPosts, setTotalPosts] = useState(0);
+    // const [filter, setFilter] = useState("");
+
+    // const [order, setOrder] = useState("-publishDate");
 
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const [postIdToDelete, setPostIdToDelete] = useState<string | null>(null);
-
-    const loadData = async () => {
-        if (!id) return;
-        setLoading(true);
-        try {
-            const response = await apiService.getAuthorPosts(id, page, perPage, order);
-            setPosts(response.data || []);
-            if (response.meta) {
-                setTotalPages(response.meta.last_page || 1);
-                setTotalPosts(response.meta.total || 0);
-            }
-        } catch (error) {
-            console.error("Error al cargar posts:", error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    useEffect(() => {
-        loadData();
-    }, [id, page, perPage, order]);
 
     const handleOpenDeleteDialog = (postId: string | number) => {
         setPostIdToDelete(String(postId));
@@ -76,7 +70,7 @@ const PostPage = () => {
     const handleDelete = async (postId: string) => {
         try {
             await apiService.deletePost(postId);
-            await loadData(); 
+            await refreshData();
         } catch (error) {
             console.error(error);
             alert("Hubo un error al eliminar el post");
@@ -91,19 +85,22 @@ const PostPage = () => {
             {}
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-bold text-white">
-                    Posts del Autor #{id}
+                    Posts del Autor #{authorId}
                 </h2>
-                <Button variant="secondary" onClick={() => navigate('/authors')}>
+                <Button
+                    variant="secondary"
+                    onClick={() => navigate("/authors")}
+                >
                     Volver a Autores
                 </Button>
             </div>
 
-            <Input
+            {/* <Input
                 className={"border border-gray-600/20 mb-4"}
                 placeholder="Buscar post..."
                 onChange={(e) => setFilter(e.target.value)}
                 value={filter}
-            />
+            /> */}
 
             <DataTable
                 loading={loading}
@@ -111,17 +108,20 @@ const PostPage = () => {
                 headers={[
                     { id: "id", name: "ID" },
                     { id: "title", name: "Título" },
-                    { id: "description", name: "Descripcion del Post" },
-                    { id: "status", name: "Status" },
-                    { id: "numComments", name: "Numero de Comentarios del Post" },
+                    { id: "description", name: "Descripcion" },
+                    { id: "status", name: "Estado" },
+                    {
+                        id: "numComments",
+                        name: "Numero de Comentarios",
+                    },
                     { id: "publishDate", name: "Fecha Publicación" },
                     { id: "actions", name: "Acciones" },
                 ]}
                 rows={posts}
-                order={order}
+                order={orderPost}
                 setOrder={(newOrder) => {
-                    if (newOrder.includes("publishDate")) {
-                        setOrder(newOrder);
+                    if (setOrderPost && newOrder.includes("publishDate")) {
+                        setOrderPost(newOrder);
                     }
                 }}
                 perPage={perPage}
@@ -134,13 +134,19 @@ const PostPage = () => {
                         <TableCell>{post.status}</TableCell>
                         <TableCell>{post.numComments}</TableCell>
                         <TableCell>
-                            {post.publishDate ? new Date(post.publishDate).toLocaleDateString() : 'Borrador'}
+                            {post.publishDate
+                                ? new Date(
+                                      post.publishDate,
+                                  ).toLocaleDateString()
+                                : "Borrador"}
                         </TableCell>
                         <TableCell className="flex justify-center align-middle space-x-1">
                             <Button
                                 className={"border border-black/20 px-2"}
                                 variant="secondary"
-                                onClick={() => navigate(`/posts/edit/${post.id}`)}
+                                onClick={() =>
+                                    navigate(`/posts/edit/${post.id}`)
+                                }
                             >
                                 Editar
                             </Button>
@@ -160,36 +166,74 @@ const PostPage = () => {
             <Pagination>
                 <PaginationContent>
                     <PaginationItem>
-                        <ChevronsLeft className="cursor-pointer pr-2" onClick={() => setPage(1)} />
+                        <ChevronsLeft
+                            className="cursor-pointer pr-2"
+                            onClick={() => setPage(1)}
+                        />
                     </PaginationItem>
                     <PaginationItem>
-                        <PaginationPrevious onClick={() => setPage(page - 1)} style={{ display: page === 1 ? "none" : "flex" }} />
+                        <PaginationPrevious
+                            onClick={() => setPage(page - 1)}
+                            style={{ display: page === 1 ? "none" : "flex" }}
+                        />
                     </PaginationItem>
-                    <PaginationLink onClick={() => setPage(page - 1)} style={{ display: page === 1 ? "none" : "flex" }}>
+                    <PaginationLink
+                        onClick={() => setPage(page - 1)}
+                        style={{ display: page === 1 ? "none" : "flex" }}
+                    >
                         {page - 1}
                     </PaginationLink>
                     <PaginationLink>{page}</PaginationLink>
-                    <PaginationLink onClick={() => setPage(page + 1)} style={{ display: page === totalPages ? "none" : "flex" }}>
+                    <PaginationLink
+                        onClick={() => setPage(page + 1)}
+                        style={{
+                            display: page === totalPages ? "none" : "flex",
+                        }}
+                    >
                         {page + 1}
                     </PaginationLink>
                     <PaginationItem>
-                        <PaginationNext onClick={() => setPage(page + 1)} style={{ display: page >= totalPages ? "none" : "flex" }} />
+                        <PaginationNext
+                            onClick={() => setPage(page + 1)}
+                            style={{
+                                display: page >= totalPages ? "none" : "flex",
+                            }}
+                        />
                     </PaginationItem>
                     <PaginationItem>
-                        <ChevronsRight className="cursor-pointer pl-2" onClick={() => setPage(totalPages)} />
+                        <ChevronsRight
+                            className="cursor-pointer pl-2"
+                            onClick={() => setPage(totalPages)}
+                        />
                     </PaginationItem>
                     <PaginationItem>
                         <Popover>
                             <PopoverTrigger className="flex h-9 w-9 items-center justify-center rounded-md hover:bg-accent transition-colors cursor-pointer">
                                 <PaginationEllipsis />
                             </PopoverTrigger>
-                            <PopoverContent className="w-32 p-2 bg-gray-800/60" align="end" side="top">
+                            <PopoverContent
+                                className="w-32 p-2 bg-gray-800/60"
+                                align="end"
+                                side="top"
+                            >
                                 <h6 className="mb-2 px-2 text-[10px] font-bold uppercase tracking-wider text-white">
                                     Posts por página
                                 </h6>
                                 <div className="flex flex-col gap-1">
                                     {[3, 5, 10].map((value) => (
-                                        <Button key={value} variant={perPage === value ? "secondary" : "ghost"} className="h-7 justify-start px-2 text-xs" onClick={() => { setPerPage(value); setPage(1); }}>
+                                        <Button
+                                            key={value}
+                                            variant={
+                                                perPage === value
+                                                    ? "secondary"
+                                                    : "ghost"
+                                            }
+                                            className="h-7 justify-start px-2 text-xs"
+                                            onClick={() => {
+                                                setPerPage(value);
+                                                setPage(1);
+                                            }}
+                                        >
                                             {value} posts
                                         </Button>
                                     ))}
@@ -201,19 +245,35 @@ const PostPage = () => {
             </Pagination>
 
             {}
-            <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+            <Dialog
+                open={isDeleteDialogOpen}
+                onOpenChange={setIsDeleteDialogOpen}
+            >
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>¿Estás completamente seguro?</DialogTitle>
                         <DialogDescription>
-                            Esta acción no se puede deshacer. Esto eliminará permanentemente el post.
+                            Esta acción no se puede deshacer. Esto eliminará
+                            permanentemente el post.
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter className="flex justify-end space-x-2 mt-4">
-                        <Button variant="secondary" onClick={() => { setPostIdToDelete(null); setIsDeleteDialogOpen(false); }}>
+                        <Button
+                            variant="secondary"
+                            onClick={() => {
+                                setPostIdToDelete(null);
+                                setIsDeleteDialogOpen(false);
+                            }}
+                        >
                             Cancelar
                         </Button>
-                        <Button variant="destructive" onClick={() => { if (postIdToDelete) handleDelete(postIdToDelete); }}>
+                        <Button
+                            variant="destructive"
+                            onClick={() => {
+                                if (postIdToDelete)
+                                    handleDelete(postIdToDelete);
+                            }}
+                        >
                             Sí, eliminar post
                         </Button>
                     </DialogFooter>

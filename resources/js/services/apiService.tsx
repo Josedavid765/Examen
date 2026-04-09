@@ -70,18 +70,25 @@ export const apiService = {
         if (!response.ok) throw new Error("Error eliminando autor");
     },
 
-    getAuthorPosts: async (authorId: string, page: number = 1, perPage: number = 10, order?: string): Promise<any> => {
+    getAuthorPosts: async (
+        authorId: string,
+        page: number = 1,
+        perPage: number = 10,
+        order?: string,
+    ): Promise<any> => {
         const params = new URLSearchParams();
         params.append("page", page.toString());
         params.append("perPage", perPage.toString());
-        
         if (order) params.append("order", order);
 
-        const response = await fetch(`${BASE_URL}/authors/${authorId}/posts?${params.toString()}`, {
-            headers,
-        });
+        const response = await fetch(
+            `${BASE_URL}/authors/${authorId}/posts?${params.toString()}`,
+            {
+                headers,
+            },
+        );
         if (!response.ok) throw new Error("Error obteniendo posts del autor");
-        
+
         return await response.json();
     },
 

@@ -11,8 +11,12 @@ import { Post } from "../models/Post";
 
 interface DataContextType {
     authors: Author[];
+    authorId: string;
+    setAuthorId: (authorId: string) => void;
     totalAuthors: number;
     posts: Post[];
+    setPosts: (posts: Post[]) => void;
+    totalPosts: number;
     loading: boolean;
     page: number;
     setPage: (page: number) => void;
@@ -21,8 +25,10 @@ interface DataContextType {
     setFilter: (filter: string) => void;
     perPage: number;
     setPerPage: (perPage: number) => void;
-    order?: string;
-    setOrder?: (order: string) => void;
+    orderAuthor?: string;
+    setOrderAuthor?: (order: string) => void;
+    orderPost?: string;
+    setOrderPost?: (order: string) => void;
     refreshData: () => Promise<void>;
 }
 
@@ -31,12 +37,14 @@ const DataContext = createContext<DataContextType | undefined>(undefined);
 export const DataProvider = ({ children }: { children: ReactNode }) => {
     const queryParams = new URLSearchParams(window.location.search);
     const [authors, setAuthors] = useState<Author[]>([]);
+    const [authorId, setAuthorId] = useState(queryParams.get("authorId") || "");
     const [posts, setPosts] = useState<Post[]>([]);
     const [loading, setLoading] = useState(true);
     const [filter, setFilter] = useState(queryParams.get("fullname") || "");
     const [page, setPage] = useState(
         queryParams.get("page") ? parseInt(queryParams.get("page") || "1") : 1,
     );
+    const [totalPosts, setTotalPosts] = useState(0);
     const [totalPages, setTotalPages] = useState(1);
     const [totalAuthors, setTotalAuthors] = useState(0);
     const [perPage, setPerPage] = useState(
@@ -44,18 +52,24 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
             ? parseInt(queryParams.get("perPage") || "3")
             : 3,
     );
-    const [order, setOrder] = useState(queryParams.get("order") || "birthDate");
+    const [orderAuthor, setOrderAuthor] = useState(
+        queryParams.get("order") || "birthDate",
+    );
+    const [orderPost, setOrderPost] = useState(
+        queryParams.get("order") || "publishDate",
+    );
 
     const loadInitialData = async () => {
         setLoading(true);
         try {
             const [authorsData, postsData] = await Promise.all([
-                apiService.getAuthors(filter, page, perPage, order),
-                apiService.getPosts(),
+                apiService.getAuthors(filter, page, perPage, orderAuthor),
+                apiService.getAuthorPosts(authorId, page, perPage, orderPost),
             ]);
 
             if (authorsData.meta) {
                 setTotalPages(authorsData.meta.lastPage || 1);
+                setTotalPosts(postsData.meta.total || 0);
                 setTotalAuthors(authorsData.meta?.total || 0);
             }
 
@@ -70,7 +84,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
 
     useEffect(() => {
         loadInitialData();
-    }, [page, perPage, order]);
+    }, [page, perPage, orderAuthor, orderPost]);
 
     useEffect(() => {
         const timerId = setTimeout(() => {
@@ -87,8 +101,12 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
         <DataContext.Provider
             value={{
                 authors,
+                authorId,
+                setAuthorId,
                 totalAuthors,
                 posts,
+                setPosts,
+                totalPosts,
                 loading,
                 page,
                 setPage,
@@ -97,8 +115,10 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
                 setFilter,
                 perPage,
                 setPerPage,
-                order,
-                setOrder,
+                orderAuthor,
+                setOrderAuthor,
+                orderPost,
+                setOrderPost,
                 refreshData: loadInitialData,
             }}
         >

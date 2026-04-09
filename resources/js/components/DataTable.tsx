@@ -74,23 +74,30 @@ export default function DataTable({
                 )}
             </div>
             <Table sx={{ minWidth: 650 }} aria-label="custom table">
-                <TableHead sx={{ backgroundColor: "#1976d2" }}>
+                <TableHead
+                    sx={{
+                        background:
+                            "linear-gradient(to right, #5B0FBE, #00d4ff)",
+                    }}
+                >
                     <TableRow>
                         {headers.map((header: Header) => (
                             <TableCell
                                 key={header.id}
                                 sx={{
                                     color: "white",
+                                    backgroundColor: "transparent",
                                     fontWeight: "bold",
+                                    transition: "background-color 0.2s ease",
                                     cursor:
                                         header.id === "actions"
                                             ? "default"
                                             : "pointer",
                                     "&:hover": {
                                         backgroundColor:
-                                            header.id === "actions"
-                                                ? "#1976d2"
-                                                : "#1565c0",
+                                            header.id !== "actions"
+                                                ? "rgba(255, 255, 255, 0.15)"
+                                                : "transparent",
                                     },
                                 }}
                                 onClick={() => handleSort(header.id)}
@@ -119,11 +126,12 @@ export default function DataTable({
                                     >
                                         {header.id === "actions" ? (
                                             <div className="flex justify-center gap-1">
-                                                <Skeleton className="h-8 w-14 rounded-md bg-slate-200/60" />
-                                                <Skeleton className="h-8 w-16 rounded-md bg-slate-200/60" />
+                                                <Skeleton className="h-8 w-14 rounded-md " />
+                                                <Skeleton className="h-8 w-16 rounded-md" />
+                                                <Skeleton className="h-8 w-16 rounded-md" />
                                             </div>
                                         ) : (
-                                            <Skeleton className="h-4 w-[85%] bg-slate-200/60" />
+                                            <Skeleton className="h-4 w-[85%]" />
                                         )}
                                     </TableCell>
                                 ))}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from "react";
 import { TableCell, TableRow } from "@mui/material";
 import DataTable from "../components/DataTable";
 import { Author } from "../models/Author";
@@ -22,14 +22,13 @@ import {
     PopoverContent,
 } from "@/components/ui/popover";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
-// Borra el import de alert-dialog y pega este:
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
 } from "@/components/ui/dialog";
 
 const AuthorPage = () => {
@@ -45,12 +44,14 @@ const AuthorPage = () => {
         setPerPage,
         filter,
         setFilter,
-        order,
-        setOrder,
+        orderAuthor,
+        setOrderAuthor,
     } = useData();
 
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-    const [authorIdToDelete, setAuthorIdToDelete] = useState<string | null>(null);
+    const [authorIdToDelete, setAuthorIdToDelete] = useState<string | null>(
+        null,
+    );
 
     console.log(authors);
 
@@ -102,8 +103,8 @@ const AuthorPage = () => {
                     { id: "actions", name: "Acciones" },
                 ]}
                 rows={authors}
-                order={order}
-                setOrder={setOrder}
+                order={orderAuthor}
+                setOrder={setOrderAuthor}
                 perPage={perPage}
                 onAdd={() => navigate("/authors/new")}
                 renderRow={(author: Author) => (
@@ -118,9 +119,13 @@ const AuthorPage = () => {
                         <TableCell className="flex justify-center align-middle space-x-1">
                             {/* NUEVO BOTÓN PARA VER LOS POSTS */}
                             <Button
-                                className={"border border-blue-600/20 px-2 bg-blue-100 text-blue-700 hover:bg-blue-200"}
+                                className={
+                                    "border border-blue-600/20 px-2 bg-blue-100 text-blue-700 hover:bg-blue-200"
+                                }
                                 variant="secondary"
-                                onClick={() => navigate(`/authors/${author.id}/posts`)}
+                                onClick={() =>
+                                    navigate(`/authors/${author.id}/posts`)
+                                }
                             >
                                 Mostrar Posts
                             </Button>
@@ -128,12 +133,16 @@ const AuthorPage = () => {
                             <Button
                                 className={"border border-black/20 px-2"}
                                 variant="secondary"
-                                onClick={() => navigate(`/authors/edit/${author.id}`)}
+                                onClick={() =>
+                                    navigate(`/authors/edit/${author.id}`)
+                                }
                             >
                                 Editar
                             </Button>
                             <Button
-                                onClick={() => handleOpenDeleteDialog(author.id)}
+                                onClick={() =>
+                                    handleOpenDeleteDialog(author.id)
+                                }
                                 className={"px-2"}
                                 variant="destructive"
                             >
@@ -195,9 +204,8 @@ const AuthorPage = () => {
                             >
                                 <PaginationEllipsis />
                             </PopoverTrigger>
-
                             <PopoverContent
-                                className="w-32 p-2 bg-gray-800/60"
+                                className="w-32 p-2 bg-gray-600/60"
                                 align="end"
                                 side="top"
                             >
@@ -230,18 +238,23 @@ const AuthorPage = () => {
             </Pagination>
 
             {/* PEGAMOS EL NUEVO MODAL AQUÍ */}
-            <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+            <Dialog
+                open={isDeleteDialogOpen}
+                onOpenChange={setIsDeleteDialogOpen}
+            >
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>¿Estás completamente seguro?</DialogTitle>
                         <DialogDescription>
-                            Esta acción no se puede deshacer. Esto eliminará permanentemente al autor
-                            y todos los posts o comentarios asociados.
+                            Esta acción no se puede deshacer. Esto eliminará
+                            permanentemente al autor y todos los posts o
+                            comentarios asociados.
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter className="flex justify-end space-x-2 mt-4">
-                        <Button 
-                            variant="secondary" 
+                        <Button
+                            variant="secondary"
+                            className="px-2"
                             onClick={() => {
                                 setAuthorIdToDelete(null);
                                 setIsDeleteDialogOpen(false); // ESTO CIERRA LA VENTANA
@@ -249,8 +262,9 @@ const AuthorPage = () => {
                         >
                             Cancelar
                         </Button>
-                        <Button 
+                        <Button
                             variant="destructive"
+                            className="px-2"
                             onClick={() => {
                                 if (authorIdToDelete) {
                                     handleDelete(authorIdToDelete);
