@@ -41,7 +41,6 @@ const PostFormPage = () => {
     useEffect(() => {
         if (postId) {
             const fetchPost = async () => {
-                setLoading(true);
                 try {
                     const post = await apiService.getPost(postId);
                     setFormData({
@@ -77,7 +76,6 @@ const PostFormPage = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setLoading(true);
         try {
             const payload = {
                 subject: formData.subject,
@@ -161,39 +159,19 @@ const PostFormPage = () => {
                     />
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                    {authors.map((author: Author) => (
-                        <option key={author.id} value={author.id}>
-                            {author.firstName || author.firstName}{" "}
-                            {author.lastName || author.lastName}
-                        </option>
-                    ))}
-
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Fecha de Publicación
-                        </label>
-                        <Input
-                            type="date"
-                            name="publishDate"
-                            value={formData.publishDate}
-                            onChange={handleChange}
-                        />
-                    </div>
-                </div>
-
                 <div className="flex justify-end space-x-2 mt-6">
                     <Button
                         type="button"
                         variant="secondary"
                         onClick={() => navigate(-1)}
+                        className="px-2"
                     >
                         Cancelar
                     </Button>
                     <Button
                         type="submit"
                         disabled={loading}
-                        className="bg-blue-600 hover:bg-blue-700 text-white"
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-2"
                     >
                         {loading ? "Guardando..." : "Guardar Post"}
                     </Button>

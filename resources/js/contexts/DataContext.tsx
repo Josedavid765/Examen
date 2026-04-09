@@ -52,7 +52,7 @@ const DataContext = createContext<DataContextType | undefined>(undefined);
 export const DataProvider = ({ children }: { children: ReactNode }) => {
     const queryParams = new URLSearchParams(window.location.search);
     const [authors, setAuthors] = useState<Author[]>([]);
-    const [authorId, setAuthorId] = useState(queryParams.get("authorId") || "");
+    const [authorId, setAuthorId] = useState(queryParams.get("id") || "");
     const [posts, setPosts] = useState<Post[]>([]);
     const [loading, setLoading] = useState(true);
     const [filter, setFilter] = useState(queryParams.get("fullname") || "");
@@ -84,25 +84,27 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
                     perPage,
                     orderAuthor,
                 ) as Promise<AuthorResponse>,
-                apiService.getAuthorPosts(
-                    authorId,
-                    page,
-                    perPage,
-                    orderPost,
-                ) as Promise<PostResponse>,
+                authorId
+                    ? (apiService.getAuthorPosts(
+                          authorId,
+                          page,
+                          perPage,
+                          orderPost,
+                      ) as Promise<PostResponse>)
+                    : Promise.resolve({ data: [], meta: {} }),
             ]);
 
             if (authorsData?.meta) {
                 setTotalAuthors(authorsData.meta.total || 0);
-                if (!authorId) setTotalPages(authorsData.meta.lastPage || 1);
+                setTotalPages(authorsData.meta.lastPage || 1);
             }
-            setAuthors(authorsData.data || []);
 
-            if (postsData?.meta) {
+            if (postsData?.meta && authorId) {
                 setTotalPosts(postsData.meta.total || 0);
-                if (authorId) setTotalPages(postsData.meta.lastPage || 1);
+                setTotalPages(postsData.meta.lastPage || 1);
             }
-            setPosts(postsData.data || []);
+            setAuthors(authorsData?.data || []);
+            setPosts(postsData?.data || []);
         } catch (error) {
             console.error("Error en el Contexto:", error);
         } finally {
