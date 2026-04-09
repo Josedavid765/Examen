@@ -32,6 +32,21 @@ interface DataContextType {
     refreshData: () => Promise<void>;
 }
 
+interface ApiMeta {
+    total: number;
+    lastPage: number;
+}
+
+interface AuthorResponse {
+    data: Author[];
+    meta: ApiMeta;
+}
+
+interface PostResponse {
+    data: Post[];
+    meta: ApiMeta;
+}
+
 const DataContext = createContext<DataContextType | undefined>(undefined);
 
 export const DataProvider = ({ children }: { children: ReactNode }) => {
@@ -63,17 +78,30 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
         setLoading(true);
         try {
             const [authorsData, postsData] = await Promise.all([
-                apiService.getAuthors(filter, page, perPage, orderAuthor),
-                apiService.getAuthorPosts(authorId, page, perPage, orderPost),
+                apiService.getAuthors(
+                    filter,
+                    page,
+                    perPage,
+                    orderAuthor,
+                ) as Promise<AuthorResponse>,
+                apiService.getAuthorPosts(
+                    authorId,
+                    page,
+                    perPage,
+                    orderPost,
+                ) as Promise<PostResponse>,
             ]);
 
-            if (authorsData.meta) {
-                setTotalPages(authorsData.meta.lastPage || 1);
-                setTotalPosts(postsData.meta.total || 0);
-                setTotalAuthors(authorsData.meta?.total || 0);
+            if (authorsData?.meta) {
+                setTotalAuthors(authorsData.meta.total || 0);
+                if (!authorId) setTotalPages(authorsData.meta.lastPage || 1);
             }
-
             setAuthors(authorsData.data || []);
+
+            if (postsData?.meta) {
+                setTotalPosts(postsData.meta.total || 0);
+                if (authorId) setTotalPages(postsData.meta.lastPage || 1);
+            }
             setPosts(postsData.data || []);
         } catch (error) {
             console.error("Error en el Contexto:", error);

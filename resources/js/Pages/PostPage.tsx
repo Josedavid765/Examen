@@ -1,10 +1,10 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { TableCell, TableRow } from "@mui/material";
 import DataTable from "../components/DataTable";
 import { Button } from "@/components/ui/button";
 import { apiService } from "../services/apiService";
-import { Post } from "../models/Post"; // Asegúrate de que este archivo existe
+import { Post } from "../models/Post";
 import {
     Pagination,
     PaginationContent,
@@ -32,11 +32,12 @@ import { useData } from "../contexts/DataContext";
 
 const PostPage = () => {
     const navigate = useNavigate();
+    const { id } = useParams();
 
     const {
         posts,
         authorId,
-        //setAuthorId,
+        setAuthorId,
         loading,
         page,
         setPage,
@@ -49,16 +50,6 @@ const PostPage = () => {
         setOrderPost,
     } = useData();
 
-    // const [posts, setPosts] = useState<Post[]>([]);
-    // const [loading, setLoading] = useState(false);
-    // const [page, setPage] = useState(1);
-    // const [perPage, setPerPage] = useState(10);
-    // const [totalPages, setTotalPages] = useState(1);
-    // const [totalPosts, setTotalPosts] = useState(0);
-    // const [filter, setFilter] = useState("");
-
-    // const [order, setOrder] = useState("-publishDate");
-
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const [postIdToDelete, setPostIdToDelete] = useState<string | null>(null);
 
@@ -66,6 +57,12 @@ const PostPage = () => {
         setPostIdToDelete(String(postId));
         setIsDeleteDialogOpen(true);
     };
+
+    useEffect(() => {
+        if (id && id !== authorId) {
+            setAuthorId(id);
+        }
+    }, [id]);
 
     const handleDelete = async (postId: string) => {
         try {

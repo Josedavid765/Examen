@@ -18,7 +18,7 @@ type Header = {
     id: string;
     name: string;
 };
-interface DataTableProps {
+interface DataTableProps<T> {
     title: string;
     headers: Header[];
     rows: T[];
