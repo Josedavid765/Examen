@@ -116,12 +116,18 @@ const PostPage = () => {
                 }}
                 perPage={perPage}
                 onAdd={() => navigate("/posts/new")}
-                renderRow={(post: Post) => (
+                renderRow={(post: Post) => {
+                    let statusLabel = post.status as string;
+                    if (post.status === "PUBLISHED") statusLabel = "Publicado";
+                    else if (post.status === "DRAFT") statusLabel = "Borrador";
+                    else if (post.status === "CANCELLED") statusLabel = "Cancelado";
+
+                    return (
                     <TableRow key={post.id}>
                         <TableCell>{post.id}</TableCell>
                         <TableCell>{post.subject}</TableCell>
                         <TableCell>{post.description}</TableCell>
-                        <TableCell>{post.status}</TableCell>
+                        <TableCell>{statusLabel}</TableCell>
                         <TableCell>{post.numComments}</TableCell>
                         <TableCell>
                             {post.publishDate
@@ -149,7 +155,7 @@ const PostPage = () => {
                             </Button>
                         </TableCell>
                     </TableRow>
-                )}
+                )}}
             />
 
             {}

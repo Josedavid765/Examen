@@ -5,39 +5,23 @@ import { Input } from "@/components/ui/input";
 import { apiService } from "../services/apiService";
 import { Status } from "../models/Status";
 import { Author } from "@/models/Author";
+import { useData } from "@/contexts/DataContext";
 
 const PostFormPage = () => {
     const { id } = useParams();
     const postId = id || "";
     const navigate = useNavigate();
+    const { authorId: contextAuthorId, refreshData } = useData();
     const [loading, setLoading] = useState(false);
-    const [authors, setAuthors] = useState<Author[]>([]);
 
     const [formData, setFormData] = useState({
         subject: "",
         description: "",
         status: "DRAFT",
         publishDate: "",
-        authorId: "",
+        authorId: contextAuthorId || "",
         numComments: 0,
     });
-
-    useEffect(() => {
-        const fetchAuthors = async () => {
-            try {
-                const response = await apiService.getAuthors("", 1, 100);
-
-                console.log("Datos de autores recibidos:", response);
-
-                const authorsList = response.data ? response.data : response;
-
-                setAuthors(Array.isArray(authorsList) ? authorsList : []);
-            } catch (error) {
-                console.error("Error al cargar la lista de autores:", error);
-            }
-        };
-        fetchAuthors();
-    }, []);
 
     useEffect(() => {
         if (postId) {
@@ -94,6 +78,7 @@ const PostFormPage = () => {
                 await apiService.createPost(payload);
                 alert("Post creado con éxito");
             }
+            await refreshData();
             navigate(-1);
         } catch (error) {
             console.error("Error al guardar:", error);
@@ -106,32 +91,11 @@ const PostFormPage = () => {
     return (
         <div className="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md mt-10">
             <h2 className="text-2xl font-bold mb-6 text-gray-800">
-                {postId ? `Editar Post #${postId}` : "Crear Nuevo Post"}
+                {postId ? `Editar Post "${formData.subject}"` : "Crear Nuevo Post"}
             </h2>
 
             <form onSubmit={handleSubmit} className="space-y-4">
                 {}
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Autor del Post
-                    </label>
-                    <select
-                        name="authorId"
-                        value={formData.authorId}
-                        onChange={handleChange}
-                        required
-                        className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500"
-                    >
-                        <option value="" disabled>
-                            -- Selecciona un autor --
-                        </option>
-                        {authors.map((author: Author) => (
-                            <option key={author.id} value={author.id}>
-                                {author.firstName || author.firstName}{" "}
-                            </option>
-                        ))}
-                    </select>
-                </div>
 
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
