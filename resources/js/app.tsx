@@ -12,48 +12,32 @@ import {
 import { DataProvider } from "./contexts/DataContext.tsx";
 import AuthorPage from "./Pages/AuthorPage.tsx";
 import AuthorFormPage from "./Pages/AuthorFormPage.tsx";
-// NUEVO: Importamos la página de Posts
 import PostPage from "./Pages/PostPage.tsx"; 
+// ¡NUEVO IMPORT DEL FORMULARIO!
+import PostFormPage from "./Pages/PostFormPage.tsx"; 
 
 const App: React.FC = () => {
     return (
         <DataProvider>
             <Router>
                 <div className="min-h-screen bg-slate-50">
-                    {/* Aquí podrías meter un menú/header común si te da tiempo */}
-
                     <div className="container mx-auto py-8">
                         <Routes>
-                            {/* Al entrar a la raíz, redirigimos a autores */}
-                            <Route
-                                path="/"
-                                element={<Navigate to="/authors" />}
-                            />
+                            <Route path="/" element={<Navigate to="/authors" />} />
 
-                            {/* Listado de autores */}
                             <Route path="/authors" element={<AuthorPage />} />
+                            <Route path="/authors/new" element={<AuthorFormPage />} />
+                            <Route path="/authors/edit/:id" element={<AuthorFormPage />} />
 
-                            {/* Formulario de autores (Upsert) */}
-                            <Route
-                                path="/authors/new"
-                                element={<AuthorFormPage />}
-                            />
-                            <Route
-                                path="/authors/edit/:id"
-                                element={<AuthorFormPage />}
-                            />
+                            <Route path="/authors/:id/posts" element={<PostPage />} />
 
-                            {/* NUEVO: Ruta para ver los posts de un autor específico */}
-                            <Route 
-                                path="/authors/:id/posts" 
-                                element={<PostPage />} 
-                            />
+                            <Route path="/posts/new" element={<PostFormPage />} />
+                            <Route path="/posts/edit/:id" element={<PostFormPage />} />
 
-                            {/* Ruta 404 simple */}
                             <Route
                                 path="*"
                                 element={
-                                    <h1 className="text-center mt-10">
+                                    <h1 className="text-center mt-10 text-xl font-bold">
                                         Página no encontrada
                                     </h1>
                                 }
