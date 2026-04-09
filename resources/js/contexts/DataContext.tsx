@@ -114,7 +114,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
 
     useEffect(() => {
         loadInitialData();
-    }, [page, perPage, orderAuthor, orderPost]);
+    }, [page, perPage, orderAuthor, orderPost, authorId]);
 
     useEffect(() => {
         const timerId = setTimeout(() => {
