@@ -94,12 +94,12 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
                     : Promise.resolve({ data: [], meta: {} }),
             ]);
 
-            if (authorsData?.meta) {
+            if (authorsData && authorsData.meta) {
                 setTotalAuthors(authorsData.meta.total || 0);
                 setTotalPages(authorsData.meta.lastPage || 1);
             }
 
-            if (postsData?.meta && authorId) {
+            if (postsData && postsData.meta && authorId) {
                 setTotalPosts(postsData.meta.total || 0);
                 setTotalPages(postsData.meta.lastPage || 1);
             }
