@@ -4,44 +4,35 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { apiService } from "../services/apiService";
 import { Status } from "../models/Status";
-import { Author } from "@/models/Author";
+import { useData } from "../contexts/DataContext";
 
 const PostFormPage = () => {
     const { id } = useParams();
     const postId = id || "";
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
-    const [authors, setAuthors] = useState<Author[]>([]);
+    const { authorId, refreshData } = useData();
 
     const [formData, setFormData] = useState({
         subject: "",
         description: "",
         status: "DRAFT",
         publishDate: "",
-        authorId: "",
+        authorId: authorId || "",
         numComments: 0,
     });
 
     useEffect(() => {
-        const fetchAuthors = async () => {
-            try {
-                const response = await apiService.getAuthors("", 1, 100);
-
-                console.log("Datos de autores recibidos:", response);
-
-                const authorsList = response.data ? response.data : response;
-
-                setAuthors(Array.isArray(authorsList) ? authorsList : []);
-            } catch (error) {
-                console.error("Error al cargar la lista de autores:", error);
-            }
-        };
-        fetchAuthors();
-    }, []);
+        if (!postId && !authorId) {
+            alert("No se ha seleccionado un autor para el post.");
+            navigate("/authors");
+        }
+    }, [postId, authorId, navigate]);
 
     useEffect(() => {
         if (postId) {
             const fetchPost = async () => {
+                setLoading(true);
                 try {
                     const post = await apiService.getPost(postId);
                     setFormData({
@@ -51,7 +42,7 @@ const PostFormPage = () => {
                         publishDate: post.publishDate
                             ? post.publishDate.split("T")[0]
                             : "",
-                        authorId: post.authorId || "",
+                        authorId: post.authorId || authorId || "",
                         numComments: post.numComments,
                     });
                 } catch (error) {
@@ -62,7 +53,7 @@ const PostFormPage = () => {
             };
             fetchPost();
         }
-    }, [postId]);
+    }, [postId, authorId]);
 
     const handleChange = (
         e: React.ChangeEvent<
@@ -77,24 +68,24 @@ const PostFormPage = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setLoading(true);
         try {
             const payload = {
                 subject: formData.subject,
                 description: formData.description,
                 status: formData.status as Status,
-                publishDate: formData.publishDate,
+                publishDate: formData.publishDate ? formData.publishDate : null as unknown as string,
                 authorId: String(formData.authorId),
                 numComments: formData.numComments,
             };
 
             if (postId) {
                 await apiService.updatePost(postId, payload);
-                alert("Post actualizado con éxito");
             } else {
                 await apiService.createPost(payload);
-                alert("Post creado con éxito");
             }
-            navigate(-1);
+            await refreshData();
+            navigate(`/authors/${formData.authorId}/posts`);
         } catch (error) {
             console.error("Error al guardar:", error);
             alert("Hubo un error al guardar el post.");
@@ -106,33 +97,11 @@ const PostFormPage = () => {
     return (
         <div className="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md mt-10">
             <h2 className="text-2xl font-bold mb-6 text-gray-800">
-                {postId ? `Editar Post #${postId}` : "Crear Nuevo Post"}
+                {postId ? `Editar Post: ${formData.subject}` : "Crear Nuevo Post"}
             </h2>
 
             <form onSubmit={handleSubmit} className="space-y-4">
                 {}
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Autor del Post
-                    </label>
-                    <select
-                        name="authorId"
-                        value={formData.authorId}
-                        onChange={handleChange}
-                        required
-                        className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500"
-                    >
-                        <option value="" disabled>
-                            -- Selecciona un autor --
-                        </option>
-                        {authors.map((author: Author) => (
-                            <option key={author.id} value={author.id}>
-                                {author.firstName || author.firstName}{" "}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                         Asunto / Título
@@ -157,6 +126,34 @@ const PostFormPage = () => {
                         required
                         className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500"
                         rows={4}
+                    />
+                </div>
+
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Estado
+                    </label>
+                    <select
+                        name="status"
+                        value={formData.status}
+                        onChange={handleChange}
+                        className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500"
+                    >
+                        <option value="DRAFT">Borrador</option>
+                        <option value="PUBLISHED">Publicado</option>
+                        <option value="CANCELLED">Cancelado</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Fecha de Publicación
+                    </label>
+                    <Input
+                        type="date"
+                        name="publishDate"
+                        value={formData.publishDate}
+                        onChange={handleChange}
                     />
                 </div>
 
