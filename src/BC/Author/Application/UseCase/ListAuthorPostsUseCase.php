@@ -13,7 +13,7 @@ class ListAuthorPostsUseCase
         private PostRepositoryPort $postRepo
     ) {}
 
-    public function execute(string $authorId): array
+    public function execute(string $authorId,  string $order='publishDate', string $direction='asc', int $page=1, int $perPage=10): array
     {
         $id = new AuthorIdValueObject($authorId);
 
@@ -21,6 +21,6 @@ class ListAuthorPostsUseCase
             throw new Exception("Author not found");
         }
 
-        return $this->postRepo->findByAuthorIdBatch($id->value(), 100);
+        return $this->postRepo->listPostsByAuthorId($id->value(), $order, $direction, $page, $perPage);
     }
 }

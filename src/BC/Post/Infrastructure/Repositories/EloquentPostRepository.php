@@ -10,6 +10,7 @@ use Src\BC\Post\Infrastructure\Traits\DeletePostTrait;
 use Src\BC\Post\Infrastructure\Traits\ListPostsTrait;
 use Src\BC\Post\Infrastructure\Traits\FindByAuthorIdBatchTrait;
 use Src\BC\Post\Infrastructure\Traits\DeletePostsByAuthorIdTrait;
+use Src\BC\Post\Infrastructure\Traits\ListPostByAuthorIdTrait;
 
 class EloquentPostRepository implements PostRepositoryPort
 {
@@ -18,6 +19,7 @@ class EloquentPostRepository implements PostRepositoryPort
         UpdatePostTrait,
         DeletePostTrait,
         ListPostsTrait,
+        ListPostByAuthorIdTrait,
         FindByAuthorIdBatchTrait,
         DeletePostsByAuthorIdTrait;
 }

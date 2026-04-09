@@ -17,6 +17,8 @@ interface PostRepositoryPort
 
     public function listPosts(string $order='publishDate', string $direction='asc', int $page=1, int $perPage=10): array;
 
+    public function listPostsByAuthorId(string $authorId, string $order='publishDate', string $direction='asc', int $page=1, int $perPage=10): array;
+    
     public function findByAuthorIdBatch(string $authorId, int $limit): array;
     
     public function deletePostsByAuthorId(string $authorId): void;
