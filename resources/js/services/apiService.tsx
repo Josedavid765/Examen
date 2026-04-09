@@ -4,6 +4,11 @@ import { Comment } from "../models/Comment";
 
 const BASE_URL = "/api";
 
+interface PaginatedResponse<T> {
+    data: T[];
+    meta?: unknown;
+}
+
 const headers = {
     "Content-Type": "application/json",
     Accept: "application/json",
@@ -75,7 +80,7 @@ export const apiService = {
         page: number = 1,
         perPage: number = 10,
         order?: string,
-    ): Promise<any> => {
+    ): Promise<PaginatedResponse<Post>> => {
         const params = new URLSearchParams();
         params.append("page", page.toString());
         params.append("perPage", perPage.toString());

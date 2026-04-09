@@ -28,10 +28,8 @@ const AuthorFormPage = () => {
             setInitialLoading(true);
             apiService
                 .getAuthor(id)
-                .then((res: any) => {
-                    const data = res.data || res;
-                    setAuthor(data);
-                    console.log(data);
+                .then((res: Author) => {
+                    setAuthor(res);
                 })
                 .catch((err) => console.error("Error al cargar autor:", err))
                 .finally(() => setInitialLoading(false));

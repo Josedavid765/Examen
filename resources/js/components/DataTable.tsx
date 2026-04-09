@@ -21,8 +21,8 @@ type Header = {
 interface DataTableProps {
     title: string;
     headers: Header[];
-    rows: any[];
-    renderRow: (row: any) => React.ReactNode;
+    rows: T[];
+    renderRow: (row: T) => React.ReactNode;
     onAdd?: () => void;
     filter?: string;
     order?: string;
@@ -31,7 +31,7 @@ interface DataTableProps {
     perPage?: number;
 }
 
-export default function DataTable({
+export default function DataTable<T>({
     title,
     headers,
     rows,
@@ -41,7 +41,7 @@ export default function DataTable({
     setOrder,
     loading,
     perPage = 5,
-}: DataTableProps) {
+}: DataTableProps<T>) {
     const handleSort = (id: string) => {
         if (!setOrder || id === "actions") return;
 
