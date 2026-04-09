@@ -95,13 +95,6 @@ const PostPage = () => {
                 </Button>
             </div>
 
-            {/* <Input
-                className={"border border-gray-600/20 mb-4"}
-                placeholder="Buscar post..."
-                onChange={(e) => setFilter(e.target.value)}
-                value={filter}
-            /> */}
-
             <DataTable
                 loading={loading}
                 title={`Posts: ${totalPosts} - Por página: ${perPage} - Página: ${page} - Totales: ${totalPages}`}

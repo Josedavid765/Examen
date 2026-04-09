@@ -18,7 +18,7 @@ const AuthorFormPage = () => {
 
     const [loading, setLoading] = useState(false);
     const [initialLoading, setInitialLoading] = useState(false);
-    const [author, setAuthor] = useState<any>(null);
+    const [author, setAuthor] = useState<Author | null>(null);
 
     const isEditMode = Boolean(id);
 
@@ -53,7 +53,7 @@ const AuthorFormPage = () => {
             if (isEditMode && id) {
                 await apiService.updateAuthor(id, payload);
             } else {
-                await apiService.createAuthor(payload as any);
+                await apiService.createAuthor(payload as Author);
             }
             await refreshData();
             navigate("/authors"); // Volver a la tabla tras el éxito

@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { apiService } from "../services/apiService";
-import { Post } from "../models/Post";
 import { Status } from "../models/Status";
+import { Author } from "@/models/Author";
 
 const PostFormPage = () => {
-    const { id } = useParams<{ id: string }>();
+    const postId = "";
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
-    const [authors, setAuthors] = useState<any[]>([]);
-    
+    const [authors, setAuthors] = useState<Author[]>([]);
+
     const [formData, setFormData] = useState({
         subject: "",
         description: "",
@@ -25,9 +25,9 @@ const PostFormPage = () => {
         const fetchAuthors = async () => {
             try {
                 const response = await apiService.getAuthors("", 1, 100);
-                
+
                 console.log("Datos de autores recibidos:", response);
-                
+
                 const authorsList = response.data ? response.data : response;
 
                 setAuthors(Array.isArray(authorsList) ? authorsList : []);
@@ -39,16 +39,18 @@ const PostFormPage = () => {
     }, []);
 
     useEffect(() => {
-        if (id) {
+        if (postId) {
             const fetchPost = async () => {
                 setLoading(true);
                 try {
-                    const post = await apiService.getPost(id); 
+                    const post = await apiService.getPost(postId);
                     setFormData({
                         subject: post.subject || "",
                         description: post.description || "",
                         status: post.status || "DRAFT",
-                        publishDate: post.publishDate ? post.publishDate.split('T')[0] : "",
+                        publishDate: post.publishDate
+                            ? post.publishDate.split("T")[0]
+                            : "",
                         authorId: post.authorId || "",
                         numComments: post.numComments,
                     });
@@ -60,9 +62,13 @@ const PostFormPage = () => {
             };
             fetchPost();
         }
-    }, [id]);
+    }, [postId]);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const handleChange = (
+        e: React.ChangeEvent<
+            HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+        >,
+    ) => {
         setFormData({
             ...formData,
             [e.target.name]: e.target.value,
@@ -79,17 +85,17 @@ const PostFormPage = () => {
                 status: formData.status as Status,
                 publishDate: formData.publishDate,
                 authorId: String(formData.authorId),
-                numComments: formData.numComments
+                numComments: formData.numComments,
             };
 
-            if (id) {
-                await apiService.updatePost(id, payload);
+            if (postId) {
+                await apiService.updatePost(postId, payload);
                 alert("Post actualizado con éxito");
             } else {
                 await apiService.createPost(payload);
                 alert("Post creado con éxito");
             }
-            navigate(-1); 
+            navigate(-1);
         } catch (error) {
             console.error("Error al guardar:", error);
             alert("Hubo un error al guardar el post.");
@@ -101,13 +107,15 @@ const PostFormPage = () => {
     return (
         <div className="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md mt-10">
             <h2 className="text-2xl font-bold mb-6 text-gray-800">
-                {id ? `Editar Post #${id}` : "Crear Nuevo Post"}
+                {postId ? `Editar Post #${postId}` : "Crear Nuevo Post"}
             </h2>
 
             <form onSubmit={handleSubmit} className="space-y-4">
                 {}
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Autor del Post</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Autor del Post
+                    </label>
                     <select
                         name="authorId"
                         value={formData.authorId}
@@ -115,17 +123,21 @@ const PostFormPage = () => {
                         required
                         className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500"
                     >
-                        <option value="" disabled>-- Selecciona un autor --</option>
-                        {authors.map((author: any) => (
+                        <option value="" disabled>
+                            -- Selecciona un autor --
+                        </option>
+                        {authors.map((author: Author) => (
                             <option key={author.id} value={author.id}>
-                                {author.name || author.first_name} {author.email ? `(${author.email})` : ''}
+                                {author.firstName || author.firstName}{" "}
                             </option>
                         ))}
                     </select>
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Asunto / Título</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Asunto / Título
+                    </label>
                     <Input
                         type="text"
                         name="subject"
@@ -136,7 +148,9 @@ const PostFormPage = () => {
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Descripción
+                    </label>
                     <textarea
                         name="description"
                         value={formData.description}
@@ -148,14 +162,17 @@ const PostFormPage = () => {
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
-                    {authors.map((author: any) => (
-                            <option key={author.id} value={author.id}>
-                                {author.first_name || author.firstName || author.name} {author.last_name || author.lastName || author.surname}
-                            </option>
-                        ))}
+                    {authors.map((author: Author) => (
+                        <option key={author.id} value={author.id}>
+                            {author.firstName || author.firstName}{" "}
+                            {author.lastName || author.lastName}
+                        </option>
+                    ))}
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Fecha de Publicación</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Fecha de Publicación
+                        </label>
                         <Input
                             type="date"
                             name="publishDate"
@@ -166,10 +183,18 @@ const PostFormPage = () => {
                 </div>
 
                 <div className="flex justify-end space-x-2 mt-6">
-                    <Button type="button" variant="secondary" onClick={() => navigate(-1)}>
+                    <Button
+                        type="button"
+                        variant="secondary"
+                        onClick={() => navigate(-1)}
+                    >
                         Cancelar
                     </Button>
-                    <Button type="submit" disabled={loading} className="bg-blue-600 hover:bg-blue-700 text-white">
+                    <Button
+                        type="submit"
+                        disabled={loading}
+                        className="bg-blue-600 hover:bg-blue-700 text-white"
+                    >
                         {loading ? "Guardando..." : "Guardar Post"}
                     </Button>
                 </div>
