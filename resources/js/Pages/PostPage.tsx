@@ -121,7 +121,15 @@ const PostPage = () => {
                         <TableCell>{post.id}</TableCell>
                         <TableCell>{post.subject}</TableCell>
                         <TableCell>{post.description}</TableCell>
-                        <TableCell>{post.status}</TableCell>
+                        <TableCell>
+                            {post.status === "PUBLISHED"
+                                ? "Publicado"
+                                : post.status === "DRAFT"
+                                  ? "Borrador"
+                                  : post.status === "CANCELLED"
+                                    ? "Cancelado"
+                                    : post.status}
+                        </TableCell>
                         <TableCell>{post.numComments}</TableCell>
                         <TableCell>
                             {post.publishDate
