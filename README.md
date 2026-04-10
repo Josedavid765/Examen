@@ -1,66 +1,112 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# TITULOS
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# Titulo 1, equivalente al H1
 
-## About Laravel
+## Titulo 2, equivalente al h2
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Titulo 3, equivalente al h3
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+#### Titulo 4, equivalente al h4
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+##### Titulo 5, equivalente al h5
 
-## Learning Laravel
+##### Titulo 6, equivalente al h6
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+###### Titulo 7, equivalente al h7
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+# FORMATOS DE TEXTO
 
-## Laravel Sponsors
+el texto plano de MarkDown es similar a la p de html
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+**Texto en negrita con 2 asteriscos**
+__texto en negrta con 2 guines bajos__
 
-### Premium Partners
+*Esto es un texto en italic usando asteriscos*
+_Esto es un texto en italic usando guones bajos_
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+***Texto en negrita y un poco curvada con 3 asteriscos***
 
-## Contributing
+Esto es para poner poner alguna citacion de alguien y se hace con un 
+signo mayor antes de la frase
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+>A la vista de sufinentes ojos, todos lo errores resultan evidentes 
+~Linus Torval
 
-## Code of Conduct
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+***Para poder bajarte mi codigo en una carpeta en tu equipo sigue estos pasos, la parte del codigo de abajo se a hecho con 3 virgulillas***
 
-## Security Vulnerabilities
+~~~
+> dev
+> vite
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-## License
+  VITE v6.4.1  ready in 575 ms
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: use --host to expose
+
+  LARAVEL v11.51.0  plugin v1.3.0
+
+  ➜  APP_URL: http://localhost
+
+~~~
+
+    Este es un texto que va a salir en un recuadro 
+    y la verdad es que mola porque es como un prompt 
+    de la IA para se precisos
+    se ha hecho poniendo 4 espacios 
+
+
+# LISTAS ORDENADAS Y DESORDENADAS
+
+## Lista desordenada
+
+###*** Esta lista desordenada lo que se puede usar son signo mas, asteriscos  o guiones, solo usa uno y para poner sublistas solo tabula y ya estaria***###
+
++ Privacidad
+    + Busquedas seguras 
+        + No rastreadores
+            + En compras
++ Seguridad
++ Rapidez
+
+## Lista ordenada
+
+###*** Esta lista ordenada y se hace poniendo un numero y seguido un punto debajo y para hacer las sublistas pones una tabulacion y es una cuenta nueva y ya estaria***###
+
+1. Programacion Basica
+    1. Variables
+    2. Estructuras de control
+        1. If
+        2. If else
+        3. Switch case
+    3. Ciclos
+        1. While
+        2. For
+2. Programacion orientada a objetos
+3. Programacion orientada a eventos
+
+***Estas listas se pueden mezclar entre ellas***
+
+# LINKS
+
+***Ejemplo de Link, la palabra que te va a direccionar se pone entre cochetes y el enlace como tal se pone al lado de los corchetes, y se pone el enlace dentro de parentesis, Para que se muestre una frase cuando pones el raton por encima, dentro de los parentesis al lado del enlace se pone la palabra entre comillas***
+
+*Visita mi perfil: [Perfil](https://github.com/Josedavid765 "Jose David 765")*
+
+***Este ejemplo de enlace es diferente ya que cuando lo clickas lo que hace es ejecutar el enlace y si es una apliacion la abre,  se suele usar para poner los correo eletronicos y se hace ponieno el enlace entro los signos mayores y menores***
+
+<joseavid765@gmail.com>
+
+***Este es otro ejemplo de como se podria poner un enlace ya que lo que hace es crear una referencia que se pueden reutilizar en cualquier part del codigo y se hace el texto normal de la referencia y la palabra que se va a usar la pones entre corchetes y para darle la funcionalidad del enlace pones la palabra entre corchetes 2 puntos y en enlace***
+
+Esto es una referencia: [Referencia a Gitub]
+
+[Referencia a Gitub]: https://github.com/Josedavid765 
+
+# Imagenes
+
+***esto es para añadir imagenes o videos o GIF's y se hace literalmente como haciendo un like, el texto que quieres que tena entre corchetes y al lado entre parentesis pones el enlace o la ruta de la imagen, video o GIF***
+
+![Animacion de un GIf de Davo Xeneixe](https://media1.tenor.com/m/uMo1NJ18LvYAAAAd/max-verstappen-edit-max-verstappen.gif "Meme de Davo")
