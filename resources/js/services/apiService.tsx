@@ -98,8 +98,17 @@ export const apiService = {
         return await response.json();
     },
 
-    getPosts: async () => {
-        const response = await fetch(`${BASE_URL}/posts`, { headers });
+    getPosts: async (
+        page: number = 1,
+        perPage: number = 12,
+    ): Promise<PaginatedResponse<Post>> => {
+        const params = new URLSearchParams();
+        params.append("page", page.toString());
+        params.append("perPage", perPage.toString());
+
+        const response = await fetch(`${BASE_URL}/posts?${params.toString()}`, {
+            headers,
+        });
         if (!response.ok) throw new Error("Error obteniendo posts");
         return await response.json();
     },

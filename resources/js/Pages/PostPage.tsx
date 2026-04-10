@@ -1,0 +1,157 @@
+import { useNavigate } from "react-router-dom";
+import { useState, useRef, useEffect } from "react";
+import { Post } from "@/models/Post";
+import { apiService } from "@/services/apiService";
+import { Button } from "@/components/ui/button";
+import {
+    Card,
+    CardHeader,
+    CardTitle,
+    CardDescription,
+    CardPanel,
+    CardFooter,
+} from "@/components/ui/card";
+import { Spinner } from "@/components/ui/spinner";
+import { FaRegCommentDots } from "react-icons/fa";
+
+const PostPage = () => {
+    const navigate = useNavigate();
+
+    const [posts, setPosts] = useState<Post[]>([]);
+    const [page, setPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
+    const [loading, setLoading] = useState(false);
+
+    const observerTarget = useRef<HTMLDivElement>(null);
+
+    const fetchPosts = async (pageNum: number) => {
+        setLoading(true);
+        try {
+            const response = await apiService.getPosts(pageNum, 12);
+
+            const newPosts = response.data
+                ? (response.data as unknown as Post[])
+                : (response as unknown as Post[]);
+            const meta = (response as any).meta || {};
+
+            setPosts((prev) =>
+                pageNum === 1 ? newPosts : [...prev, ...newPosts],
+            );
+
+            if (meta.currentPage >= meta.lastPage || newPosts.length === 0) {
+                setHasMore(false);
+            }
+        } catch (error) {
+            console.error("Error cargando posts:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchPosts(page);
+    }, [page]);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting && hasMore && !loading) {
+                    setPage((prevPage) => prevPage + 1);
+                }
+            },
+            { threshold: 1.0 },
+        );
+
+        const currentTarget = observerTarget.current;
+        if (currentTarget) {
+            observer.observe(currentTarget);
+        }
+
+        return () => {
+            if (currentTarget) {
+                observer.unobserve(currentTarget);
+            }
+        };
+    }, [hasMore, loading]);
+
+    return (
+        <div className="max-w-7xl mx-auto py-8 px-4">
+            <h1 className="text-3xl font-bold text-white mb-8">
+                Todos los Posts
+            </h1>
+
+            {/* Grid responsivo: 1 columna en móvil, 2 en tablets, 3 en desktop, 4 en pantallas anchas */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
+                {posts.map((post, index) => (
+                    <Card
+                        key={`${post.id}-${index}`}
+                        className="flex flex-col h-full bg-white text-black shadow-lg hover:shadow-xl transition-shadow"
+                    >
+                        <CardHeader className="pb-2">
+                            <CardTitle
+                                className="text-lg line-clamp-1"
+                                title={post.subject}
+                            >
+                                {post.subject}
+                            </CardTitle>
+                            <CardDescription className="text-xs text-gray-500">
+                                Autor:{" "}
+                                {(post as any).author?.fullName ||
+                                    `#${post.authorId}`}
+                                <br />
+                                Fecha:{" "}
+                                {post.publishDate
+                                    ? new Date(
+                                          post.publishDate,
+                                      ).toLocaleDateString()
+                                    : "Borrador"}
+                            </CardDescription>
+                        </CardHeader>
+
+                        <CardPanel className="flex-1 pt-2 pb-4 px-6 text-sm text-gray-700">
+                            {/* line-clamp-3 limita la descripción a 3 líneas con puntos suspensivos */}
+                            <p className="line-clamp-3">{post.description}</p>
+                        </CardPanel>
+
+                        <CardFooter className="flex justify-between items-center border-t border-gray-100 pt-4">
+                            <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+                                {post.numComments} comentarios
+                            </span>
+                            <Button
+                                variant="default"
+                                size="sm"
+                                onClick={() =>
+                                    navigate(`/posts/${post.id}/comments`)
+                                }
+                                className="bg-blue-800 hover:bg-blue-900 text-white px-6"
+                            >
+                                <FaRegCommentDots />
+                            </Button>
+                        </CardFooter>
+                    </Card>
+                ))}
+            </div>
+
+            {/* Indicador de carga visual mientras el observer hace la petición */}
+            {loading && (
+                <div className="flex justify-center py-6">
+                    <div className="text-white">
+                        <Spinner />
+                    </div>
+                </div>
+            )}
+
+            {/* Ancla invisible para el Infinite Scroll */}
+            <div ref={observerTarget} className="h-4 w-full mt-4" />
+
+            {/* Mensaje de fin de contenido */}
+            {!hasMore && !loading && posts.length > 0 && (
+                <div className="text-center py-8 text-gray-400 text-sm">
+                    Has llegado al final de la lista.
+                </div>
+            )}
+        </div>
+    );
+};
+
+export default PostPage;

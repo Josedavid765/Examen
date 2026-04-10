@@ -15,6 +15,7 @@ import AuthorFormPage from "./Pages/AuthorFormPage.tsx";
 import AuthorPostsPage from "./Pages/AuthorPostsPage.tsx";
 // ¡NUEVO IMPORT DEL FORMULARIO!
 import PostFormPage from "./Pages/PostFormPage.tsx";
+import PostPage from "./Pages/PostPage.tsx"; 
 
 const App: React.FC = () => {
     return (
@@ -50,6 +51,10 @@ const App: React.FC = () => {
                             <Route
                                 path="/posts/edit/:id"
                                 element={<PostFormPage />}
+                            />
+                            <Route
+                                path="/posts"
+                                element={<PostPage/>}
                             />
 
                             <Route
