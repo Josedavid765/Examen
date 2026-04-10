@@ -1,10 +1,4 @@
-import {
-    createContext,
-    useContext,
-    useState,
-    useEffect,
-    ReactNode,
-} from "react";
+import { createContext, useContext, useState, ReactNode } from "react";
 import { apiService } from "../services/apiService";
 import { Author } from "../models/Author";
 import { Post } from "../models/Post";
@@ -15,21 +9,27 @@ interface DataContextType {
     setAuthorId: (authorId: string) => void;
     totalAuthors: number;
     posts: Post[];
-    setPosts: (posts: Post[]) => void;
     totalPosts: number;
+    setPosts: (posts: Post[]) => void;
     loading: boolean;
-    page: number;
-    setPage: (page: number) => void;
-    totalPages: number;
+    AuthorPage: number;
+    setAuthorPage: (page: number) => void;
+    totalAuthorPages: number;
+    PostPage: number;
+    setPostPage: (page: number) => void;
+    totalPostPages: number;
+    authorPerPage: number;
+    setAuthorPerPage: (perPage: number) => void;
+    postPerPage: number;
+    setPostPerPage: (perPage: number) => void;
     filter: string;
     setFilter: (filter: string) => void;
-    perPage: number;
-    setPerPage: (perPage: number) => void;
     orderAuthor?: string;
     setOrderAuthor?: (order: string) => void;
     orderPost?: string;
     setOrderPost?: (order: string) => void;
-    refreshData: () => Promise<void>;
+    refreshAuthorData: () => Promise<void>;
+    refreshPostData: () => Promise<void>;
 }
 
 interface ApiMeta {
@@ -56,17 +56,14 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     const [posts, setPosts] = useState<Post[]>([]);
     const [loading, setLoading] = useState(true);
     const [filter, setFilter] = useState(queryParams.get("fullname") || "");
-    const [page, setPage] = useState(
-        queryParams.get("page") ? parseInt(queryParams.get("page") || "1") : 1,
-    );
-    const [totalPosts, setTotalPosts] = useState(0);
-    const [totalPages, setTotalPages] = useState(1);
+    const [AuthorPage, setAuthorPage] = useState(1);
+    const [PostPage, setPostPage] = useState(1);
     const [totalAuthors, setTotalAuthors] = useState(0);
-    const [perPage, setPerPage] = useState(
-        queryParams.get("perPage")
-            ? parseInt(queryParams.get("perPage") || "3")
-            : 3,
-    );
+    const [totalPosts, setTotalPosts] = useState(0);
+    const [totalAuthorPages, setTotalAuthorPages] = useState(1);
+    const [totalPostPages, setTotalPostPages] = useState(1);
+    const [authorPerPage, setAuthorPerPage] = useState(3);
+    const [postPerPage, setPostPerPage] = useState(3);
     const [orderAuthor, setOrderAuthor] = useState(
         queryParams.get("order") || "birthDate",
     );
@@ -74,58 +71,49 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
         queryParams.get("order") || "publishDate",
     );
 
-    const loadInitialData = async () => {
-        setLoading(true);
+    const loadAuthors = async () => {
         try {
-            const [authorsData, postsData] = await Promise.all([
-                apiService.getAuthors(
-                    filter,
-                    page,
-                    perPage,
-                    orderAuthor,
-                ) as Promise<AuthorResponse>,
-                authorId
-                    ? (apiService.getAuthorPosts(
-                          authorId,
-                          page,
-                          perPage,
-                          orderPost,
-                      ) as Promise<PostResponse>)
-                    : Promise.resolve({ data: [], meta: {} }),
-            ]);
-
-            if (authorsData && authorsData.meta) {
-                setTotalAuthors(authorsData.meta.total || 0);
-                setTotalPages(authorsData.meta.lastPage || 1);
-            }
-
-            if (postsData && postsData.meta && authorId) {
-                setTotalPosts(postsData.meta.total || 0);
-                setTotalPages(postsData.meta.lastPage || 1);
-            }
-            setAuthors(authorsData?.data || []);
-            setPosts(postsData?.data || []);
+            setLoading(true);
+            const authorsData = (await apiService.getAuthors(
+                filter,
+                AuthorPage,
+                authorPerPage,
+                orderAuthor,
+            )) as AuthorResponse;
+            setAuthors(authorsData.data || []);
+            setTotalAuthors(authorsData.meta?.total || 0);
+            setTotalAuthorPages(authorsData.meta?.lastPage || 1);
         } catch (error) {
-            console.error("Error en el Contexto:", error);
+            console.error("Error al cargar autores:", error);
         } finally {
             setLoading(false);
         }
     };
 
-    useEffect(() => {
-        loadInitialData();
-    }, [page, perPage, orderAuthor, orderPost, authorId]);
-
-    useEffect(() => {
-        const timerId = setTimeout(() => {
-            setPage(1);
-            loadInitialData();
-        }, 700);
-
-        return () => {
-            clearTimeout(timerId);
-        };
-    }, [filter]);
+    const loadPosts = async () => {
+        if (!authorId) {
+            setPosts([]);
+            setTotalPosts(0);
+            setTotalPostPages(1);
+            return;
+        }
+        try {
+            setLoading(true);
+            const postsData = (await apiService.getAuthorPosts(
+                authorId,
+                PostPage,
+                postPerPage,
+                orderPost,
+            )) as PostResponse;
+            setPosts(postsData.data || []);
+            setTotalPosts(postsData.meta?.total || 0);
+            setTotalPostPages(postsData.meta?.lastPage || 1);
+        } catch (error) {
+            console.error("Error al cargar posts:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <DataContext.Provider
@@ -138,18 +126,24 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
                 setPosts,
                 totalPosts,
                 loading,
-                page,
-                setPage,
-                totalPages,
+                AuthorPage,
+                setAuthorPage,
+                totalAuthorPages,
+                PostPage,
+                setPostPage,
+                totalPostPages,
                 filter,
                 setFilter,
-                perPage,
-                setPerPage,
+                authorPerPage,
+                setAuthorPerPage,
+                postPerPage,
+                setPostPerPage,
                 orderAuthor,
                 setOrderAuthor,
                 orderPost,
                 setOrderPost,
-                refreshData: loadInitialData,
+                refreshAuthorData: loadAuthors,
+                refreshPostData: loadPosts,
             }}
         >
             {children}

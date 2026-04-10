@@ -2,24 +2,25 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useData } from "../contexts/DataContext";
 import { apiService } from "../services/apiService";
 import { Status } from "../models/Status";
-import { useData } from "../contexts/DataContext";
 
 const PostFormPage = () => {
     const { id } = useParams();
     const postId = id || "";
     const navigate = useNavigate();
+    const { authorId, refreshPostData } = useData();
     const [loading, setLoading] = useState(false);
-    const { authorId, refreshData } = useData();
 
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<{
+        subject: string;
+        description: string;
+        status: Status;
+    }>({
         subject: "",
         description: "",
-        status: "DRAFT",
-        publishDate: "",
-        authorId: authorId || "",
-        numComments: 0,
+        status: "DRAFT" as Status,
     });
 
     useEffect(() => {
@@ -30,65 +31,76 @@ const PostFormPage = () => {
     }, [postId, authorId, navigate]);
 
     useEffect(() => {
-        if (postId) {
-            const fetchPost = async () => {
-                setLoading(true);
+        const loadPostToEdit = async () => {
+            if (postId) {
                 try {
-                    const post = await apiService.getPost(postId);
+                    setLoading(true);
+                    const postData = await apiService.getPost(postId);
                     setFormData({
-                        subject: post.subject || "",
-                        description: post.description || "",
-                        status: post.status || "DRAFT",
-                        publishDate: post.publishDate
-                            ? post.publishDate.split("T")[0]
-                            : "",
-                        authorId: post.authorId || authorId || "",
-                        numComments: post.numComments,
+                        subject: postData.subject,
+                        description: postData.description,
+                        status: postData.status,
                     });
                 } catch (error) {
-                    console.error("Error al cargar el post", error);
+                    console.error("Error al cargar el post:", error);
+                    alert("No se pudo cargar la informacion del post");
+                    navigate(-1);
                 } finally {
                     setLoading(false);
                 }
-            };
-            fetchPost();
-        }
-    }, [postId, authorId]);
+            }
+        };
+        loadPostToEdit();
+    }, [postId, navigate]);
 
     const handleChange = (
         e: React.ChangeEvent<
             HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
         >,
     ) => {
+        const { name, value } = e.target;
         setFormData({
             ...formData,
-            [e.target.name]: e.target.value,
+            [name]: name === "status" ? (value as Status) : value,
         });
     };
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
         try {
-            const payload = {
-                subject: formData.subject,
-                description: formData.description,
-                status: formData.status as Status,
-                publishDate: formData.publishDate ? formData.publishDate : null as unknown as string,
-                authorId: String(formData.authorId),
-                numComments: formData.numComments,
-            };
-
             if (postId) {
-                await apiService.updatePost(postId, payload);
+                // Lógica para actualizar el post existente
+                await apiService.updatePost(postId, formData);
+                alert("Post actualizado exitosamente.");
             } else {
-                await apiService.createPost(payload);
+                // Lógica para crear un nuevo post
+                const newPayload = {
+                    ...formData,
+                    authorId: authorId,
+                    publishDate:
+                        formData.status === "PUBLISHED"
+                            ? new Date().toISOString()
+                            : null,
+                    numComments: 0,
+                };
+                try {
+                    await apiService.createPost(newPayload);
+                    alert("Post creado exitosamente.");
+                } catch (error) {
+                    console.error("Error al crear el post:", error);
+                    alert(
+                        "Hubo un error al crear el post. Por favor, inténtalo de nuevo.",
+                    );
+                    return;
+                }
             }
-            await refreshData();
-            navigate(`/authors/${formData.authorId}/posts`);
+            await refreshPostData();
+            navigate(`/authors/${authorId}/posts`);
         } catch (error) {
-            console.error("Error al guardar:", error);
-            alert("Hubo un error al guardar el post.");
+            console.error("Error al guardar el post:", error);
+            alert(
+                "Hubo un error al guardar el post. Por favor, inténtalo de nuevo.",
+            );
         } finally {
             setLoading(false);
         }
@@ -97,11 +109,12 @@ const PostFormPage = () => {
     return (
         <div className="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md mt-10">
             <h2 className="text-2xl font-bold mb-6 text-gray-800">
-                {postId ? `Editar Post: ${formData.subject}` : "Crear Nuevo Post"}
+                {postId
+                    ? `Editar Post: ${formData.subject}`
+                    : "Crear Nuevo Post"}
             </h2>
 
             <form onSubmit={handleSubmit} className="space-y-4">
-                {}
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                         Asunto / Título
@@ -109,6 +122,7 @@ const PostFormPage = () => {
                     <Input
                         type="text"
                         name="subject"
+                        disabled={loading}
                         value={formData.subject}
                         onChange={handleChange}
                         required
@@ -123,6 +137,7 @@ const PostFormPage = () => {
                         name="description"
                         value={formData.description}
                         onChange={handleChange}
+                        disabled={loading}
                         required
                         className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500"
                         rows={4}
@@ -137,24 +152,13 @@ const PostFormPage = () => {
                         name="status"
                         value={formData.status}
                         onChange={handleChange}
+                        disabled={loading}
                         className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500"
                     >
                         <option value="DRAFT">Borrador</option>
                         <option value="PUBLISHED">Publicado</option>
                         <option value="CANCELLED">Cancelado</option>
                     </select>
-                </div>
-
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Fecha de Publicación
-                    </label>
-                    <Input
-                        type="date"
-                        name="publishDate"
-                        value={formData.publishDate}
-                        onChange={handleChange}
-                    />
                 </div>
 
                 <div className="flex justify-end space-x-2 mt-6">

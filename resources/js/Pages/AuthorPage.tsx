@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TableCell, TableRow } from "@mui/material";
 import DataTable from "../components/DataTable";
 import { Author } from "../models/Author";
@@ -32,20 +32,21 @@ import {
 } from "@/components/ui/dialog";
 
 const AuthorPage = () => {
-    const { authors, loading } = useData();
     const navigate = useNavigate();
     const {
-        refreshData,
-        totalPages,
+        refreshAuthorData,
+        totalAuthorPages,
         totalAuthors,
-        page,
-        perPage,
-        setPage,
-        setPerPage,
+        AuthorPage,
+        authorPerPage,
+        setAuthorPage,
+        setAuthorPerPage,
         filter,
         setFilter,
         orderAuthor,
         setOrderAuthor,
+        authors,
+        loading,
     } = useData();
 
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -55,6 +56,18 @@ const AuthorPage = () => {
 
     console.log(authors);
 
+    useEffect(() => {
+        refreshAuthorData();
+    }, [AuthorPage, authorPerPage, orderAuthor]);
+
+    useEffect(() => {
+        const timerId = setTimeout(() => {
+            setAuthorPage(1);
+            refreshAuthorData();
+        }, 700);
+        return () => clearTimeout(timerId);
+    }, [filter]);
+
     const handleOpenDeleteDialog = (id: string) => {
         setAuthorIdToDelete(id);
         setIsDeleteDialogOpen(true);
@@ -63,7 +76,7 @@ const AuthorPage = () => {
     const handleDelete = async (id: string) => {
         try {
             await apiService.deleteAuthor(String(id));
-            await refreshData();
+            await refreshAuthorData();
         } catch (error) {
             console.log(error);
             alert("Hubo un error al eliminar el autor");
@@ -88,11 +101,11 @@ const AuthorPage = () => {
                     "Autores: " +
                     totalAuthors +
                     " - Autores por página: " +
-                    perPage +
+                    authorPerPage +
                     " - Página: " +
-                    page +
+                    AuthorPage +
                     " - Paginas totales: " +
-                    totalPages
+                    totalAuthorPages
                 }
                 headers={[
                     { id: "id", name: "ID" },
@@ -105,7 +118,7 @@ const AuthorPage = () => {
                 rows={authors}
                 order={orderAuthor}
                 setOrder={setOrderAuthor}
-                perPage={perPage}
+                perPage={authorPerPage}
                 onAdd={() => navigate("/authors/new")}
                 renderRow={(author: Author) => (
                     <TableRow key={author.id}>
@@ -157,42 +170,50 @@ const AuthorPage = () => {
                     <PaginationItem>
                         <ChevronsLeft
                             className="cursor-pointer pr-2"
-                            onClick={() => setPage(1)}
+                            onClick={() => setAuthorPage(1)}
                         ></ChevronsLeft>
                     </PaginationItem>
                     <PaginationItem>
                         <PaginationPrevious
-                            onClick={() => setPage(page - 1)}
-                            style={{ display: page == 1 ? "none" : "flex" }}
+                            onClick={() => setAuthorPage(AuthorPage - 1)}
+                            style={{
+                                display: AuthorPage == 1 ? "none" : "flex",
+                            }}
                         />
                     </PaginationItem>
                     <PaginationLink
-                        onClick={() => setPage(page - 1)}
-                        style={{ display: page == 1 ? "none" : "flex" }}
+                        onClick={() => setAuthorPage(AuthorPage - 1)}
+                        style={{ display: AuthorPage == 1 ? "none" : "flex" }}
                     >
-                        {page - 1}
+                        {AuthorPage - 1}
                     </PaginationLink>
-                    <PaginationLink>{page}</PaginationLink>
+                    <PaginationLink>{AuthorPage}</PaginationLink>
                     <PaginationLink
-                        onClick={() => setPage(page + 1)}
+                        onClick={() => setAuthorPage(AuthorPage + 1)}
                         style={{
-                            display: page == totalPages ? "none" : "flex",
+                            display:
+                                AuthorPage == totalAuthorPages
+                                    ? "none"
+                                    : "flex",
                         }}
                     >
-                        {page + 1}
+                        {AuthorPage + 1}
                     </PaginationLink>
                     <PaginationItem>
                         <PaginationNext
-                            onClick={() => setPage(page + 1)}
+                            onClick={() => setAuthorPage(AuthorPage + 1)}
                             style={{
-                                display: page >= totalPages ? "none" : "flex",
+                                display:
+                                    AuthorPage >= totalAuthorPages
+                                        ? "none"
+                                        : "flex",
                             }}
                         />
                     </PaginationItem>
                     <PaginationItem>
                         <ChevronsRight
                             className="cursor-pointer pl-2"
-                            onClick={() => setPage(totalPages)}
+                            onClick={() => setAuthorPage(totalAuthorPages)}
                         ></ChevronsRight>
                     </PaginationItem>
                     <PaginationItem>
@@ -217,14 +238,14 @@ const AuthorPage = () => {
                                         <Button
                                             key={value}
                                             variant={
-                                                perPage === value
+                                                authorPerPage === value
                                                     ? "secondary"
                                                     : "ghost"
                                             }
                                             className="h-7 justify-start px-2 text-xs"
                                             onClick={() => {
-                                                setPerPage(value);
-                                                setPage(1);
+                                                setAuthorPerPage(value);
+                                                setAuthorPage(1);
                                             }}
                                         >
                                             {value} autores

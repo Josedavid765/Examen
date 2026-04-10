@@ -39,13 +39,13 @@ const PostPage = () => {
         authorId,
         setAuthorId,
         loading,
-        page,
-        setPage,
-        perPage,
-        setPerPage,
-        totalPages,
+        PostPage,
+        setPostPage,
+        postPerPage,
+        setPostPerPage,
+        totalPostPages,
         totalPosts,
-        refreshData,
+        refreshPostData,
         orderPost,
         setOrderPost,
     } = useData();
@@ -64,10 +64,16 @@ const PostPage = () => {
         }
     }, [id]);
 
+    useEffect(() => {
+        if (authorId) {
+            refreshPostData();
+        }
+    }, [authorId, PostPage, postPerPage, orderPost]);
+
     const handleDelete = async (postId: string) => {
         try {
             await apiService.deletePost(postId);
-            await refreshData();
+            await refreshPostData();
         } catch (error) {
             console.error(error);
             alert("Hubo un error al eliminar el post");
@@ -79,7 +85,6 @@ const PostPage = () => {
 
     return (
         <>
-            {}
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-bold text-white">
                     Posts del Autor #{authorId}
@@ -94,7 +99,7 @@ const PostPage = () => {
 
             <DataTable
                 loading={loading}
-                title={`Posts: ${totalPosts} - Por página: ${perPage} - Página: ${page} - Totales: ${totalPages}`}
+                title={`Posts: ${totalPosts} - Por página: ${postPerPage} - Página: ${PostPage} - Totales: ${totalPostPages}`}
                 headers={[
                     { id: "id", name: "ID" },
                     { id: "title", name: "Título" },
@@ -114,13 +119,17 @@ const PostPage = () => {
                         setOrderPost(newOrder);
                     }
                 }}
-                perPage={perPage}
+                perPage={postPerPage}
                 onAdd={() => navigate("/posts/new")}
                 renderRow={(post: Post) => (
                     <TableRow key={post.id}>
                         <TableCell>{post.id}</TableCell>
-                        <TableCell>{post.subject}</TableCell>
-                        <TableCell>{post.description}</TableCell>
+                        <TableCell className="max-w-36 truncate">
+                            {post.subject}
+                        </TableCell>
+                        <TableCell className="max-w-72 truncate">
+                            {post.description}
+                        </TableCell>
                         <TableCell>
                             {post.status === "PUBLISHED"
                                 ? "Publicado"
@@ -150,7 +159,7 @@ const PostPage = () => {
                             </Button>
                             <Button
                                 onClick={() => handleOpenDeleteDialog(post.id)}
-                                className={"px-2"}
+                                className={"px-2 my-2 "}
                                 variant="destructive"
                             >
                                 Eliminar
@@ -160,48 +169,53 @@ const PostPage = () => {
                 )}
             />
 
-            {}
             <Pagination>
                 <PaginationContent>
                     <PaginationItem>
                         <ChevronsLeft
                             className="cursor-pointer pr-2"
-                            onClick={() => setPage(1)}
+                            onClick={() => setPostPage(1)}
                         />
                     </PaginationItem>
                     <PaginationItem>
                         <PaginationPrevious
-                            onClick={() => setPage(page - 1)}
-                            style={{ display: page === 1 ? "none" : "flex" }}
+                            onClick={() => setPostPage(PostPage - 1)}
+                            style={{
+                                display: PostPage === 1 ? "none" : "flex",
+                            }}
                         />
                     </PaginationItem>
                     <PaginationLink
-                        onClick={() => setPage(page - 1)}
-                        style={{ display: page === 1 ? "none" : "flex" }}
+                        onClick={() => setPostPage(PostPage - 1)}
+                        style={{ display: PostPage === 1 ? "none" : "flex" }}
                     >
-                        {page - 1}
+                        {PostPage - 1}
                     </PaginationLink>
-                    <PaginationLink>{page}</PaginationLink>
+                    <PaginationLink>{PostPage}</PaginationLink>
                     <PaginationLink
-                        onClick={() => setPage(page + 1)}
+                        onClick={() => setPostPage(PostPage + 1)}
                         style={{
-                            display: page === totalPages ? "none" : "flex",
+                            display:
+                                PostPage === totalPostPages ? "none" : "flex",
                         }}
                     >
-                        {page + 1}
+                        {PostPage + 1}
                     </PaginationLink>
                     <PaginationItem>
                         <PaginationNext
-                            onClick={() => setPage(page + 1)}
+                            onClick={() => setPostPage(PostPage + 1)}
                             style={{
-                                display: page >= totalPages ? "none" : "flex",
+                                display:
+                                    PostPage >= totalPostPages
+                                        ? "none"
+                                        : "flex",
                             }}
                         />
                     </PaginationItem>
                     <PaginationItem>
                         <ChevronsRight
                             className="cursor-pointer pl-2"
-                            onClick={() => setPage(totalPages)}
+                            onClick={() => setPostPage(totalPostPages)}
                         />
                     </PaginationItem>
                     <PaginationItem>
@@ -222,14 +236,14 @@ const PostPage = () => {
                                         <Button
                                             key={value}
                                             variant={
-                                                perPage === value
+                                                postPerPage === value
                                                     ? "secondary"
                                                     : "ghost"
                                             }
                                             className="h-7 justify-start px-2 text-xs"
                                             onClick={() => {
-                                                setPerPage(value);
-                                                setPage(1);
+                                                setPostPerPage(value);
+                                                setPostPage(1);
                                             }}
                                         >
                                             {value} posts

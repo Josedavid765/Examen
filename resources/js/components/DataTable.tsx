@@ -56,7 +56,7 @@ export default function DataTable<T>({
     return (
         <TableContainer
             component={Paper}
-            sx={{ mb: 4, boxShadow: 3, overflow: "hidden", borderRadius: 6 }}
+            sx={{ mb: 4, boxShadow: 3, overflowX: "auto", borderRadius: 6 }}
         >
             <div className="flex items-center justify-between p-4 bg-slate-50 border-b">
                 <Typography variant="h6" className="font-bold text-slate-700">
@@ -73,7 +73,10 @@ export default function DataTable<T>({
                     </Button>
                 )}
             </div>
-            <Table sx={{ minWidth: 650 }} aria-label="custom table">
+            <Table
+                sx={{ minWidth: 650, borderRadius: 6 }}
+                aria-label="custom table"
+            >
                 <TableHead
                     sx={{
                         background:
