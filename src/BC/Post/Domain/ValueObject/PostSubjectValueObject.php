@@ -16,9 +16,9 @@ class PostSubjectValueObject extends StringValueObject
 
     private function ensureHasValidLength(string $value): void
     {
-        if (mb_strlen(trim($value)) < 10) {
+        if (mb_strlen(trim($value)) < 1) {
             throw new InvalidArgumentException(
-                sprintf('<%s> no permite el valor <%s>. El titulo del post debe tener al menos 10 caracteres.', static::class, $value)
+                sprintf('<%s> no permite el valor <%s>. El titulo del post debe tener al menos 1 caracteres.', static::class, $value)
             );
         }
     }
