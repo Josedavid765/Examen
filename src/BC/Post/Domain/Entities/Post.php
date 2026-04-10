@@ -15,7 +15,7 @@ class Post
     private PostIdValueObject $postId;
     private PostSubjectValueObject $subject;
     private PostDescriptionValueObject $description;
-    private PostPublishDateValueObject $publishDate;
+    private ?PostPublishDateValueObject $publishDate;
     private PostStatusValueObject $status;
     private PostAuthorIdValueObject $authorId;
     private PostCommentCount $numOfComments;
@@ -24,7 +24,7 @@ class Post
         PostIdValueObject $postId,
         PostSubjectValueObject $subject,
         PostDescriptionValueObject $description,
-        PostPublishDateValueObject $publishDate,
+        ?PostPublishDateValueObject $publishDate,
         PostStatusValueObject $status,
         PostAuthorIdValueObject $authorId,
         PostCommentCount $numOfComments

@@ -110,3 +110,13 @@ Esto es una referencia: [Referencia a Gitub]
 ***esto es para añadir imagenes o videos o GIF's y se hace literalmente como haciendo un like, el texto que quieres que tena entre corchetes y al lado entre parentesis pones el enlace o la ruta de la imagen, video o GIF***
 
 ![Animacion de un GIf de Davo Xeneixe](https://media1.tenor.com/m/uMo1NJ18LvYAAAAd/max-verstappen-edit-max-verstappen.gif "Meme de Davo")
+
+
+# TABLAS
+
+***PAra hacer las tablas es de manera muy sencilla solamente utilizando el simbolo de or en la primera fila pones los encabezados ya despues pones todo guines y ya estaria no son muy complicadas lo que se recomienda es respetar ls tabulaciones ya que sera mucha mas facil de leer porque es muy visual***
+
+| Distribuciones | Disponibilidad | Version |
+|----------------|----------------|---------|
+|ArchLinux       | Yes            | 7.0.0   |
+| Cent Log       |Yes             | 1.0.5   |
