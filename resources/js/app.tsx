@@ -12,9 +12,9 @@ import {
 import { DataProvider } from "./contexts/DataContext.tsx";
 import AuthorPage from "./Pages/AuthorPage.tsx";
 import AuthorFormPage from "./Pages/AuthorFormPage.tsx";
-import PostPage from "./Pages/PostPage.tsx"; 
+import AuthorPostsPage from "./Pages/AuthorPostsPage.tsx";
 // ¡NUEVO IMPORT DEL FORMULARIO!
-import PostFormPage from "./Pages/PostFormPage.tsx"; 
+import PostFormPage from "./Pages/PostFormPage.tsx";
 
 const App: React.FC = () => {
     return (
@@ -23,16 +23,34 @@ const App: React.FC = () => {
                 <div className="min-h-screen bg-slate-50">
                     <div className="container mx-auto py-8">
                         <Routes>
-                            <Route path="/" element={<Navigate to="/authors" />} />
+                            <Route
+                                path="/"
+                                element={<Navigate to="/authors" />}
+                            />
 
                             <Route path="/authors" element={<AuthorPage />} />
-                            <Route path="/authors/new" element={<AuthorFormPage />} />
-                            <Route path="/authors/edit/:id" element={<AuthorFormPage />} />
+                            <Route
+                                path="/authors/new"
+                                element={<AuthorFormPage />}
+                            />
+                            <Route
+                                path="/authors/edit/:id"
+                                element={<AuthorFormPage />}
+                            />
 
-                            <Route path="/authors/:id/posts" element={<PostPage />} />
+                            <Route
+                                path="/authors/:id/posts"
+                                element={<AuthorPostsPage />}
+                            />
 
-                            <Route path="/posts/new" element={<PostFormPage />} />
-                            <Route path="/posts/edit/:id" element={<PostFormPage />} />
+                            <Route
+                                path="/posts/new"
+                                element={<PostFormPage />}
+                            />
+                            <Route
+                                path="/posts/edit/:id"
+                                element={<PostFormPage />}
+                            />
 
                             <Route
                                 path="*"

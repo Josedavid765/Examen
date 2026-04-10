@@ -30,7 +30,7 @@ import {
 } from "@/components/ui/dialog";
 import { useData } from "../contexts/DataContext";
 
-const PostPage = () => {
+const AuthorPostsPage = () => {
     const navigate = useNavigate();
     const { id } = useParams();
 
@@ -287,6 +287,7 @@ const PostPage = () => {
                     <DialogFooter className="flex justify-end space-x-2 mt-4">
                         <Button
                             variant="secondary"
+                            disabled={loading}
                             onClick={() => {
                                 setPostIdToDelete(null);
                                 setIsDeleteDialogOpen(false);
@@ -296,6 +297,7 @@ const PostPage = () => {
                         </Button>
                         <Button
                             variant="destructive"
+                            disabled={loading}
                             onClick={() => {
                                 if (postIdToDelete)
                                     handleDelete(postIdToDelete);
@@ -310,4 +312,4 @@ const PostPage = () => {
     );
 };
 
-export default PostPage;
+export default AuthorPostsPage;
