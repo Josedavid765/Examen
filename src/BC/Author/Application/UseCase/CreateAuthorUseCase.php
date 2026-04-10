@@ -12,7 +12,7 @@ use Src\BC\Author\Domain\ValueObject\AuthorBirthDateValueObject;
 
 class CreateAuthorUseCase
 {
-    public function __construct(private AuthorRepositoryPort $repo){}
+    public function __construct(private AuthorRepositoryPort $repo) {}
 
     public function execute(AuthorDTO $dto): Author
     {
