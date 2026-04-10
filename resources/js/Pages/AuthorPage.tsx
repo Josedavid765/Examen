@@ -97,16 +97,7 @@ const AuthorPage = () => {
 
             <DataTable
                 loading={loading}
-                title={
-                    "Autores: " +
-                    totalAuthors +
-                    " - Autores por página: " +
-                    authorPerPage +
-                    " - Página: " +
-                    AuthorPage +
-                    " - Paginas totales: " +
-                    totalAuthorPages
-                }
+                title={"Autores"}
                 headers={[
                     { id: "id", name: "ID" },
                     { id: "firstName", name: "Nombre" },
