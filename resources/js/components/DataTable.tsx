@@ -17,6 +17,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 type Header = {
     id: string;
     name: string;
+    sortable?: boolean;
 };
 interface DataTableProps<T> {
     title: string;
@@ -42,15 +43,17 @@ export default function DataTable<T>({
     loading,
     perPage = 5,
 }: DataTableProps<T>) {
-    const handleSort = (id: string) => {
-        if (!setOrder || id === "actions") return;
+    const handleSort = (header: Header) => {
+        const isSortable = header.sortable !== false && header.id !== "actions";
 
-        if (order === id) {
-            setOrder("-" + id);
-        } else if (order === "-" + id) {
+        if (!setOrder || !isSortable) return;
+
+        if (order === header.id) {
+            setOrder("-" + header.id);
+        } else if (order === "-" + header.id) {
             setOrder("");
         } else {
-            setOrder(id);
+            setOrder(header.id);
         }
     };
     return (
@@ -84,39 +87,43 @@ export default function DataTable<T>({
                     }}
                 >
                     <TableRow>
-                        {headers.map((header: Header) => (
-                            <TableCell
-                                key={header.id}
-                                sx={{
-                                    color: "white",
-                                    backgroundColor: "transparent",
-                                    fontWeight: "bold",
-                                    transition: "background-color 0.2s ease",
-                                    cursor:
-                                        header.id === "actions"
-                                            ? "default"
-                                            : "pointer",
-                                    "&:hover": {
-                                        backgroundColor:
-                                            header.id !== "actions"
+                        {headers.map((header: Header) => {
+                            const isSortable =
+                                header.sortable !== false &&
+                                header.id !== "actions";
+                            return (
+                                <TableCell
+                                    key={header.id}
+                                    sx={{
+                                        color: "white",
+                                        backgroundColor: "transparent",
+                                        fontWeight: "bold",
+                                        transition:
+                                            "background-color 0.2s ease",
+                                        cursor: isSortable
+                                            ? "pointer"
+                                            : "default",
+                                        "&:hover": {
+                                            backgroundColor: isSortable
                                                 ? "rgba(255, 255, 255, 0.15)"
                                                 : "transparent",
-                                    },
-                                }}
-                                onClick={() => handleSort(header.id)}
-                            >
-                                <div className="flex items-center gap-1">
-                                    {(order === header.id ||
-                                        order === "-" + header.id) &&
-                                        (order === header.id ? (
-                                            <LucideChevronUp className="w-4 h-4" />
-                                        ) : (
-                                            <LucideChevronDown className="w-4 h-4" />
-                                        ))}
-                                    {header.name}
-                                </div>
-                            </TableCell>
-                        ))}
+                                        },
+                                    }}
+                                    onClick={() => handleSort(header)}
+                                >
+                                    <div className="flex items-center gap-1">
+                                        {(order === header.id ||
+                                            order === "-" + header.id) &&
+                                            (order === header.id ? (
+                                                <LucideChevronUp className="w-4 h-4" />
+                                            ) : (
+                                                <LucideChevronDown className="w-4 h-4" />
+                                            ))}
+                                        {header.name}
+                                    </div>
+                                </TableCell>
+                            );
+                        })}
                     </TableRow>
                 </TableHead>
                 <TableBody>

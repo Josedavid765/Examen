@@ -71,7 +71,6 @@ const PostFormPage = () => {
             if (postId) {
                 // Lógica para actualizar el post existente
                 await apiService.updatePost(postId, formData);
-                alert("Post actualizado exitosamente.");
             } else {
                 // Lógica para crear un nuevo post
                 const newPayload = {
@@ -85,7 +84,6 @@ const PostFormPage = () => {
                 };
                 try {
                     await apiService.createPost(newPayload);
-                    alert("Post creado exitosamente.");
                 } catch (error) {
                     console.error("Error al crear el post:", error);
                     alert(
@@ -109,9 +107,7 @@ const PostFormPage = () => {
     return (
         <div className="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md mt-10">
             <h2 className="text-2xl font-bold mb-6 text-gray-800">
-                {postId
-                    ? `Editar Post: ${formData.subject}`
-                    : "Crear Nuevo Post"}
+                {postId ? "Editar Post" : "Crear Nuevo Post"}
             </h2>
 
             <form onSubmit={handleSubmit} className="space-y-4">

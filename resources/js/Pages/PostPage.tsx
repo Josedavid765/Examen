@@ -101,13 +101,14 @@ const PostPage = () => {
                 loading={loading}
                 title={`Posts: ${totalPosts} - Por página: ${postPerPage} - Página: ${PostPage} - Totales: ${totalPostPages}`}
                 headers={[
-                    { id: "id", name: "ID" },
-                    { id: "title", name: "Título" },
-                    { id: "description", name: "Descripcion" },
-                    { id: "status", name: "Estado" },
+                    { id: "id", name: "ID", sortable: false },
+                    { id: "title", name: "Título", sortable: false },
+                    { id: "description", name: "Descripcion", sortable: false },
+                    { id: "status", name: "Estado", sortable: false },
                     {
                         id: "numComments",
                         name: "Numero de Comentarios",
+                        sortable: false,
                     },
                     { id: "publishDate", name: "Fecha Publicación" },
                     { id: "actions", name: "Acciones" },
@@ -115,7 +116,11 @@ const PostPage = () => {
                 rows={posts}
                 order={orderPost}
                 setOrder={(newOrder) => {
-                    if (setOrderPost && newOrder.includes("publishDate")) {
+                    if (
+                        setOrderPost &&
+                        (newOrder.includes("publishDate") ||
+                            newOrder.includes(""))
+                    ) {
                         setOrderPost(newOrder);
                     }
                 }}

@@ -122,7 +122,7 @@ const AuthorPage = () => {
                 onAdd={() => navigate("/authors/new")}
                 renderRow={(author: Author) => (
                     <TableRow key={author.id}>
-                        <TableCell>{author.id}</TableCell>
+                        <TableCell className="max-w-52">{author.id}</TableCell>
                         <TableCell>{author.firstName}</TableCell>
                         <TableCell>{author.lastName}</TableCell>
                         <TableCell>{author.fullName}</TableCell>
