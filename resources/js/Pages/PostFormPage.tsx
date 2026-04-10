@@ -17,10 +17,12 @@ const PostFormPage = () => {
         subject: string;
         description: string;
         status: Status;
+        publishDate: string;
     }>({
         subject: "",
         description: "",
         status: "DRAFT" as Status,
+        publishDate: "",
     });
 
     useEffect(() => {
@@ -37,9 +39,12 @@ const PostFormPage = () => {
                     setLoading(true);
                     const postData = await apiService.getPost(postId);
                     setFormData({
-                        subject: postData.subject,
-                        description: postData.description,
-                        status: postData.status,
+                        subject: postData.subject || "",
+                        description: postData.description || "",
+                        status: postData.status || "DRAFT",
+                        publishDate: postData.publishDate
+                            ? postData.publishDate.split(" ")[0]
+                            : "",
                     });
                 } catch (error) {
                     console.error("Error al cargar el post:", error);

@@ -122,7 +122,7 @@ const AuthorPage = () => {
                 onAdd={() => navigate("/authors/new")}
                 renderRow={(author: Author) => (
                     <TableRow key={author.id}>
-                        <TableCell className="max-w-52">{author.id}</TableCell>
+                        <TableCell className="max-w-">{author.id}</TableCell>
                         <TableCell>{author.firstName}</TableCell>
                         <TableCell>{author.lastName}</TableCell>
                         <TableCell>{author.fullName}</TableCell>
@@ -165,98 +165,105 @@ const AuthorPage = () => {
                     </TableRow>
                 )}
             />
-            <Pagination>
-                <PaginationContent>
-                    <PaginationItem>
-                        <ChevronsLeft
-                            className="cursor-pointer pr-2"
-                            onClick={() => setAuthorPage(1)}
-                        ></ChevronsLeft>
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationPrevious
+
+            <div className="flex justify-between items-center mt-4 text-sm">
+                <div className="flex items-center gap-2">
+                    <Popover>
+                        <PopoverTrigger className="flex h-9 w-9 items-center justify-center rounded-md hover:bg-accent transition-colors cursor-pointer">
+                            <PaginationEllipsis />
+                        </PopoverTrigger>
+                        <PopoverContent
+                            className="w-32 p-2 bg-gray-800/60"
+                            align="start"
+                            side="inline-end"
+                        >
+                            <h6 className="mb-2 px-2 text-[10px] font-bold uppercase tracking-wider text-white">
+                                Posts por página
+                            </h6>
+                            <div className="flex flex-col gap-1">
+                                {[3, 5, 10].map((value) => (
+                                    <Button
+                                        key={value}
+                                        variant={
+                                            authorPerPage === value
+                                                ? "secondary"
+                                                : "ghost"
+                                        }
+                                        className="h-7 justify-start px-2 text-xs"
+                                        onClick={() => {
+                                            setAuthorPerPage(value);
+                                            setAuthorPage(1);
+                                        }}
+                                    >
+                                        {value} posts
+                                    </Button>
+                                ))}
+                            </div>
+                        </PopoverContent>
+                    </Popover>
+                </div>
+
+                <Pagination className="mx-0 w-auto">
+                    <PaginationContent>
+                        <PaginationItem>
+                            <ChevronsLeft
+                                className="cursor-pointer pr-2"
+                                onClick={() => setAuthorPage(1)}
+                            />
+                        </PaginationItem>
+                        <PaginationItem>
+                            <PaginationPrevious
+                                onClick={() => setAuthorPage(AuthorPage - 1)}
+                                style={{
+                                    display: AuthorPage === 1 ? "none" : "flex",
+                                }}
+                            />
+                        </PaginationItem>
+                        <PaginationLink
                             onClick={() => setAuthorPage(AuthorPage - 1)}
                             style={{
-                                display: AuthorPage == 1 ? "none" : "flex",
+                                display: AuthorPage === 1 ? "none" : "flex",
                             }}
-                        />
-                    </PaginationItem>
-                    <PaginationLink
-                        onClick={() => setAuthorPage(AuthorPage - 1)}
-                        style={{ display: AuthorPage == 1 ? "none" : "flex" }}
-                    >
-                        {AuthorPage - 1}
-                    </PaginationLink>
-                    <PaginationLink>{AuthorPage}</PaginationLink>
-                    <PaginationLink
-                        onClick={() => setAuthorPage(AuthorPage + 1)}
-                        style={{
-                            display:
-                                AuthorPage == totalAuthorPages
-                                    ? "none"
-                                    : "flex",
-                        }}
-                    >
-                        {AuthorPage + 1}
-                    </PaginationLink>
-                    <PaginationItem>
-                        <PaginationNext
+                        >
+                            {AuthorPage - 1}
+                        </PaginationLink>
+                        <PaginationLink>{AuthorPage}</PaginationLink>
+                        <PaginationLink
                             onClick={() => setAuthorPage(AuthorPage + 1)}
                             style={{
                                 display:
-                                    AuthorPage >= totalAuthorPages
+                                    AuthorPage === totalAuthorPages
                                         ? "none"
                                         : "flex",
                             }}
-                        />
-                    </PaginationItem>
-                    <PaginationItem>
-                        <ChevronsRight
-                            className="cursor-pointer pl-2"
-                            onClick={() => setAuthorPage(totalAuthorPages)}
-                        ></ChevronsRight>
-                    </PaginationItem>
-                    <PaginationItem>
-                        <Popover>
-                            <PopoverTrigger
-                                className={
-                                    "flex h-9 w-9 items-center justify-center rounded-md hover:bg-accent transition-colors cursor-pointer"
-                                }
-                            >
-                                <PaginationEllipsis />
-                            </PopoverTrigger>
-                            <PopoverContent
-                                className="w-32 p-2 bg-gray-600/60"
-                                align="end"
-                                side="top"
-                            >
-                                <h6 className="mb-2 px-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground text-white">
-                                    Autores por pagina
-                                </h6>
-                                <div className="flex flex-col gap-1">
-                                    {[3, 5, 10].map((value) => (
-                                        <Button
-                                            key={value}
-                                            variant={
-                                                authorPerPage === value
-                                                    ? "secondary"
-                                                    : "ghost"
-                                            }
-                                            className="h-7 justify-start px-2 text-xs"
-                                            onClick={() => {
-                                                setAuthorPerPage(value);
-                                                setAuthorPage(1);
-                                            }}
-                                        >
-                                            {value} autores
-                                        </Button>
-                                    ))}
-                                </div>
-                            </PopoverContent>
-                        </Popover>
-                    </PaginationItem>
-                </PaginationContent>
-            </Pagination>
+                        >
+                            {AuthorPage + 1}
+                        </PaginationLink>
+                        <PaginationItem>
+                            <PaginationNext
+                                onClick={() => setAuthorPage(AuthorPage + 1)}
+                                style={{
+                                    display:
+                                        AuthorPage >= totalAuthorPages
+                                            ? "none"
+                                            : "flex",
+                                }}
+                            />
+                        </PaginationItem>
+                        <PaginationItem>
+                            <ChevronsRight
+                                className="cursor-pointer pl-2"
+                                onClick={() => setAuthorPage(totalAuthorPages)}
+                            />
+                        </PaginationItem>
+                    </PaginationContent>
+                </Pagination>
+
+                <div className="text-gray-400 min-w-[150px] text-right">
+                    Autores totales: {totalAuthors} | Página {AuthorPage} de{" "}
+                    {totalAuthorPages}
+                </div>
+            </div>
 
             {/* PEGAMOS EL NUEVO MODAL AQUÍ */}
             <Dialog

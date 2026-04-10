@@ -40,7 +40,8 @@ export const apiService = {
     getAuthor: async (id: string): Promise<Author> => {
         const response = await fetch(`${BASE_URL}/authors/${id}`, { headers });
         if (!response.ok) throw new Error("Error obteniendo autor");
-        return await response.json();
+        const json = await response.json();
+        return json.data ? json.data : json;
     },
 
     createAuthor: async (data: Omit<Author, "id">): Promise<Author> => {
@@ -106,7 +107,8 @@ export const apiService = {
     getPost: async (id: string): Promise<Post> => {
         const response = await fetch(`${BASE_URL}/posts/${id}`, { headers });
         if (!response.ok) throw new Error("Error obteniendo post");
-        return await response.json();
+        const json = await response.json();
+        return json.data ? json.data : json;
     },
 
     createPost: async (data: Omit<Post, "id">): Promise<Post> => {

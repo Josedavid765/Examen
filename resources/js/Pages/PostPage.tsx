@@ -86,10 +86,9 @@ const PostPage = () => {
     return (
         <>
             <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-bold text-white">
-                    Posts del Autor #{authorId}
-                </h2>
+                <h2 className="text-xl font-bold text-white"></h2>
                 <Button
+                    className="border-black/20 p-1.5"
                     variant="secondary"
                     onClick={() => navigate("/authors")}
                 >
@@ -99,7 +98,7 @@ const PostPage = () => {
 
             <DataTable
                 loading={loading}
-                title={`Posts: ${totalPosts} - Por página: ${postPerPage} - Página: ${PostPage} - Totales: ${totalPostPages}`}
+                title="Posts"
                 headers={[
                     { id: "id", name: "ID", sortable: false },
                     { id: "title", name: "Título", sortable: false },
@@ -174,94 +173,105 @@ const PostPage = () => {
                 )}
             />
 
-            <Pagination>
-                <PaginationContent>
-                    <PaginationItem>
-                        <ChevronsLeft
-                            className="cursor-pointer pr-2"
-                            onClick={() => setPostPage(1)}
-                        />
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationPrevious
+            <div className="flex justify-between items-center mt-4 text-sm">
+                <div className="flex items-center gap-2">
+                    <Popover>
+                        <PopoverTrigger className="flex h-9 w-9 items-center justify-center rounded-md hover:bg-accent transition-colors cursor-pointer">
+                            <PaginationEllipsis />
+                        </PopoverTrigger>
+                        <PopoverContent
+                            className="w-32 p-2 bg-gray-800/60"
+                            align="start"
+                            side="inline-end"
+                        >
+                            <h6 className="mb-2 px-2 text-[10px] font-bold uppercase tracking-wider text-white">
+                                Posts por página
+                            </h6>
+                            <div className="flex flex-col gap-1">
+                                {[3, 5, 10].map((value) => (
+                                    <Button
+                                        key={value}
+                                        variant={
+                                            postPerPage === value
+                                                ? "secondary"
+                                                : "ghost"
+                                        }
+                                        className="h-7 justify-start px-2 text-xs"
+                                        onClick={() => {
+                                            setPostPerPage(value);
+                                            setPostPage(1);
+                                        }}
+                                    >
+                                        {value} posts
+                                    </Button>
+                                ))}
+                            </div>
+                        </PopoverContent>
+                    </Popover>
+                </div>
+
+                <Pagination className="mx-0 w-auto">
+                    <PaginationContent>
+                        <PaginationItem>
+                            <ChevronsLeft
+                                className="cursor-pointer pr-2"
+                                onClick={() => setPostPage(1)}
+                            />
+                        </PaginationItem>
+                        <PaginationItem>
+                            <PaginationPrevious
+                                onClick={() => setPostPage(PostPage - 1)}
+                                style={{
+                                    display: PostPage === 1 ? "none" : "flex",
+                                }}
+                            />
+                        </PaginationItem>
+                        <PaginationLink
                             onClick={() => setPostPage(PostPage - 1)}
                             style={{
                                 display: PostPage === 1 ? "none" : "flex",
                             }}
-                        />
-                    </PaginationItem>
-                    <PaginationLink
-                        onClick={() => setPostPage(PostPage - 1)}
-                        style={{ display: PostPage === 1 ? "none" : "flex" }}
-                    >
-                        {PostPage - 1}
-                    </PaginationLink>
-                    <PaginationLink>{PostPage}</PaginationLink>
-                    <PaginationLink
-                        onClick={() => setPostPage(PostPage + 1)}
-                        style={{
-                            display:
-                                PostPage === totalPostPages ? "none" : "flex",
-                        }}
-                    >
-                        {PostPage + 1}
-                    </PaginationLink>
-                    <PaginationItem>
-                        <PaginationNext
+                        >
+                            {PostPage - 1}
+                        </PaginationLink>
+                        <PaginationLink>{PostPage}</PaginationLink>
+                        <PaginationLink
                             onClick={() => setPostPage(PostPage + 1)}
                             style={{
                                 display:
-                                    PostPage >= totalPostPages
+                                    PostPage === totalPostPages
                                         ? "none"
                                         : "flex",
                             }}
-                        />
-                    </PaginationItem>
-                    <PaginationItem>
-                        <ChevronsRight
-                            className="cursor-pointer pl-2"
-                            onClick={() => setPostPage(totalPostPages)}
-                        />
-                    </PaginationItem>
-                    <PaginationItem>
-                        <Popover>
-                            <PopoverTrigger className="flex h-9 w-9 items-center justify-center rounded-md hover:bg-accent transition-colors cursor-pointer">
-                                <PaginationEllipsis />
-                            </PopoverTrigger>
-                            <PopoverContent
-                                className="w-32 p-2 bg-gray-800/60"
-                                align="end"
-                                side="top"
-                            >
-                                <h6 className="mb-2 px-2 text-[10px] font-bold uppercase tracking-wider text-white">
-                                    Posts por página
-                                </h6>
-                                <div className="flex flex-col gap-1">
-                                    {[3, 5, 10].map((value) => (
-                                        <Button
-                                            key={value}
-                                            variant={
-                                                postPerPage === value
-                                                    ? "secondary"
-                                                    : "ghost"
-                                            }
-                                            className="h-7 justify-start px-2 text-xs"
-                                            onClick={() => {
-                                                setPostPerPage(value);
-                                                setPostPage(1);
-                                            }}
-                                        >
-                                            {value} posts
-                                        </Button>
-                                    ))}
-                                </div>
-                            </PopoverContent>
-                        </Popover>
-                    </PaginationItem>
-                </PaginationContent>
-            </Pagination>
+                        >
+                            {PostPage + 1}
+                        </PaginationLink>
+                        <PaginationItem>
+                            <PaginationNext
+                                onClick={() => setPostPage(PostPage + 1)}
+                                style={{
+                                    display:
+                                        PostPage >= totalPostPages
+                                            ? "none"
+                                            : "flex",
+                                }}
+                            />
+                        </PaginationItem>
+                        <PaginationItem>
+                            <ChevronsRight
+                                className="cursor-pointer pl-2"
+                                onClick={() => setPostPage(totalPostPages)}
+                            />
+                        </PaginationItem>
+                    </PaginationContent>
+                </Pagination>
 
-            {}
+                <div className="text-gray-400 min-w-[150px] text-right">
+                    Posts totales: {totalPosts} | Página {PostPage} de{" "}
+                    {totalPostPages}
+                </div>
+            </div>
+
             <Dialog
                 open={isDeleteDialogOpen}
                 onOpenChange={setIsDeleteDialogOpen}
