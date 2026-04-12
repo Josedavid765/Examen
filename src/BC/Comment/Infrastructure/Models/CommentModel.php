@@ -24,6 +24,11 @@ class CommentModel extends Model
         'comment_date'
     ];
 
+    public function author()
+    {
+        return $this->belongsTo(\Src\BC\Author\Infrastructure\Models\AuthorModel::class, 'author_id');
+    }
+
     protected static function booted(): void
     {
         static::created(function ($comment) {

@@ -10,19 +10,26 @@ use Src\BC\Comment\Domain\ValueObject\CommentIdValueObject;
 use Src\BC\Comment\Domain\ValueObject\CommentPostIdValueObject;
 use Src\BC\Comment\Domain\ValueObject\CommentStatusValueObject;
 use Src\BC\Comment\Infrastructure\Models\CommentModel;
+use Src\BC\Author\Infrastructure\Hydrators\AuthorHydrators;
 
 class CommentHydrator
 {
     public static function toDomain(CommentModel $model): Comment
     {
+        $author = null;
+        if ($model->relationLoaded('author') && $model->author) {
+            $author = AuthorHydrators::toDomain($model->author);
+        }
+
         return new Comment(
             new CommentIdValueObject($model->id),
             new CommentDescriptionValueObject($model->description),
             new CommentAuthorIdValueObject($model->author_id),   
             new CommentStatusValueObject($model->status),
             new CommentPostIdValueObject($model->post_id),        
-            new CommentDateValueObject($model->comment_date)     
-);
+            new CommentDateValueObject($model->comment_date),
+            $author
+        );
     }
 
     public static function toArray(Comment $entity): array

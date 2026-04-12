@@ -21,5 +21,10 @@ class PostModel extends Model
         'num_comments'
     ];
 
-    public $timestamps = true; 
+    public $timestamps = true;
+
+    public function author()
+    {
+        return $this->belongsTo(\Src\BC\Author\Infrastructure\Models\AuthorModel::class, 'author_id');
+    }
 }

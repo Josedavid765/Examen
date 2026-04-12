@@ -9,7 +9,7 @@ trait ListPostByAuthorIdTrait
 {
     public function listPostsByAuthorId(string $authorId, string $order='publishDate', string $direction='asc', int $page=1, int $perPage=10): array
     {
-        $query = PostModel::where('author_id', $authorId);
+        $query = PostModel::with('author')->where('author_id', $authorId);
 
         $query->orderBy($order, $direction);
 

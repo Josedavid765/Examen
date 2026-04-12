@@ -34,9 +34,20 @@ class ListPostsController
             $result = $this->listPostsUseCase->execute($order, $direction, $page, $perPage);
 
             $data = array_map(function ($post) {
+                $author = $post->getAuthor();
+                $authorData = null;
+                if ($author) {
+                    $authorData = [
+                        'id' => $author->getAuthorIdValue(),
+                        'fullName' => $author->getFullName(),
+                        'firstName' => $author->getAuthorFirstNameValue(),
+                        'lastName' => $author->getAuthorLastNameValue()
+                    ];
+                }
                 return [
                     'id'           => $post->getPostIdValue(),
                     'authorId'    => $post->getAuthorIdValue(),
+                    'author'       => $authorData,
                     'subject'      => $post->getSubjectValue(),
                     'description'  => $post->getDescriptionValue(),
                     'publishDate' => $post->getPublishDateValue(),

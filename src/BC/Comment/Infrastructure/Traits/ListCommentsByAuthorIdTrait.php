@@ -8,7 +8,7 @@ trait ListCommentsByAuthorIdTrait
 {
     public function listCommentsByAuthorId(string $authorId, string $order = 'commentDate', string $direction = 'desc', int $page = 1, int $perPage = 10): array
     {   
-        $query = CommentModel::where('author_id', $authorId);
+        $query = CommentModel::with('author')->where('author_id', $authorId);
 
         $query->orderBy($order, $direction);
 

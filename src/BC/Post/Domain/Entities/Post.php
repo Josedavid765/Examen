@@ -9,6 +9,7 @@ use Src\BC\Post\Domain\ValueObject\PostPublishDateValueObject;
 use Src\BC\Post\Domain\ValueObject\PostStatusValueObject;
 use Src\BC\Post\Domain\ValueObject\PostAuthorIdValueObject;
 use Src\BC\Post\Domain\ValueObject\PostCommentCount;
+use Src\BC\Author\Domain\Entities\Author;
 
 class Post
 {
@@ -19,6 +20,7 @@ class Post
     private PostStatusValueObject $status;
     private PostAuthorIdValueObject $authorId;
     private PostCommentCount $numOfComments;
+    private ?Author $author;
 
     public function __construct(
         PostIdValueObject $postId,
@@ -27,7 +29,8 @@ class Post
         ?PostPublishDateValueObject $publishDate,
         PostStatusValueObject $status,
         PostAuthorIdValueObject $authorId,
-        PostCommentCount $numOfComments
+        PostCommentCount $numOfComments,
+        ?Author $author = null
     ) {
         $this->postId = $postId;
         $this->subject = $subject;
@@ -36,6 +39,7 @@ class Post
         $this->status = $status;
         $this->authorId = $authorId;
         $this->numOfComments = $numOfComments;
+        $this->author = $author;
     }
 
     public function getPostId(): PostIdValueObject { return $this->postId; }
@@ -55,6 +59,8 @@ class Post
 
     public function getAuthorId(): PostAuthorIdValueObject { return $this->authorId; }
     public function getAuthorIdValue(): string { return $this->authorId->value(); }
+
+    public function getAuthor(): ?Author { return $this->author; }
 
     public function getNumComments(): PostCommentCount { return $this->numOfComments; }
     public function getNumCommentsValue(): int { return $this->numOfComments->value(); }
