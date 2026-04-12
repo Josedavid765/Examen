@@ -8,6 +8,7 @@ use Src\BC\Comment\Domain\ValueObject\CommentDescriptionValueObject;
 use Src\BC\Comment\Domain\ValueObject\CommentIdValueObject;
 use Src\BC\Comment\Domain\ValueObject\CommentPostIdValueObject;
 use Src\BC\Comment\Domain\ValueObject\CommentStatusValueObject;
+use Src\BC\Author\Domain\Entities\Author;
 
 class Comment
 {
@@ -17,6 +18,7 @@ class Comment
     private CommentStatusValueObject $status;
     private CommentPostIdValueObject $postId;
     private CommentDateValueObject $commentdate;
+    private ?Author $author;
 
     public function __construct(
         CommentIdValueObject $commentId, 
@@ -24,7 +26,8 @@ class Comment
         CommentAuthorIdValueObject $authorId,
         CommentStatusValueObject $status,
         CommentPostIdValueObject $postId,
-        CommentDateValueObject $commentdate
+        CommentDateValueObject $commentdate,
+        ?Author $author = null
     ) {
         $this->commentId = $commentId;
         $this->description = $description;
@@ -32,6 +35,7 @@ class Comment
         $this->status = $status;
         $this->postId = $postId;
         $this->commentdate = $commentdate;
+        $this->author = $author;
     }
 
     public function getCommentId(): CommentIdValueObject { return $this->commentId; }
@@ -42,6 +46,8 @@ class Comment
 
     public function getAuthorId(): CommentAuthorIdValueObject { return $this->authorId; }
     public function getAuthorIdValue(): string { return $this->authorId->value(); }
+
+    public function getAuthor(): ?Author { return $this->author; }
 
     public function getStatus(): CommentStatusValueObject { return $this->status; }
     public function getStatusValue(): string { return $this->status->value(); }

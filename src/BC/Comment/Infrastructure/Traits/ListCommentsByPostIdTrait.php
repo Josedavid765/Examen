@@ -10,7 +10,7 @@ trait ListCommentsByPostIdTrait
 {
     public function listByPostID(CommentPostIdValueObject $postId, string $order = 'commentDate', string $direction = 'desc', int $page = 1, int $perPage = 10): array
     {
-        $query = CommentModel::where('post_id', $postId->value());
+        $query = CommentModel::with('author')->where('post_id', $postId->value());
 
         $query->orderBy($order, $direction);
 

@@ -41,10 +41,21 @@ class ListCommentsByAuthorIdController extends Controller
             );
 
             $data = array_map(function (Comment $comment) {
+                $author = $comment->getAuthor();
+                $authorData = null;
+                if ($author) {
+                    $authorData = [
+                        'id' => $author->getAuthorIdValue(),
+                        'fullName' => $author->getFullName(),
+                        'firstName' => $author->getAuthorFirstNameValue(),
+                        'lastName' => $author->getAuthorLastNameValue()
+                    ];
+                }
                 return [
                     'id'           => $comment->getCommentIdValue(),
                     'description'  => $comment->getDescriptionValue(),
                     'authorId'     => $comment->getAuthorIdValue(),
+                    'author'       => $authorData,
                     'status'       => $comment->getStatusValue(),
                     'postId'       => $comment->getPostIdValue(),
                     'commentDate'  => $comment->getCommentDateValue(),
