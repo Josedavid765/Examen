@@ -34,8 +34,10 @@ class ListCommentsByPostIdController extends Controller
 
             $result = $this->listCommentsByPostIdUseCase->execute($postId, $dbColumn,$direction, $page, $perPage);
 
-            $data = array_map(function (Comment $comment) {
-                $author = $comment->getAuthor();
+            $data = array_map(function ($item) {
+                $comment = $item['comment'];
+                $author = $item['author'];
+
                 $authorData = null;
                 if ($author) {
                     $authorData = [

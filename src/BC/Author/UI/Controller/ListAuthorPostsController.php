@@ -38,8 +38,10 @@ class ListAuthorPostsController extends Controller
                 $perPage
             );
 
-            $mappedItems = array_map(function ($post) {
-                $author = $post->getAuthor();
+            $mappedItems = array_map(function ($item) {
+                $post = $item['post'];
+                $author = $item['author'];
+
                 $authorData = null;
                 if ($author) {
                     $authorData = [

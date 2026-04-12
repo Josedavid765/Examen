@@ -17,7 +17,10 @@ trait ListPostByAuthorIdTrait
 
         return [
             'items' => array_map(
-                fn($model) => PostHydrator::toDomain($model),
+                fn($model) => [
+                    'post' => PostHydrator::toDomain($model),
+                    'author' => $model->relationLoaded('author') && $model->author ? \Src\BC\Author\Infrastructure\Hydrators\AuthorHydrators::toDomain($model->author) : null
+                ],
                 $paginator->items()
             ),
             'pagination' => [
