@@ -16,7 +16,10 @@ trait ListCommentsByAuthorIdTrait
 
         return [
             'items' => array_map(
-                fn($model) => CommentHydrator::toDomain($model),
+                fn($model) => [
+                    'comment' => CommentHydrator::toDomain($model),
+                    'author' => $model->relationLoaded('author') && $model->author ? \Src\BC\Author\Infrastructure\Hydrators\AuthorHydrators::toDomain($model->author) : null
+                ],
                 $paginator->items()
             ),
             'pagination' => [
