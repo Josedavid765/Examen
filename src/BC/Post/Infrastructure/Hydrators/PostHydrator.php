@@ -4,6 +4,7 @@ namespace Src\BC\Post\Infrastructure\Hydrators;
 
 use Src\BC\Post\Infrastructure\Models\PostModel;
 use Src\BC\Post\Domain\Entities\Post;
+use Src\BC\Post\Domain\ValueObject\PostAuthorFullNameValueObject;
 use Src\BC\Post\Domain\ValueObject\PostIdValueObject;
 use Src\BC\Post\Domain\ValueObject\PostSubjectValueObject;
 use Src\BC\Post\Domain\ValueObject\PostDescriptionValueObject;
@@ -16,6 +17,7 @@ class PostHydrator
 {
     public static function toDomain(PostModel $model): Post
     {
+        $fullName = trim(($model->first_name ?? '') . ' ' . ($model->last_name ?? ''));
         return new Post(
             new PostIdValueObject($model->id),
             new PostSubjectValueObject($model->subject),
@@ -23,7 +25,8 @@ class PostHydrator
             new PostPublishDateValueObject($model->publish_date),
             new PostStatusValueObject($model->status),
             new PostAuthorIdValueObject($model->author_id),
-            new PostCommentCount((int)$model->num_comments)
+            new PostCommentCount((int)$model->num_comments),
+            new PostAuthorFullNameValueObject($fullName)
         );
     }
 }

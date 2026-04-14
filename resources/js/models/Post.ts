@@ -8,4 +8,5 @@ export interface Post {
     status: Status;
     authorId: string;
     numComments: number;
+    authorName: string;
 }

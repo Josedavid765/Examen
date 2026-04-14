@@ -16,11 +16,18 @@ class ListAuthorPostsUseCase
     public function execute(string $authorId,  string $order='publishDate', string $direction='asc', int $page=1, int $perPage=10): array
     {
         $id = new AuthorIdValueObject($authorId);
+        $author =  $this->authorRepo->readAuthor($id);
 
-        if (!$this->authorRepo->readAuthor($id)) {
+        if (!$author) {
             throw new Exception("Author not found");
         }
 
-        return $this->postRepo->listPostsByAuthorId($id->value(), $order, $direction, $page, $perPage);
+        $postsData = $this->postRepo->listPostsByAuthorId($author->getAuthorIdValue(), $order, $direction, $page, $perPage);
+
+        return [
+            'authorName' => $author->getFullName(),
+            'items'      => $postsData['items'],
+            'meta'       => $postsData['meta']
+        ];
     }
 }

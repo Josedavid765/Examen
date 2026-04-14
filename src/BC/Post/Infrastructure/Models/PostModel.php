@@ -18,7 +18,8 @@ class PostModel extends Model
         'description',
         'publish_date',
         'status',
-        'num_comments'
+        'num_comments',
+        'author_fullname'
     ];
 
     public $timestamps = true; 

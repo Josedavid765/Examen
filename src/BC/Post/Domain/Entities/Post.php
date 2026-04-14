@@ -2,6 +2,7 @@
 
 namespace Src\BC\Post\Domain\Entities;
 
+use Src\BC\Post\Domain\ValueObject\PostAuthorFullNameValueObject;
 use Src\BC\Post\Domain\ValueObject\PostIdValueObject;
 use Src\BC\Post\Domain\ValueObject\PostSubjectValueObject;
 use Src\BC\Post\Domain\ValueObject\PostDescriptionValueObject;
@@ -19,6 +20,7 @@ class Post
     private PostStatusValueObject $status;
     private PostAuthorIdValueObject $authorId;
     private PostCommentCount $numOfComments;
+    private PostAuthorFullNameValueObject $authorFullName;
 
     public function __construct(
         PostIdValueObject $postId,
@@ -27,7 +29,8 @@ class Post
         ?PostPublishDateValueObject $publishDate,
         PostStatusValueObject $status,
         PostAuthorIdValueObject $authorId,
-        PostCommentCount $numOfComments
+        PostCommentCount $numOfComments,
+        PostAuthorFullNameValueObject $authorFullName
     ) {
         $this->postId = $postId;
         $this->subject = $subject;
@@ -36,6 +39,7 @@ class Post
         $this->status = $status;
         $this->authorId = $authorId;
         $this->numOfComments = $numOfComments;
+        $this->authorFullName = $authorFullName;
     }
 
     public function getPostId(): PostIdValueObject { return $this->postId; }
@@ -58,6 +62,9 @@ class Post
 
     public function getNumComments(): PostCommentCount { return $this->numOfComments; }
     public function getNumCommentsValue(): int { return $this->numOfComments->value(); }
+
+    public function getAuthorFullName(): PostAuthorFullNameValueObject { return $this->authorFullName; }
+    public function getAuthorFullNameValue(): string { return $this->authorFullName->value(); }
 
     public function changeStatus(PostStatusValueObject $newStatus): void
     {

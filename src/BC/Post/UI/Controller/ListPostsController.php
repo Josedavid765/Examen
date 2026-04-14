@@ -42,6 +42,7 @@ class ListPostsController
                     'publishDate' => $post->getPublishDateValue(),
                     'status'       => $post->getStatusValue(),
                     'numComments' => $post->getNumCommentsValue(),
+                    'authorName' => $post->getAuthorFullNameValue(),
                 ];
             }, $result['items']);
 
