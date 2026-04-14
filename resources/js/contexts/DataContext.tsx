@@ -28,7 +28,7 @@ interface DataContextType {
     setOrderAuthor?: (order: string) => void;
     orderPost?: string;
     setOrderPost?: (order: string) => void;
-    refreshAuthorData: () => Promise<void>;
+    refreshAuthorData: (debouncedSearch?: string) => Promise<void>;
     refreshPostData: () => Promise<void>;
 }
 
@@ -71,11 +71,13 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
         queryParams.get("order") || "publishDate",
     );
 
-    const loadAuthors = async () => {
+    const loadAuthors = async (debouncedSearch?: string) => {
         try {
             setLoading(true);
+            const currentFilter =
+                debouncedSearch !== undefined ? debouncedSearch : filter;
             const authorsData = (await apiService.getAuthors(
-                filter,
+                currentFilter,
                 AuthorPage,
                 authorPerPage,
                 orderAuthor,
