@@ -186,9 +186,12 @@ export const apiService = {
     },
 
     getCommentsByPost: async (postId: string): Promise<Comment[]> => {
-        const response = await fetch(`${BASE_URL}/posts/${postId}/comments`, {
-            headers,
-        });
+        const response = await fetch(
+            `${BASE_URL}/posts/${postId}/comments?perPage=100`,
+            {
+                headers,
+            },
+        );
         if (!response.ok)
             throw new Error("Error obteniendo comentarios del post");
         const json = await response.json();

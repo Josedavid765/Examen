@@ -11,11 +11,6 @@ import {
 } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
 import PostCommentsWidget from "./PostCommentsWidget";
-import {
-    Popover,
-    PopoverTrigger,
-    PopoverContent,
-} from "@/components/ui/popover";
 
 const PostPage = () => {
     const [posts, setPosts] = useState<Post[]>([]);
@@ -25,6 +20,15 @@ const PostPage = () => {
 
     const observerTarget = useRef<HTMLDivElement>(null);
 
+    type PostResponse = {
+        data: Post[];
+        meta: {
+            currentPage: number;
+            lastPage: number;
+            total: number;
+        };
+    };
+
     const fetchPosts = async (pageNum: number) => {
         setLoading(true);
         try {
@@ -33,7 +37,7 @@ const PostPage = () => {
             const newPosts = response.data
                 ? (response.data as unknown as Post[])
                 : (response as unknown as Post[]);
-            const meta = (response as any).meta || {};
+            const meta = (response as PostResponse).meta || {};
 
             setPosts((prev) =>
                 pageNum === 1 ? newPosts : [...prev, ...newPosts],
@@ -76,13 +80,13 @@ const PostPage = () => {
     }, [hasMore, loading]);
 
     return (
-        <div className="max-w-7xl mx-auto py-8 px-4">
-            <h1 className="text-3xl font-bold text-white mb-8">
-                Todos los Posts
+        <div className="relative max-w-7xl mx-auto py-8 px-4 gap-2">
+            <h1 className="absolute mx-10 top-0 left-1/2 transform -translate-x-3/4 text-3xl font-bold mb-10">
+                Posts
             </h1>
 
             {/* Grid responsivo: 1 columna en móvil, 2 en tablets, 3 en desktop, 4 en pantallas anchas */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6 mt-5">
                 {posts.map((post, index) => (
                     <Card
                         key={`${post.id}-${index}`}
@@ -95,9 +99,9 @@ const PostPage = () => {
                             >
                                 {post.subject}
                             </CardTitle>
-                            <CardDescription className="text-xs text-gray-500">
+                            <CardDescription className="text-sm text-gray-500/60">
                                 Autor:{" "}
-                                {(post as any).authorName ||
+                                {(post as Post).authorName ||
                                     `#${post.authorName}`}
                                 <br />
                                 Fecha:{" "}
