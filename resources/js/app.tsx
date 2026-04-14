@@ -21,8 +21,8 @@ import { Button } from "./components/ui/button.tsx";
 const App: React.FC = () => {
     const navigate = useNavigate();
     return (
-        <div className="min-h-screen bg-slate-50">
-            <div className="bg-gradient-to-r from-[#FF9A8B] to-[#1E1040] shadow flex justify-center align-middle gap-4 py-3">
+        <div className="min-h-screen bg-slate-50 pt-12">
+            <div className="fixed top-0 left-0 z-50 w-full flex items-center justify-center bg-gradient-to-r from-[#FF9A8B] to-[#1E1040] shadow gap-4 py-3 mb-10">
                 <Button onClick={() => navigate("/posts")} variant={"link"}>
                     Posts
                 </Button>
