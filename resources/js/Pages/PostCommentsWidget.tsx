@@ -41,7 +41,12 @@ const PostCommentsWidget = ({ postId }: { postId: string }) => {
                     <FaRegCommentDots />
                 </PopoverTrigger>
             </div>
-            <PopoverContent className="w-80 p-4 max-h-64 overflow-y-auto">
+            <PopoverContent
+                className="w-80 p-4 max-h-64 overflow-y-auto"
+                side="top"
+                align="end"
+                sideOffset={8}
+            >
                 {isLoading ? (
                     <div className="flex justify-center py-4">
                         <Spinner />
