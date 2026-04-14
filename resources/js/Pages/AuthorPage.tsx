@@ -253,7 +253,7 @@ const AuthorPage = () => {
                     </PaginationContent>
                 </Pagination>
 
-                <div className="text-gray-400 min-w-[150px] text-right">
+                <div className="text-gray-400 min-w-37.5 text-right">
                     Autores totales: {totalAuthors} | Página {AuthorPage} de{" "}
                     {totalAuthorPages}
                 </div>

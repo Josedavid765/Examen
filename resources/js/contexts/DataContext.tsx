@@ -4,6 +4,8 @@ import { Author } from "../models/Author";
 import { Post } from "../models/Post";
 
 interface DataContextType {
+    isDarkMode: boolean;
+    setIsDarkMode: (isDarkMode: boolean) => void;
     authors: Author[];
     authorId: string;
     setAuthorId: (authorId: string) => void;
@@ -51,6 +53,7 @@ const DataContext = createContext<DataContextType | undefined>(undefined);
 
 export const DataProvider = ({ children }: { children: ReactNode }) => {
     const queryParams = new URLSearchParams(window.location.search);
+    const [isDarkMode, setIsDarkMode] = useState(false);
     const [authors, setAuthors] = useState<Author[]>([]);
     const [authorId, setAuthorId] = useState(queryParams.get("id") || "");
     const [posts, setPosts] = useState<Post[]>([]);
@@ -124,6 +127,8 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     return (
         <DataContext.Provider
             value={{
+                isDarkMode,
+                setIsDarkMode,
                 authors,
                 authorId,
                 setAuthorId,
