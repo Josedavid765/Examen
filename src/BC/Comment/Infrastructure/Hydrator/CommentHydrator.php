@@ -15,7 +15,9 @@ use Src\BC\Comment\Infrastructure\Models\CommentModel;
 class CommentHydrator
 {
     public static function toDomain(CommentModel $model): Comment
-    {
+    {   
+        $rawFullName = trim(($model->author_fullname ?? ''));
+        $fullName = !empty($rawFullName) ? $rawFullName : 'Autor Desconocido';
         return new Comment(
             new CommentIdValueObject($model->id),
             new CommentDescriptionValueObject($model->description),
@@ -23,7 +25,7 @@ class CommentHydrator
             new CommentStatusValueObject($model->status),
             new CommentPostIdValueObject($model->post_id),        
             new CommentDateValueObject($model->comment_date),
-            new CommentAuthorFullNameValueObject($model->author_fullname)
+            new CommentAuthorFullNameValueObject($fullName)
 );
     }
 

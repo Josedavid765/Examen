@@ -19,7 +19,7 @@ trait ListCommentsByAuthorIdTrait
                 fn($model) => CommentHydrator::toDomain($model),
                 $paginator->items()
             ),
-            'pagination' => [
+            'meta' => [
                 'total'         => $paginator->total(),
                 'perPage'       => $paginator->perPage(),
                 'currentPage'   => $paginator->currentPage(),

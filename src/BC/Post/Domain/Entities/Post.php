@@ -30,7 +30,7 @@ class Post
         PostStatusValueObject $status,
         PostAuthorIdValueObject $authorId,
         PostCommentCount $numOfComments,
-        PostAuthorFullNameValueObject $authorFullName
+        PostAuthorFullNameValueObject $authorFullName=null
     ) {
         $this->postId = $postId;
         $this->subject = $subject;

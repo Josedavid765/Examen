@@ -43,10 +43,7 @@ class ListAuthorPostsController extends Controller
                     
             return response()->json([
                 'status' => 'success',
-                'data'   => [
-                    'authorName' => $result['authorName'],
-                    'posts'       => $posts
-                ],
+                'data'   => $posts,
                 'meta'   => $result['meta']       
             ]);
 

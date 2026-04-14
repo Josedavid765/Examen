@@ -42,19 +42,20 @@ class ListCommentsByAuthorIdController extends Controller
 
             $data = array_map(function (Comment $comment) {
                 return [
-                    'id'           => $comment->getCommentIdValue(),
-                    'description'  => $comment->getDescriptionValue(),
-                    'authorId'     => $comment->getAuthorIdValue(),
-                    'status'       => $comment->getStatusValue(),
-                    'postId'       => $comment->getPostIdValue(),
-                    'commentDate'  => $comment->getCommentDateValue(),
+                    'id'              => $comment->getCommentIdValue(),
+                    'description'     => $comment->getDescriptionValue(),
+                    'authorId'        => $comment->getAuthorIdValue(),
+                    'authorFullName'  => $comment->getAuthorFullNameValue(),
+                    'status'          => $comment->getStatusValue(),
+                    'postId'          => $comment->getPostIdValue(),
+                    'commentDate'     => $comment->getCommentDateValue(),
                 ];
             }, $result['items']);
 
             return response()->json([
                 'status' => 'success',
                 'data'   => $data,
-                'meta'   => $result['pagination']
+                'meta'   => $result['meta']
             ], 200);
 
         } catch (\Exception $e) {

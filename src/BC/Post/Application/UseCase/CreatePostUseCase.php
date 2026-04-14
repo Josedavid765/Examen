@@ -35,7 +35,8 @@ class CreatePostUseCase
             new PostPublishDateValueObject($dto->getPublishDate()),
             new PostStatusValueObject($dto->getStatus()),
             new PostAuthorIdValueObject($dto->getAuthorId()),
-            new PostCommentCount((int)$dto->getNumComments())
+            new PostCommentCount((int)$dto->getNumComments()),
+            null
         );
 
         $this->repo->createPost($post);

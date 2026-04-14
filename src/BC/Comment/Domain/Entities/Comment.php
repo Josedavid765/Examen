@@ -18,7 +18,7 @@ class Comment
     private CommentStatusValueObject $status;
     private CommentPostIdValueObject $postId;
     private CommentDateValueObject $commentdate;
-    private CommentAuthorFullNameValueObject $authorfullName;
+    private ?CommentAuthorFullNameValueObject $authorfullName;
 
 
     public function __construct(
@@ -28,7 +28,7 @@ class Comment
         CommentStatusValueObject $status,
         CommentPostIdValueObject $postId,
         CommentDateValueObject $commentdate,
-        CommentAuthorFullNameValueObject $authorfullName
+        ?CommentAuthorFullNameValueObject $authorfullName = null
     ) {
         $this->commentId = $commentId;
         $this->description = $description;
@@ -57,8 +57,8 @@ class Comment
     public function getCommentDate(): CommentDateValueObject { return $this->commentdate; }
     public function getCommentDateValue(): string { return $this->commentdate->value(); }
 
-    public function getAuthorFullName(): CommentAuthorFullNameValueObject { return $this->authorfullName; }
-    public function getAuthorFullNameValue(): string { return $this->authorfullName->value(); }
+    public function getAuthorFullName(): ?CommentAuthorFullNameValueObject { return $this->authorfullName; }
+    public function getAuthorFullNameValue(): ?string { return $this->authorfullName ? $this->authorfullName->value() : null; }
 
     public function changeStatus(CommentStatusValueObject $newStatus): void
     {

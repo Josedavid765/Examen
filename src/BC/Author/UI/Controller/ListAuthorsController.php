@@ -47,7 +47,7 @@ class ListAuthorsController extends Controller
             return response()->json([
                 'status' => 'success',
                 'data'   => $authors,
-                'meta'   => $result['pagination']       
+                'meta'   => $result['meta']       
             ]);
 
         } catch (\Exception $e) {

@@ -14,7 +14,6 @@ use Src\BC\Comment\Domain\ValueObject\CommentIdValueObject;
 use Src\BC\Comment\Domain\ValueObject\CommentPostIdValueObject;
 use Src\BC\Comment\Domain\ValueObject\CommentStatusValueObject;
 use Src\BC\Post\Application\UseCase\ReadPostUseCase;
-
 class CreateCommentUseCase
 {
     public function __construct(
@@ -39,7 +38,8 @@ class CreateCommentUseCase
             new CommentAuthorIdValueObject($dto->getAuthorId()),
             new CommentStatusValueObject($dto->getStatus()),
             new CommentPostIdValueObject($dto->getPostId()),
-            new CommentDateValueObject($dto->getCommentDate())
+            new CommentDateValueObject($dto->getCommentDate()),
+            null
         );
 
         $this->repository->createComment($comment);

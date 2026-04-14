@@ -25,7 +25,6 @@ class ListAuthorPostsUseCase
         $postsData = $this->postRepo->listPostsByAuthorId($author->getAuthorIdValue(), $order, $direction, $page, $perPage);
 
         return [
-            'authorName' => $author->getFullName(),
             'items'      => $postsData['items'],
             'meta'       => $postsData['meta']
         ];
