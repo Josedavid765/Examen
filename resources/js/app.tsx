@@ -22,7 +22,7 @@ const App: React.FC = () => {
     const navigate = useNavigate();
     return (
         <div className="min-h-screen bg-slate-50">
-            <div className="bg-gray-400/40 shadow flex justify-center align-middle gap-4 py-3">
+            <div className="bg-gradient-to-r from-[#FF9A8B] to-[#1E1040] shadow flex justify-center align-middle gap-4 py-3">
                 <Button onClick={() => navigate("/posts")} variant={"link"}>
                     Posts
                 </Button>

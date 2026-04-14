@@ -191,7 +191,8 @@ export const apiService = {
         });
         if (!response.ok)
             throw new Error("Error obteniendo comentarios del post");
-        return await response.json();
+        const json = await response.json();
+        return json.data ? json.data : json;
     },
 
     getCommentsByAuthor: async (authorId: string): Promise<Comment[]> => {

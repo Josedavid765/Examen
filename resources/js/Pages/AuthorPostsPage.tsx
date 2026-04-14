@@ -59,16 +59,13 @@ const AuthorPostsPage = () => {
     };
 
     useEffect(() => {
-        if (id && id !== authorId) {
-            setAuthorId(id);
+        if (id) {
+            if (id !== authorId) {
+                setAuthorId(id);
+            }
+            refreshPostData(id);
         }
-    }, [id]);
-
-    useEffect(() => {
-        if (authorId) {
-            refreshPostData();
-        }
-    }, [authorId, PostPage, postPerPage, orderPost]);
+    }, [id, PostPage, postPerPage, orderPost]);
 
     const handleDelete = async (postId: string) => {
         try {

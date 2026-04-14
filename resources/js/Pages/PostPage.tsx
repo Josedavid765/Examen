@@ -1,8 +1,6 @@
-import { useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import { Post } from "@/models/Post";
 import { apiService } from "@/services/apiService";
-import { Button } from "@/components/ui/button";
 import {
     Card,
     CardHeader,
@@ -12,11 +10,14 @@ import {
     CardFooter,
 } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
-import { FaRegCommentDots } from "react-icons/fa";
+import PostCommentsWidget from "./PostCommentsWidget";
+import {
+    Popover,
+    PopoverTrigger,
+    PopoverContent,
+} from "@/components/ui/popover";
 
 const PostPage = () => {
-    const navigate = useNavigate();
-
     const [posts, setPosts] = useState<Post[]>([]);
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
@@ -117,16 +118,7 @@ const PostPage = () => {
                             <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
                                 {post.numComments} comentarios
                             </span>
-                            <Button
-                                variant="default"
-                                size="sm"
-                                onClick={() =>
-                                    navigate(`/posts/${post.id}/comments`)
-                                }
-                                className="bg-blue-800 hover:bg-blue-900 text-white px-6"
-                            >
-                                <FaRegCommentDots />
-                            </Button>
+                            <PostCommentsWidget postId={post.id} />
                         </CardFooter>
                     </Card>
                 ))}

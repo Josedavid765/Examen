@@ -29,7 +29,7 @@ interface DataContextType {
     orderPost?: string;
     setOrderPost?: (order: string) => void;
     refreshAuthorData: (debouncedSearch?: string) => Promise<void>;
-    refreshPostData: () => Promise<void>;
+    refreshPostData: (currentAuthorId?: string) => Promise<void>;
 }
 
 interface ApiMeta {
@@ -92,8 +92,9 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
-    const loadPosts = async () => {
-        if (!authorId) {
+    const loadPosts = async (currentAuthorId?: string) => {
+        const idToUse = currentAuthorId || authorId;
+        if (!idToUse) {
             setPosts([]);
             setTotalPosts(0);
             setTotalPostPages(1);
@@ -101,15 +102,18 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
         }
         try {
             setLoading(true);
-            const postsData = (await apiService.getAuthorPosts(
-                authorId,
+            const response = (await apiService.getAuthorPosts(
+                idToUse,
                 PostPage,
                 postPerPage,
                 orderPost,
             )) as PostResponse;
-            setPosts(postsData.data || []);
-            setTotalPosts(postsData.meta?.total || 0);
-            setTotalPostPages(postsData.meta?.lastPage || 1);
+            const postsArray = response.data
+                ? response.data
+                : ((Array.isArray(response) ? response : []) as Post[]);
+            setPosts(postsArray);
+            setTotalPosts(response.meta?.total || postsArray.length);
+            setTotalPostPages(response.meta?.lastPage || 1);
         } catch (error) {
             console.error("Error al cargar posts:", error);
         } finally {
