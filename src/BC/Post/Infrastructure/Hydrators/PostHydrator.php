@@ -17,7 +17,8 @@ class PostHydrator
 {
     public static function toDomain(PostModel $model): Post
     {
-        $fullName = trim(($model->first_name ?? '') . ' ' . ($model->last_name ?? ''));
+        $rawFullName = trim(($model->first_name ?? '') . ' ' . ($model->last_name ?? ''));
+        $fullName = !empty($rawFullName) ? $rawFullName : 'Autor Desconocido';
         return new Post(
             new PostIdValueObject($model->id),
             new PostSubjectValueObject($model->subject),

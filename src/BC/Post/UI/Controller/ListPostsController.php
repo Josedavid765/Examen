@@ -49,11 +49,16 @@ class ListPostsController
             return response()->json([
                 'status' => 'success',
                 'data'   => $data,
-                'meta'   => $result['pagination']
+                'meta'   => $result['meta']
             ], 200);
 
         } catch (\Exception $e) {
-            return response()->json(['status' => 'error','error'  => $e->getMessage()], 400);
-        }
+    return response()->json([
+        'status' => 'error',
+        'message' => $e->getMessage(),
+        'file' => $e->getFile(),
+        'line' => $e->getLine()
+    ], 500);
+}
     }
 }

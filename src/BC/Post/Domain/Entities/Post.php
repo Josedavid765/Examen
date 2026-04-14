@@ -20,7 +20,7 @@ class Post
     private PostStatusValueObject $status;
     private PostAuthorIdValueObject $authorId;
     private PostCommentCount $numOfComments;
-    private PostAuthorFullNameValueObject $authorFullName;
+    private ?PostAuthorFullNameValueObject $authorFullName;
 
     public function __construct(
         PostIdValueObject $postId,
@@ -63,8 +63,8 @@ class Post
     public function getNumComments(): PostCommentCount { return $this->numOfComments; }
     public function getNumCommentsValue(): int { return $this->numOfComments->value(); }
 
-    public function getAuthorFullName(): PostAuthorFullNameValueObject { return $this->authorFullName; }
-    public function getAuthorFullNameValue(): string { return $this->authorFullName->value(); }
+    public function getAuthorFullName(): ?PostAuthorFullNameValueObject { return $this->authorFullName; }
+    public function getAuthorFullNameValue(): ?string { return $this->authorFullName->value(); }
 
     public function changeStatus(PostStatusValueObject $newStatus): void
     {

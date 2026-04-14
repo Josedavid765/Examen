@@ -3,6 +3,7 @@
 namespace Src\BC\Comment\Infrastructure\Hydrator;
 
 use Src\BC\Comment\Domain\Entities\Comment;
+use Src\BC\Comment\Domain\ValueObject\CommentAuthorFullNameValueObject;
 use Src\BC\Comment\Domain\ValueObject\CommentAuthorIdValueObject;
 use Src\BC\Comment\Domain\ValueObject\CommentDateValueObject;
 use Src\BC\Comment\Domain\ValueObject\CommentDescriptionValueObject;
@@ -21,7 +22,8 @@ class CommentHydrator
             new CommentAuthorIdValueObject($model->author_id),   
             new CommentStatusValueObject($model->status),
             new CommentPostIdValueObject($model->post_id),        
-            new CommentDateValueObject($model->comment_date)     
+            new CommentDateValueObject($model->comment_date),
+            new CommentAuthorFullNameValueObject($model->author_fullname)
 );
     }
 
@@ -34,6 +36,7 @@ class CommentHydrator
             'status' => $entity->getStatusValue(),
             'post_id' => $entity->getPostIdValue(),
             'comment_date' => $entity->getCommentDateValue(),
+            'author_fullname' => $entity->getAuthorFullNameValue(),
         ];
     }
 }

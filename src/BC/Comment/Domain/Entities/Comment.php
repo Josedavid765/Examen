@@ -2,6 +2,7 @@
 
 namespace Src\BC\Comment\Domain\Entities;
 
+use Src\BC\Comment\Domain\ValueObject\CommentAuthorFullNameValueObject;
 use Src\BC\Comment\Domain\ValueObject\CommentAuthorIdValueObject;
 use Src\BC\Comment\Domain\ValueObject\CommentDateValueObject;
 use Src\BC\Comment\Domain\ValueObject\CommentDescriptionValueObject;
@@ -17,6 +18,8 @@ class Comment
     private CommentStatusValueObject $status;
     private CommentPostIdValueObject $postId;
     private CommentDateValueObject $commentdate;
+    private CommentAuthorFullNameValueObject $authorfullName;
+
 
     public function __construct(
         CommentIdValueObject $commentId, 
@@ -24,7 +27,8 @@ class Comment
         CommentAuthorIdValueObject $authorId,
         CommentStatusValueObject $status,
         CommentPostIdValueObject $postId,
-        CommentDateValueObject $commentdate
+        CommentDateValueObject $commentdate,
+        CommentAuthorFullNameValueObject $authorfullName
     ) {
         $this->commentId = $commentId;
         $this->description = $description;
@@ -32,6 +36,7 @@ class Comment
         $this->status = $status;
         $this->postId = $postId;
         $this->commentdate = $commentdate;
+        $this->authorfullName = $authorfullName;
     }
 
     public function getCommentId(): CommentIdValueObject { return $this->commentId; }
@@ -51,6 +56,9 @@ class Comment
 
     public function getCommentDate(): CommentDateValueObject { return $this->commentdate; }
     public function getCommentDateValue(): string { return $this->commentdate->value(); }
+
+    public function getAuthorFullName(): CommentAuthorFullNameValueObject { return $this->authorfullName; }
+    public function getAuthorFullNameValue(): string { return $this->authorfullName->value(); }
 
     public function changeStatus(CommentStatusValueObject $newStatus): void
     {

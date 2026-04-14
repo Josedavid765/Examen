@@ -21,7 +21,8 @@ class CommentModel extends Model
         'author_id',
         'status',
         'post_id',
-        'comment_date'
+        'comment_date',
+        'author_fullname'
     ];
 
     protected static function booted(): void
