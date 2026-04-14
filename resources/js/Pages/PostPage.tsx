@@ -96,7 +96,7 @@ const PostPage = () => {
                             </CardTitle>
                             <CardDescription className="text-xs text-gray-500">
                                 Autor:{" "}
-                                {(post as any).authorName||
+                                {(post as any).authorName ||
                                     `#${post.authorName}`}
                                 <br />
                                 Fecha:{" "}

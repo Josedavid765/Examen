@@ -53,20 +53,23 @@ const AuthorPage = () => {
     const [authorIdToDelete, setAuthorIdToDelete] = useState<string | null>(
         null,
     );
+    const [debouncedFilter, setDebouncedFilter] = useState(filter);
 
     console.log(authors);
 
     useEffect(() => {
-        refreshAuthorData();
-    }, [AuthorPage, authorPerPage, orderAuthor]);
+        const timer = setTimeout(() => {
+            if (filter !== debouncedFilter) {
+                setDebouncedFilter(filter);
+                setAuthorPage(1); // Reiniciar a la primera página al cambiar el filtro
+            }
+        }, 700);
+        return () => clearTimeout(timer);
+    }, [filter, debouncedFilter, setAuthorPage]);
 
     useEffect(() => {
-        const timerId = setTimeout(() => {
-            setAuthorPage(1);
-            refreshAuthorData();
-        }, 700);
-        return () => clearTimeout(timerId);
-    }, [filter]);
+        refreshAuthorData(debouncedFilter);
+    }, [AuthorPage, authorPerPage, orderAuthor, debouncedFilter]);
 
     const handleOpenDeleteDialog = (id: string) => {
         setAuthorIdToDelete(id);
