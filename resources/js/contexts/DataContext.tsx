@@ -32,6 +32,7 @@ interface DataContextType {
     setOrderAuthor?: (order: string) => void;
     orderPost?: string;
     setOrderPost?: (order: string) => void;
+    logout: () => void;
     refreshAuthorData: (debouncedSearch?: string) => Promise<void>;
     refreshPostData: (currentAuthorId?: string) => Promise<void>;
 }
@@ -54,7 +55,10 @@ interface PostResponse {
 const DataContext = createContext<DataContextType | undefined>(undefined);
 
 export const DataProvider = ({ children }: { children: ReactNode }) => {
-    const [authorLogged, setAuthorLogged] = useState<Author | null>(null);
+    const [authorLogged, setAuthorLogged] = useState<Author | null>(() => {
+        const storedAuthor = localStorage.getItem("authorLogged");
+        return storedAuthor ? JSON.parse(storedAuthor) : null;
+    });
     const queryParams = new URLSearchParams(window.location.search);
     const [isDarkMode, setIsDarkMode] = useState(() => {
         return localStorage.getItem("theme") === "dark";
@@ -84,6 +88,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
             setLoading(true);
             apiService.login({ email: author.email, password: author.password }).then(loggedAuthor => {
                 setAuthorLogged(loggedAuthor);
+                localStorage.setItem("authorLogged", JSON.stringify(loggedAuthor));
             }).catch(error => {
                 console.error("Error al iniciar sesión:", error);
             });
@@ -92,6 +97,16 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
             console.error("Error al iniciar sesión:", error);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const logout = async () => {
+        try {
+            await apiService.logout();
+            setAuthorLogged(null);
+            localStorage.removeItem("authorLogged");
+        } catch (error) {
+            console.error("Error al cerrar sesión:", error);
         }
     };
 
@@ -160,6 +175,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
             value={{
                 authorLogged,
                 logAuthor,
+                logout,
                 isDarkMode,
                 setIsDarkMode,
                 authors,

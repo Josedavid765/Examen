@@ -14,13 +14,14 @@ import AuthorFormPage from "./Pages/AuthorFormPage.tsx";
 import AuthorPostsPage from "./Pages/AuthorPostsPage.tsx";
 import PostFormPage from "./Pages/PostFormPage.tsx";
 import PostPage from "./Pages/PostPage.tsx";
+import LoginPage from "./Pages/LoginPage.tsx";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 
 const App: React.FC = () => {
     const navigate = useNavigate();
-    const { isDarkMode, setIsDarkMode, authorLogged } = useData();
+    const { isDarkMode, setIsDarkMode, authorLogged, logout } = useData();
     return (
         <div className="min-h-screen bg-slate-50 pt-12 dark:bg-slate-800 dark:text-white transition-colors duration-300">
             <div
@@ -62,25 +63,33 @@ const App: React.FC = () => {
                                 Toggle dark mode
                             </span>
                         </Label>
-                        <div className="absolute top-3 right-4 flex gap-2">
+                        <div className="absolute top-3 right-4 flex gap-2 items-center">
                             {authorLogged !== null ? (
-                                <Button
-                                    variant="link"
-                                    className="text-white font-bold"
-                                >
-                                    {authorLogged.fullName}
-                                </Button>
+                                <>
+                                    <span className="text-white font-bold">
+                                        {authorLogged.fullName}
+                                    </span>
+                                    <Button
+                                        variant="link"
+                                        className="text-white underline hover:text-gray-200"
+                                        onClick={logout}
+                                    >
+                                        Cerrar sesión
+                                    </Button>
+                                </>
                             ) : (
                                 <>
                                     <Button
                                         variant="link"
                                         className="text-black dark:text-gray-200 hover:underline"
+                                        onClick={() => navigate("/login")}
                                     >
                                         Iniciar sesión
                                     </Button>
                                     <Button
                                         variant="link"
                                         className="text-black dark:text-gray-200 hover:text-underline hover:text-[#1E1040]"
+                                        onClick={() => navigate("/authors/new")}
                                     >
                                         Registrarse
                                     </Button>
@@ -93,6 +102,8 @@ const App: React.FC = () => {
             <div className="container mx-auto py-8">
                 <Routes>
                     <Route path="/" element={<Navigate to="/authors" />} />
+
+                    <Route path="/login" element={<LoginPage />} />
 
                     <Route path="/authors" element={<AuthorPage />} />
                     <Route path="/authors/new" element={<AuthorFormPage />} />
