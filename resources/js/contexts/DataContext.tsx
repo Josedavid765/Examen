@@ -4,6 +4,8 @@ import { Author } from "../models/Author";
 import { Post } from "../models/Post";
 
 interface DataContextType {
+    authorLogged: Author | null;
+    logAuthor: (author: Author) => void;
     isDarkMode: boolean;
     setIsDarkMode: (isDarkMode: boolean) => void;
     authors: Author[];
@@ -52,6 +54,7 @@ interface PostResponse {
 const DataContext = createContext<DataContextType | undefined>(undefined);
 
 export const DataProvider = ({ children }: { children: ReactNode }) => {
+    const [authorLogged, setAuthorLogged] = useState<Author | null>(null);
     const queryParams = new URLSearchParams(window.location.search);
     const [isDarkMode, setIsDarkMode] = useState(() => {
         return localStorage.getItem("theme") === "dark";
@@ -75,6 +78,22 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     const [orderPost, setOrderPost] = useState(
         queryParams.get("order") || "publishDate",
     );
+
+    const logAuthor = (author: Author) => {
+        try{
+            setLoading(true);
+            apiService.login({ email: author.email, password: author.password }).then(loggedAuthor => {
+                setAuthorLogged(loggedAuthor);
+            }).catch(error => {
+                console.error("Error al iniciar sesión:", error);
+            });
+            loadAuthors();
+        } catch (error) {
+            console.error("Error al iniciar sesión:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const loadAuthors = async (debouncedSearch?: string) => {
         try {
@@ -139,6 +158,8 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     return (
         <DataContext.Provider
             value={{
+                authorLogged,
+                logAuthor,
                 isDarkMode,
                 setIsDarkMode,
                 authors,

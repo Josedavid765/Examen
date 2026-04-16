@@ -55,8 +55,6 @@ const AuthorPage = () => {
     );
     const [debouncedFilter, setDebouncedFilter] = useState(filter);
 
-    console.log(authors);
-
     useEffect(() => {
         const timer = setTimeout(() => {
             if (filter !== debouncedFilter) {
@@ -167,9 +165,9 @@ const AuthorPage = () => {
                             <PaginationEllipsis />
                         </PopoverTrigger>
                         <PopoverContent
-                            className="w-32 p-2 bg-gray-800/60"
+                            className="w-32 p-2 bg-gray-800/60 dark:bg-gray-400/60"
                             align="start"
-                            side="inline-end"
+                            side="bottom"
                         >
                             <h6 className="mb-2 px-2 text-[10px] font-bold uppercase tracking-wider text-white">
                                 Posts por página

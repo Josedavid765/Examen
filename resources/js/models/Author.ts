@@ -4,4 +4,6 @@ export interface Author {
     firstName: string;
     lastName: string;
     birthDate: string;
+    email: string;
+    password: string;
 }

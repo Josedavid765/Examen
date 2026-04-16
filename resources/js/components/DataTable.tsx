@@ -98,7 +98,7 @@ export default function DataTable<T>({
             </div>
 
             <Table sx={{ minWidth: 650 }} aria-label="custom table">
-                <TableHead>
+                <TableHead >
                     <TableRow
                         sx={{
                             background: isDarkMode
