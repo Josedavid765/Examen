@@ -7,6 +7,7 @@ use Src\BC\Author\Infrastructure\Hydrators\AuthorHydrators;
 use Src\BC\Author\Domain\Entities\Author;
 use Src\BC\Author\Domain\ValueObject\AuthorEmailValueObject;
 use Src\BC\Author\Domain\ValueObject\AuthorPasswordValueObject;
+use Illuminate\Support\Facades\Hash;
 
 trait LoginAuthorTrait
 {
@@ -14,10 +15,12 @@ trait LoginAuthorTrait
         AuthorEmailValueObject $email, 
         AuthorPasswordValueObject $password
     ): ?Author {
-        $model = AuthorModel::where('email', $email->value())
-                            ->where('password', $password->value())
-                            ->first();
+        $model = AuthorModel::where('email', $email->value())->first();
 
-        return $model ? AuthorHydrators::toDomain($model) : null;
+        if (!$model || !Hash::check($password->value(), $model->password)) {
+            return null;
+        }
+
+        return AuthorHydrators::toDomain($model);
     }
 }

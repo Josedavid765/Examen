@@ -93,7 +93,8 @@ const App: React.FC = () => {
                                     </Button>
                                     <Button
                                         variant="link"
-                                        className="text-black dark:text-gray-200 hover:text-underline"
+                                        className="text-black dark:text-gray-200 hover:underline"
+                                        onClick={() => navigate("/authors/new")}
                                     >
                                         Registrarse
                                     </Button>
