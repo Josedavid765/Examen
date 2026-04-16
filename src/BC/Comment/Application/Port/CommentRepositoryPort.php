@@ -21,5 +21,5 @@ interface CommentRepositoryPort
     
     public function listByPostID(CommentPostIdValueObject $postId, string $order = 'commentDate', string $direction = 'desc', int $page = 1, int $perPage = 10):array;
     
-    public function deleteCommentsByPostId(CommentPostIdValueObject $postId):void;
+    public function deleteCommentsByPostId(string $postId):void;
 }
