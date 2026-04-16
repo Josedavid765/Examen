@@ -9,11 +9,18 @@ import {
 } from "../components/ui/popover";
 import { FaRegCommentDots } from "react-icons/fa";
 import { Spinner } from "../components/ui/spinner";
+import { useData } from "@/contexts/DataContext";
+import { Status } from "@/models/Status";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 const PostCommentsWidget = ({ postId }: { postId: string }) => {
+    const { authorLogged } = useData();
     const [comments, setComments] = useState<Comment[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [hasLoaded, setHasLoaded] = useState(false);
+    const [newCommentText, setNewCommentText] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const loadComments = async () => {
         // Evita recargar si ya se cargaron una vez
@@ -31,6 +38,36 @@ const PostCommentsWidget = ({ postId }: { postId: string }) => {
             console.error("Error al cargar comentarios:", error);
         } finally {
             setIsLoading(false);
+        }
+    };
+
+    const handleAddComment = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!newCommentText.trim() || !authorLogged) return;
+
+        setIsSubmitting(true);
+        try {
+            const newCommentData = {
+                description: newCommentText,
+                authorId: authorLogged.id,
+                status: Status.PUBLISHED,
+                postId: postId,
+                commentDate: new Date().toISOString().split("T")[0],
+            };
+
+            const createdComment = await apiService.createComment(newCommentData);
+
+            // Optimistically update the UI
+            setComments(prevComments => [...prevComments, {
+                ...createdComment,
+                authorFullName: authorLogged.fullName,
+            } as Comment]);
+
+            setNewCommentText("");
+        } catch (error) {
+            console.error("Error al crear el comentario:", error);
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -71,6 +108,26 @@ const PostCommentsWidget = ({ postId }: { postId: string }) => {
                     <p className="text-sm text-muted-foreground text-center">
                         No hay comentarios aún.
                     </p>
+                )}
+
+                {authorLogged && (
+                    <form onSubmit={handleAddComment} className="mt-4 pt-3 border-t border-gray-200 flex gap-2">
+                        <Input
+                            placeholder="Escribe un comentario..."
+                            value={newCommentText}
+                            onChange={(e) => setNewCommentText(e.target.value)}
+                            disabled={isSubmitting}
+                            className="text-sm h-8"
+                        />
+                        <Button
+                            type="submit"
+                            disabled={!newCommentText.trim() || isSubmitting}
+                            size="sm"
+                            className="h-8 border-black dark:border-white"
+                        >
+                            {isSubmitting ? "..." : "Enviar"}
+                        </Button>
+                    </form>
                 )}
             </PopoverContent>
         </Popover>

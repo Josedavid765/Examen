@@ -10,6 +10,7 @@ use Src\BC\Author\Domain\ValueObject\AuthorBirthDateValueObject;
 use Src\BC\Author\Domain\ValueObject\AuthorEmailValueObject;
 use Src\BC\Author\Domain\ValueObject\AuthorPasswordValueObject;
 use Src\BC\Author\Infrastructure\Models\AuthorModel;
+use Illuminate\Support\Facades\Hash;
 
 class AuthorHydrators
 {
@@ -27,13 +28,18 @@ class AuthorHydrators
 
     public static function toDatabase(Author $author): array
     {
+        $password = $author->getAuthorPasswordValue();
+        if (Hash::needsRehash($password)) {
+            $password = Hash::make($password);
+        }
+
         return [
             'id' => $author->getAuthorIdValue(),
             'first_name' => $author->getAuthorFirstNameValue(),
             'last_name' => $author->getAuthorLastNameValue(),
             'birth_date' => $author->getAuthorBirthDateValue(),
             'email'      => $author->getAuthorEmailValue(),
-            'password'   => $author->getAuthorPasswordValue(),
+            'password'   => $password,
         ];
     }
 }

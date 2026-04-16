@@ -64,7 +64,8 @@ export const apiService = {
             body: JSON.stringify(data),
         });
         if (!response.ok) throw new Error("Error iniciando sesión");
-        return await response.json();
+        const json = await response.json();
+        return json.data ? json.data : json;
     },
 
     logout: async (): Promise<void> => {
