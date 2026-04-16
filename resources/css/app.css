@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {
   body {
@@ -8,13 +9,15 @@
     @apply bg-slate-900 text-slate-100;
   }
 }
+
 @theme {
   /* Colores base (Modo Claro) */
   --color-page-bg: #f8fafc; /* slate-50 */
   --color-page-text: #0f172a; /* slate-900 */
+}
 
-  /* Colores Modo Oscuro */
-  @variant dark (&:where(.dark, .dark *)) {
+@layer base {
+  :where(.dark, .dark *) {
     --color-page-bg: #0f172a; /* slate-900 */
     --color-page-text: #f8fafc; /* slate-50 */
   }
