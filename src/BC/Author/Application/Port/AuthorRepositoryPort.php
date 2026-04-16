@@ -4,6 +4,8 @@ namespace Src\BC\Author\Application\Port;
 
 use Src\BC\Author\Domain\Entities\Author;
 use Src\BC\Author\Domain\ValueObject\AuthorIdValueObject;
+use Src\BC\Author\Domain\ValueObject\AuthorEmailValueObject;
+use Src\BC\Author\Domain\ValueObject\AuthorPasswordValueObject;
 
 interface AuthorRepositoryPort
 {
@@ -16,4 +18,6 @@ interface AuthorRepositoryPort
     public function deleteAuthor(AuthorIdValueObject $id): void;
 
     public function listAuthors(?string $fullName = null, int $page=1, int $perPage=10, string $order='id',  string $direction = 'asc') : array;
+
+    public function findByCredentials(AuthorEmailValueObject $email, AuthorPasswordValueObject $password): ?Author;
 }

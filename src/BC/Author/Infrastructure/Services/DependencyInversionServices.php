@@ -5,15 +5,19 @@ namespace Src\BC\Author\Infrastructure\Services;
 use Illuminate\Support\ServiceProvider;
 use Src\BC\Author\Application\Port\AuthorRepositoryPort;
 use Src\BC\Author\Infrastructure\Repositories\EloquentAuthorRepository;
+use Src\BC\Author\Application\UseCase\LoginAuthorUseCase;
 
 class DependencyInversionServices extends ServiceProvider
 {
-    public function register():void
+    public function register(): void
     {
         $this->app->bind(
             AuthorRepositoryPort::class,
             EloquentAuthorRepository::class
         );
+
+        $this->app->bind(LoginAuthorUseCase::class, function ($app) {
+            return new LoginAuthorUseCase($app->make(AuthorRepositoryPort::class));
+        });
     }
 }
-

@@ -19,7 +19,9 @@ class CreateAuthorController extends Controller
                     $request->input('id'),
                     $request->input('firstName'),
                     $request->input('lastName'),
-                    $request->input('birthDate')
+                    $request->input('birthDate'),
+                    $request->input('email'),
+                    $request->input('password'),
                 );
 
             $author = $this->useCase->execute($dto);

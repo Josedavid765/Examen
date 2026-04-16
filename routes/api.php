@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Src\BC\Author\UI\Controller\LoginAuthorController;
 use Src\BC\Author\UI\Controller\CreateAuthorController;
 use Src\BC\Author\UI\Controller\ReadAuthorController;
 use Src\BC\Author\UI\Controller\UpdateAuthorController;
@@ -22,11 +23,14 @@ use Src\BC\Comment\UI\Controller\ListCommentsByPostIdController;
 use Src\BC\Comment\UI\Controller\ListCommentsByAuthorIdController;
 
 Route::prefix('authors')->group(function () {
+    Route::post('/login', LoginAuthorController::class);
+    Route::get('/', ListAuthorsController::class);
     Route::post('/', CreateAuthorController::class);
+
+
     Route::get('/{id}', ReadAuthorController::class);
     Route::put('/{id}', UpdateAuthorController::class);
     Route::delete('/{id}', DeleteAuthorController::class);
-    Route::get('/', ListAuthorsController::class);
     Route::get('/{id}/posts', ListAuthorPostsController::class);
     Route::get('/{id}/comments', ListCommentsByAuthorIdController::class);
 });

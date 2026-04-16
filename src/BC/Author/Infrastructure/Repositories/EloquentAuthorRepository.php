@@ -8,6 +8,7 @@ use Src\BC\Author\Infrastructure\Traits\DeleteAuthorTrait;
 use Src\BC\Author\Infrastructure\Traits\ReadAuthorTrait;
 use Src\BC\Author\Infrastructure\Traits\UpdateAuthorTrait;
 use Src\BC\Author\Infrastructure\Traits\ListAuthorTrait;
+use Src\BC\Author\Infrastructure\Traits\LoginAuthorTrait;
 
 class EloquentAuthorRepository implements AuthorRepositoryPort
 {
@@ -16,4 +17,5 @@ class EloquentAuthorRepository implements AuthorRepositoryPort
     use UpdateAuthorTrait;
     use DeleteAuthorTrait;
     use ListAuthorTrait;
+    use LoginAuthorTrait;
 }

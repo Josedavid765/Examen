@@ -9,6 +9,8 @@ use Src\BC\Author\Domain\ValueObject\AuthorFirstNameValueObject;
 use Src\BC\Author\Domain\ValueObject\AuthorIdValueObject;
 use Src\BC\Author\Domain\ValueObject\AuthorLastNameValueObject;
 use Src\BC\Author\Domain\ValueObject\AuthorBirthDateValueObject;
+use Src\BC\Author\Domain\ValueObject\AuthorEmailValueObject;
+use Src\BC\Author\Domain\ValueObject\AuthorPasswordValueObject;
 
 class CreateAuthorUseCase
 {
@@ -20,8 +22,10 @@ class CreateAuthorUseCase
         $firstName = new AuthorFirstNameValueObject($dto->getFirstName());
         $lastName = new AuthorLastNameValueObject($dto->getLastName());
         $birthDate = new AuthorBirthDateValueObject($dto->getBirthDate());
+        $email = new AuthorEmailValueObject($dto->getEmail());
+        $password = new AuthorPasswordValueObject($dto->getPassword());
 
-        $author = new Author($id, $firstName, $lastName, $birthDate);
+        $author = new Author($id, $firstName, $lastName, $birthDate, $email, $password);
 
         $this->repo->createAuthor($author);
 

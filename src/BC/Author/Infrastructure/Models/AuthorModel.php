@@ -11,9 +11,10 @@ class AuthorModel extends Model
     protected $keyType = 'string';
 
     protected $fillable = [
-        'id',
-        'first_name',
-        'last_name',
-        'birth_date'
-    ];
+        'id', 
+        'first_name', 
+        'last_name', 
+        'birth_date', 
+        'email', 
+        'password'];
 }
