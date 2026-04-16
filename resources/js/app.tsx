@@ -23,9 +23,9 @@ const App: React.FC = () => {
     const { isDarkMode, setIsDarkMode } = useData();
     return (
         <div className="min-h-screen bg-slate-50 pt-12">
-            <div {/*className="fixed top-0 left-0 z-50 w-full grid grid-cols-3 bg-linear-to-r from-[#FF9A8B] to-[#1E1040] shadow gap-4 py-3 mb-10"*/}>
+            <div className="fixed top-0 left-0 z-50 w-full grid grid-cols-3 bg-linear-to-r from-[#FF9A8B] to-[#1E1040] shadow gap-4 py-3 mb-10">
                 <div></div>
-                <div className="flex justify-center align-middle gap-4">
+                <div className="flex justify-center items-center gap-4">
                     <Button onClick={() => navigate("/posts")} variant={"link"}>
                         Posts
                     </Button>
@@ -38,12 +38,12 @@ const App: React.FC = () => {
                 </div>
                 <div >
                     <div>
-                        <Label className="flex items-center gap-3 text-white cursor-pointer group">
+                        <Label className="flex items-center gap-3 cursor-pointer group">
                             <Switch
                             id="dark-mode"
                             checked={isDarkMode}
                             onCheckedChange={setIsDarkMode}
-                             className=" border-gray-400/40 "/>
+                            className=" border-gray-400/40 "/>
                             <span className="text-sm font-medium group-hover:text-slate-200">Toggle dark mode</span>
                         </Label>
                     </div>
