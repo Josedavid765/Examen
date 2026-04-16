@@ -62,16 +62,16 @@ export default function DataTable<T>({
     return (
         <TableContainer
             component={Paper}
-            // Ajustamos el fondo del Paper dinámicamente según el modo
             sx={{
                 mb: 4,
+                mt: 2,
                 boxShadow: 3,
                 overflowX: "auto",
                 borderRadius: 4, // Unificado a un valor estándar
-                backgroundColor: isDarkMode ? "#1e293b" : "#ffffff", // slate-800 o blanco
+                backgroundColor: isDarkMode ? "#1e293b" : "#ffffff",
                 transition: "background-color 0.3s ease",
                 "& .MuiTableCell-body": {
-                    color: isDarkMode ? "#e2e8f0" : "#475569", 
+                    color: isDarkMode ? "#e2e8f0" : "#475569",
                 },
                 "& .MuiTableCell-root": {
                     borderColor: isDarkMode

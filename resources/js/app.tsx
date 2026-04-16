@@ -32,10 +32,11 @@ const App: React.FC = () => {
             >
                 <div></div>
                 <div className="flex justify-center items-center gap-4">
-                    <Button onClick={() => navigate("/posts")} variant={"link"}>
+                    <Button className="text-white" onClick={() => navigate("/posts")} variant={"link"}>
                         Posts
                     </Button>
                     <Button
+                        className="text-white"
                         onClick={() => navigate("/authors")}
                         variant={"link"}
                     >

@@ -58,7 +58,7 @@ const PostCommentsWidget = ({ postId }: { postId: string }) => {
                                 key={comment.id || i}
                                 className="border-b border-gray-200 pb-2 last:border-0 text-sm"
                             >
-                                <span className="font-bold text-gray-800 text-xs">
+                                <span className="font-bold text-gray-800 dark:text-slate-400 text-xs">
                                     {comment.authorFullName || "Anónimo"}:
                                 </span>
                                 <p className="text-gray-600 dark:text-gray-200 mt-1">
