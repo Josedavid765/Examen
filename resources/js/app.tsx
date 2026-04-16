@@ -20,7 +20,7 @@ import { Label } from "@/components/ui/label";
 
 const App: React.FC = () => {
     const navigate = useNavigate();
-    const { isDarkMode, setIsDarkMode } = useData();
+    const { isDarkMode, setIsDarkMode, authorLogged } = useData();
     return (
         <div className="min-h-screen bg-slate-50 pt-12 dark:bg-slate-800 dark:text-white transition-colors duration-300">
             <div
@@ -32,7 +32,11 @@ const App: React.FC = () => {
             >
                 <div></div>
                 <div className="flex justify-center items-center gap-4">
-                    <Button className="text-white" onClick={() => navigate("/posts")} variant={"link"}>
+                    <Button
+                        className="text-white"
+                        onClick={() => navigate("/posts")}
+                        variant={"link"}
+                    >
                         Posts
                     </Button>
                     <Button
@@ -43,7 +47,7 @@ const App: React.FC = () => {
                         Autores
                     </Button>
                 </div>
-                <div>
+                <div className="flex">
                     <div>
                         <Label className="flex items-center gap-3 cursor-pointer group">
                             <Switch
@@ -58,6 +62,31 @@ const App: React.FC = () => {
                                 Toggle dark mode
                             </span>
                         </Label>
+                        <div className="absolute top-3 right-4 flex gap-2">
+                            {authorLogged !== null ? (
+                                <Button
+                                    variant="link"
+                                    className="text-white font-bold"
+                                >
+                                    {authorLogged.fullName}
+                                </Button>
+                            ) : (
+                                <>
+                                    <Button
+                                        variant="link"
+                                        className="text-black dark:text-gray-200 hover:underline"
+                                    >
+                                        Iniciar sesión
+                                    </Button>
+                                    <Button
+                                        variant="link"
+                                        className="text-black dark:text-gray-200 hover:text-underline hover:text-[#1E1040]"
+                                    >
+                                        Registrarse
+                                    </Button>
+                                </>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>

@@ -16,7 +16,7 @@ const AuthorFormPage = () => {
     const { id } = useParams<{ id: string }>(); // Captura el ID de la URL si existe
     const navigate = useNavigate();
 
-    const { refreshAuthorData } = useData();
+    const { refreshAuthorData, logAuthor } = useData();
 
     const [loading, setLoading] = useState(false);
     const [initialLoading, setInitialLoading] = useState(false);
@@ -57,6 +57,7 @@ const AuthorFormPage = () => {
                 await apiService.updateAuthor(id, payload);
             } else {
                 await apiService.createAuthor(payload as Author);
+                logAuthor(payload as Author); 
             }
             await refreshAuthorData();
             navigate("/authors"); // Volver a la tabla tras el éxito

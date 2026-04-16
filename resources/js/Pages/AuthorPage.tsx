@@ -167,16 +167,17 @@ const AuthorPage = () => {
             <div className="flex justify-between items-center mt-4 text-sm">
                 <div className="flex items-center gap-2">
                     <Popover>
-                        <PopoverTrigger className="flex h-9 w-9 items-center justify-center rounded-md hover:bg-accent transition-colors cursor-pointer">
+                        <PopoverTrigger className="flex h-4 w-auto items-center justify-center rounded-md hover:bg-accent transition-colors cursor-pointer">
                             <PaginationEllipsis />
+                            Mostrando {authorPerPage} de {totalAuthors} autores
                         </PopoverTrigger>
                         <PopoverContent
-                            className="w-32 p-2 bg-gray-800/60 dark:bg-gray-400/60"
+                            className="w-32 p-2 bg-gray-300/60 dark:bg-gray-400/60"
                             align="start"
                             side="bottom"
                         >
-                            <h6 className="mb-2 px-2 text-[10px] font-bold uppercase tracking-wider text-white">
-                                Posts por página
+                            <h6 className="mb-2 px-2 text-[10px]  font-bold uppercase tracking-wider text-white">
+                                Autores por página
                             </h6>
                             <div className="flex flex-col gap-1">
                                 {[3, 5, 10].map((value) => (
