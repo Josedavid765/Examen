@@ -44,7 +44,9 @@ export const apiService = {
         return json.data ? json.data : json;
     },
 
-    createAuthor: async (data: Omit<Author, "id">): Promise<Author> => {
+    createAuthor: async (
+        data: Omit<Author, "id" | "fullName">,
+    ): Promise<Author> => {
         console.log(data);
         const response = await fetch(`${BASE_URL}/authors`, {
             method: "POST",
@@ -53,6 +55,24 @@ export const apiService = {
         });
         if (!response.ok) throw new Error("Error creando autor");
         return await response.json();
+    },
+
+    login: async (data: Partial<Author>): Promise<Author> => {
+        const response = await fetch(`${BASE_URL}/authors/login`, {
+            method: "POST",
+            headers,
+            body: JSON.stringify(data),
+        });
+        if (!response.ok) throw new Error("Error iniciando sesión");
+        return await response.json();
+    },
+
+    logout: async (): Promise<void> => {
+        const response = await fetch(`${BASE_URL}/authors/logout`, {
+            method: "POST",
+            headers,
+        });
+        if (!response.ok) throw new Error("Error cerrando sesión");
     },
 
     updateAuthor: async (

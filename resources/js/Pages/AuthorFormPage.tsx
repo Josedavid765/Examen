@@ -9,6 +9,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Author } from "@/models/Author";
 import { useData } from "@/contexts/DataContext";
 import { Spinner } from "@/components/ui/spinner";
+import { IoIosEye } from "react-icons/io";
+import { IoIosEyeOff } from "react-icons/io";
 
 const AuthorFormPage = () => {
     const { id } = useParams<{ id: string }>(); // Captura el ID de la URL si existe
@@ -19,6 +21,7 @@ const AuthorFormPage = () => {
     const [loading, setLoading] = useState(false);
     const [initialLoading, setInitialLoading] = useState(false);
     const [author, setAuthor] = useState<Author | null>(null);
+    const [showPassword, setShowPassword] = useState(false);
 
     const isEditMode = Boolean(id);
 
@@ -44,8 +47,12 @@ const AuthorFormPage = () => {
         const payload: Partial<Author> = {
             firstName: String(formData.get("firstname")),
             lastName: String(formData.get("lastname")),
-            birthDate: String(formData.get("birthdate")), // Formato YYYY-MM-DD
+            birthDate: String(formData.get("birthdate")),
+            email: String(formData.get("email")),
+            password: String(formData.get("password")),
         };
+
+        console.log(payload);
 
         try {
             if (isEditMode && id) {
@@ -57,7 +64,11 @@ const AuthorFormPage = () => {
             navigate("/authors"); // Volver a la tabla tras el éxito
         } catch (error) {
             console.error("Error al guardar:", error);
-            alert("Hubo un error al procesar la solicitud.");
+            if (isEditMode) {
+                alert("Hubo un error al actualizar el autor.");
+            } else {
+                alert("Hubo un error al crear el autor.");
+            }
         } finally {
             setLoading(false);
         }
@@ -87,7 +98,7 @@ const AuthorFormPage = () => {
                         onSubmit={handleSubmit}
                         key={author?.id || "new"}
                     >
-                        <Field name="firstname">
+                        <Field>
                             <FieldLabel>Nombre</FieldLabel>
                             <Input
                                 name="firstname"
@@ -99,7 +110,7 @@ const AuthorFormPage = () => {
                         </Field>
 
                         {/* Campo Apellido */}
-                        <Field name="lastname">
+                        <Field>
                             <FieldLabel>Apellido</FieldLabel>
                             <Input
                                 name="lastname"
@@ -111,7 +122,7 @@ const AuthorFormPage = () => {
                         </Field>
 
                         {/* Campo Fecha de Nacimiento */}
-                        <Field name="birthdate">
+                        <Field>
                             <FieldLabel>Fecha de Nacimiento</FieldLabel>
                             <Input
                                 name="birthdate"
@@ -129,6 +140,43 @@ const AuthorFormPage = () => {
                             </FieldError>
                         </Field>
 
+                        <Field>
+                            <FieldLabel>Correo</FieldLabel>
+                            <Input
+                                name="email"
+                                type="email"
+                                placeholder="Ej: correo@gmail.com"
+                                defaultValue={author?.email || ""}
+                                required
+                            />
+                        </Field>
+
+                        <Field>
+                            <FieldLabel>Contraseña</FieldLabel>
+                            <div className="relative flex items-center">
+                                <Input
+                                    name="password"
+                                    type={showPassword ? "text" : "password"}
+                                    defaultValue={author?.password || ""}
+                                    className="pr-10"
+                                    required
+                                />
+                                <Button
+                                    type="button"
+                                    onClick={() =>
+                                        setShowPassword(!showPassword)
+                                    }
+                                    className="absolute right-3 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
+                                >
+                                    {showPassword ? (
+                                        <IoIosEyeOff />
+                                    ) : (
+                                        <IoIosEye />
+                                    )}
+                                </Button>
+                            </div>
+                        </Field>
+
                         <div className="flex gap-4 pt-4">
                             <Button
                                 type="button"
@@ -140,8 +188,9 @@ const AuthorFormPage = () => {
                             </Button>
                             <Button
                                 type="submit"
+                                variant="outline"
                                 className="flex-1"
-                                loading={loading}
+                                disabled={loading}
                             >
                                 {isEditMode ? "Actualizar" : "Crear"}
                             </Button>
