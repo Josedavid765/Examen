@@ -80,7 +80,7 @@ const App: React.FC = () => {
                                     </Button>
                                     <Button
                                         variant="link"
-                                        className="text-black dark:text-gray-200 hover:text-underline hover:text-[#1E1040]"
+                                        className="text-black dark:text-gray-200 hover:text-underline"
                                     >
                                         Registrarse
                                     </Button>
