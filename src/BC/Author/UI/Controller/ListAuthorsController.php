@@ -30,6 +30,8 @@ class ListAuthorsController extends Controller
                 'firstName' => 'first_name',
                 'lastName'  => 'last_name',
                 'birthDate' => 'birth_date',
+                'email'     => 'email',
+                'password'  => 'password'
             ];
                 
             $order = $orderMap[$orderInput] ?? 'id';
@@ -41,7 +43,9 @@ class ListAuthorsController extends Controller
                 'fullName'  => $author->getFullName(),
                 'firstName' => $author->getAuthorFirstNameValue(),
                 'lastName'  => $author->getAuthorLastNameValue(),
-                'birthDate' => $author->getAuthorBirthDateValue()
+                'birthDate' => $author->getAuthorBirthDateValue(),
+                'email'     => $author->getAuthorEmailValue(),
+                'password'  => $author->getAuthorPasswordValue()
             ], $result['items']);
                     
             return response()->json([

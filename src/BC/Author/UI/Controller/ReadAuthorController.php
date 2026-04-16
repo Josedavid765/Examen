@@ -22,8 +22,10 @@ class ReadAuthorController extends Controller
                 'data' => [
                     'id' => $author->getAuthorIdValue(),
                     'firstName' => $author->getAuthorFirstNameValue(),
-                    'lastName' => $author->getAuthorLastNameValue(),
-                    'birthDate' => $author->getAuthorBirthDateValue()
+                    'lastName'  => $author->getAuthorLastNameValue(),
+                    'birthDate' => $author->getAuthorBirthDateValue(),
+                    'email'     => $author->getAuthorEmailValue(),
+                    'password'  => $author->getAuthorPasswordValue()
                 ]
             ]);
         } catch(\Exception $e){
