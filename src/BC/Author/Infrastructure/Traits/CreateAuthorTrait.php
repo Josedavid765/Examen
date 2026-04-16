@@ -15,7 +15,7 @@ trait CreateAuthorTrait
             'last_name'  => $author->getAuthorLastNameValue(),
             'birth_date' => $author->getAuthorBirthDateValue(),
             'email'      => $author->getAuthorEmailValue(),
-            'password'   => $author->getAuthorPasswordValue(),
+            'password'   => \Illuminate\Support\Facades\Hash::make($author->getAuthorPasswordValue()),
         ]);
     }
 }

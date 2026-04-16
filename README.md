@@ -120,3 +120,41 @@ Esto es una referencia: [Referencia a Gitub]
 |----------------|----------------|---------|
 |ArchLinux       | Yes            | 7.0.0   |
 | Cent Log       |Yes             | 1.0.5   |
+# Documentación de Endpoints de Autenticación
+
+El backend expone los siguientes endpoints para manejar la autenticación de los autores:
+
+### Login (`/api/authors/login`)
+
+- **Método HTTP:** `POST`
+- **Descripción:** Verifica las credenciales del autor y, en caso de ser correctas, devuelve sus datos básicos.
+- **Payload esperado (JSON):**
+  ```json
+  {
+    "email": "correo@ejemplo.com",
+    "password": "mi_password_secreto"
+  }
+  ```
+- **Respuesta de ejemplo (200 OK):**
+  ```json
+  {
+    "status": "success",
+    "data": {
+      "id": "123e4567-e89b-12d3-a456-426614174000",
+      "fullName": "Juan Perez"
+    }
+  }
+  ```
+
+### Logout (`/api/authors/logout`)
+
+- **Método HTTP:** `POST`
+- **Descripción:** Finaliza la sesión actual del autor en el servidor.
+- **Payload:** No requiere parámetros.
+- **Respuesta de ejemplo (200 OK):**
+  ```json
+  {
+    "status": "success",
+    "message": "Sesión cerrada correctamente en el servidor"
+  }
+  ```

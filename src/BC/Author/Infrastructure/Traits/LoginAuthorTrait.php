@@ -14,10 +14,12 @@ trait LoginAuthorTrait
         AuthorEmailValueObject $email, 
         AuthorPasswordValueObject $password
     ): ?Author {
-        $model = AuthorModel::where('email', $email->value())
-                            ->where('password', $password->value())
-                            ->first();
+        $model = AuthorModel::where('email', $email->value())->first();
 
-        return $model ? AuthorHydrators::toDomain($model) : null;
+        if ($model && \Illuminate\Support\Facades\Hash::check($password->value(), $model->password)) {
+            return AuthorHydrators::toDomain($model);
+        }
+
+        return null;
     }
 }
