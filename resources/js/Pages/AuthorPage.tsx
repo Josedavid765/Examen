@@ -92,7 +92,7 @@ const AuthorPage = () => {
         <>
             <Input
                 className={
-                    "border border-gray-600/20 dark:border-gray-300/20 dark:text-white"
+                    "border border-gray-600/20 dark:border-gray-300/20 dark:text-white "
                 }
                 placeholder="Buscar..."
                 onChange={(e) => setFilter(e.target.value)}
@@ -170,7 +170,7 @@ const AuthorPage = () => {
                     <Popover>
                         <PopoverTrigger className="flex h-4 w-auto items-center justify-center rounded-md hover:bg-accent transition-colors cursor-pointer">
                             <PaginationEllipsis />
-                            Mostrando {authorPerPage} de {totalAuthors} autores
+                            Mostrando {authorPerPage} autores por página
                         </PopoverTrigger>
                         <PopoverContent
                             className="w-32 p-2 bg-gray-300/60 dark:bg-gray-400/60"
@@ -227,7 +227,7 @@ const AuthorPage = () => {
                         >
                             {AuthorPage - 1}
                         </PaginationLink>
-                        <PaginationLink>{AuthorPage}</PaginationLink>
+                        <PaginationLink >{AuthorPage}</PaginationLink>
                         <PaginationLink
                             onClick={() => setAuthorPage(AuthorPage + 1)}
                             style={{

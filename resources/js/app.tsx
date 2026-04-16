@@ -17,6 +17,8 @@ import PostPage from "./Pages/PostPage.tsx";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { CiLight } from "react-icons/ci";
+import { CiDark } from "react-icons/ci";
 
 const App: React.FC = () => {
     const navigate = useNavigate();
@@ -50,17 +52,20 @@ const App: React.FC = () => {
                 <div className="flex">
                     <div>
                         <Label className="flex items-center gap-3 cursor-pointer group">
+                            {isDarkMode &&
+                                <CiLight className="text-2xl" />
+                            }
                             <Switch
                                 id="dark-mode"
-                                checked={!isDarkMode}
+                                checked={isDarkMode}
                                 onCheckedChange={() =>
                                     setIsDarkMode(!isDarkMode)
                                 }
-                                className=" border-gray-400/40 "
+                                className= {isDarkMode ? "bg-gray-400/40" : "bg-white"}
                             />
-                            <span className="text-sm font-medium text-white/70 transition-opacity group-hover:opacity-75">
-                                {!isDarkMode ? "Modo Claro" : "Modo Oscuro"}
-                            </span>
+                            {!isDarkMode &&
+                                <CiDark className="text-2xl" />
+                            }
                         </Label>
                         <div className="absolute top-3 right-4 flex gap-2">
                             {authorLogged !== null ? (

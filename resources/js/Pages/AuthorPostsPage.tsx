@@ -178,7 +178,7 @@ const AuthorPostsPage = () => {
                 <div className="flex items-center gap-2">
                     <Popover>
                         <PopoverTrigger className="flex h-9 w-9 items-center justify-center rounded-md hover:bg-accent transition-colors cursor-pointer">
-                            <PaginationEllipsis />
+                            <PaginationEllipsis /> 
                         </PopoverTrigger>
                         <PopoverContent
                             className="w-32 p-2 bg-gray-800/60"
