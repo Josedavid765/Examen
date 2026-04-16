@@ -14,9 +14,9 @@ import AuthorFormPage from "./Pages/AuthorFormPage.tsx";
 import AuthorPostsPage from "./Pages/AuthorPostsPage.tsx";
 import PostFormPage from "./Pages/PostFormPage.tsx";
 import PostPage from "./Pages/PostPage.tsx";
-import { Button } from "@/components/ui/button.tsx";
-import { Switch } from "@/components/ui/switch.tsx";
-import { Label } from "@/components/ui/label.tsx";
+import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
 const App: React.FC = () => {
     const navigate = useNavigate();
@@ -44,7 +44,7 @@ const App: React.FC = () => {
                             checked={isDarkMode}
                             onCheckedChange={setIsDarkMode}
                             className=" border-gray-400/40 "/>
-                            <span className="text-sm font-medium group-hover:text-slate-200">Toggle dark mode</span>
+                            <span className="text-sm font-medium text-white/70 transition-opacity group-hover:opacity-75">Toggle dark mode</span>
                         </Label>
                     </div>
                 </div>

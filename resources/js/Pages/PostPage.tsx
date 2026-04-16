@@ -6,7 +6,7 @@ import {
     CardHeader,
     CardTitle,
     CardDescription,
-    CardPanel,
+    CardContent,
     CardFooter,
 } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
@@ -90,7 +90,7 @@ const PostPage = () => {
                 {posts.map((post, index) => (
                     <Card
                         key={`${post.id}-${index}`}
-                        className="flex flex-col h-full bg-white text-black shadow-lg hover:shadow-xl transition-shadow"
+                        className="flex flex-col h-full bg-white text-black shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition"
                     >
                         <CardHeader className="pb-2">
                             <CardTitle
@@ -113,10 +113,10 @@ const PostPage = () => {
                             </CardDescription>
                         </CardHeader>
 
-                        <CardPanel className="flex-1 pt-2 pb-4 px-6 text-sm text-gray-700">
+                        <CardContent className="flex-1 pt-2 pb-4 px-6 text-sm text-gray-700">
                             {/* line-clamp-3 limita la descripción a 3 líneas con puntos suspensivos */}
                             <p className="line-clamp-3">{post.description}</p>
-                        </CardPanel>
+                        </CardContent>
 
                         <CardFooter className="flex justify-between items-center border-t border-gray-100 pt-4">
                             <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
