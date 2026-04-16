@@ -1,9 +1,11 @@
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, ReactNode, useEffect } from "react";
 import { apiService } from "../services/apiService";
 import { Author } from "../models/Author";
 import { Post } from "../models/Post";
 
 interface DataContextType {
+    isDarkMode: boolean;
+    setIsDarkMode: (isDarkMode: boolean) => void;
     authors: Author[];
     authorId: string;
     setAuthorId: (authorId: string) => void;
@@ -51,6 +53,9 @@ const DataContext = createContext<DataContextType | undefined>(undefined);
 
 export const DataProvider = ({ children }: { children: ReactNode }) => {
     const queryParams = new URLSearchParams(window.location.search);
+    const [isDarkMode, setIsDarkMode] = useState(() => {
+        return localStorage.getItem("theme") === "dark";
+    });
     const [authors, setAuthors] = useState<Author[]>([]);
     const [authorId, setAuthorId] = useState(queryParams.get("id") || "");
     const [posts, setPosts] = useState<Post[]>([]);
@@ -92,6 +97,16 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
+    useEffect(() => {
+        if (isDarkMode) {
+            document.documentElement.classList.add("dark");
+            localStorage.setItem("theme", "dark");
+        } else {
+            document.documentElement.classList.remove("dark");
+            localStorage.setItem("theme", "light");
+        }
+    }, [isDarkMode]);
+
     const loadPosts = async (currentAuthorId?: string) => {
         const idToUse = currentAuthorId || authorId;
         if (!idToUse) {
@@ -124,6 +139,8 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     return (
         <DataContext.Provider
             value={{
+                isDarkMode,
+                setIsDarkMode,
                 authors,
                 authorId,
                 setAuthorId,

@@ -42,7 +42,7 @@ const PostCommentsWidget = ({ postId }: { postId: string }) => {
                 </PopoverTrigger>
             </div>
             <PopoverContent
-                className="w-80 p-4 max-h-64 overflow-y-auto"
+                className="w-80 p-4 max-h-64 overflow-y-auto bg-slate-200"
                 side="top"
                 align="end"
                 sideOffset={8}

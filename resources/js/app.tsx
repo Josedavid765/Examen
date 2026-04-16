@@ -8,27 +8,46 @@ import {
     Navigate,
     useNavigate,
 } from "react-router-dom";
-// Contextos y Páginas
-import { DataProvider } from "./contexts/DataContext.tsx";
+import { DataProvider, useData } from "./contexts/DataContext.tsx";
 import AuthorPage from "./Pages/AuthorPage.tsx";
 import AuthorFormPage from "./Pages/AuthorFormPage.tsx";
 import AuthorPostsPage from "./Pages/AuthorPostsPage.tsx";
-// ¡NUEVO IMPORT DEL FORMULARIO!
 import PostFormPage from "./Pages/PostFormPage.tsx";
 import PostPage from "./Pages/PostPage.tsx";
-import { Button } from "./components/ui/button.tsx";
+import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
 const App: React.FC = () => {
     const navigate = useNavigate();
+    const { isDarkMode, setIsDarkMode } = useData();
     return (
-        <div className="min-h-screen bg-slate-50">
-            <div className="bg-gradient-to-r from-[#FF9A8B] to-[#1E1040] shadow flex justify-center align-middle gap-4 py-3">
-                <Button onClick={() => navigate("/posts")} variant={"link"}>
-                    Posts
-                </Button>
-                <Button onClick={() => navigate("/authors")} variant={"link"}>
-                    Autores
-                </Button>
+        <div className="min-h-screen bg-slate-50 pt-12 dark:bg-slate-900 dark:text-white transition-colors duration-300">
+            <div className="fixed top-0 left-0 z-50 w-full grid grid-cols-3 bg-linear-to-r from-[#FF9A8B] to-[#1E1040] shadow gap-4 py-3 mb-10 ">
+                <div></div>
+                <div className="flex justify-center items-center gap-4">
+                    <Button onClick={() => navigate("/posts")} variant={"link"}>
+                        Posts
+                    </Button>
+                    <Button
+                        onClick={() => navigate("/authors")}
+                        variant={"link"}
+                    >
+                        Autores
+                    </Button>
+                </div>
+                <div >
+                    <div>
+                        <Label className="flex items-center gap-3 cursor-pointer group">
+                            <Switch
+                            id="dark-mode"
+                            checked={isDarkMode}
+                            onCheckedChange={() => setIsDarkMode(!isDarkMode)}
+                            className=" border-gray-400/40 "/>
+                            <span className="text-sm font-medium text-white/70 transition-opacity group-hover:opacity-75">Toggle dark mode</span>
+                        </Label>
+                    </div>
+                </div>
             </div>
             <div className="container mx-auto py-8">
                 <Routes>
