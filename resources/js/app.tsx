@@ -59,7 +59,7 @@ const App: React.FC = () => {
                                 className=" border-gray-400/40 "
                             />
                             <span className="text-sm font-medium text-white/70 transition-opacity group-hover:opacity-75">
-                                Toggle dark mode
+                                {!isDarkMode ? "Modo Claro" : "Modo Oscuro"}
                             </span>
                         </Label>
                         <div className="absolute top-3 right-4 flex gap-2">
