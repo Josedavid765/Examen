@@ -5,7 +5,7 @@ import { Post } from "../models/Post";
 
 interface DataContextType {
     authorLogged: Author | null;
-    logAuthor: (author: Author) => void;
+    logAuthor: (author: Partial<Author>) => void;
     isDarkMode: boolean;
     setIsDarkMode: (isDarkMode: boolean) => void;
     authors: Author[];
@@ -83,7 +83,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
         queryParams.get("order") || "publishDate",
     );
 
-    const logAuthor = (author: Author) => {
+    const logAuthor = (author: Partial<Author>) => {
         try{
             setLoading(true);
             apiService.login({ email: author.email, password: author.password }).then(loggedAuthor => {

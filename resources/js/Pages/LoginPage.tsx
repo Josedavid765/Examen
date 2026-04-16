@@ -7,10 +7,11 @@ import { Form } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { IoIosEye, IoIosEyeOff } from "react-icons/io";
+import { Author } from "@/models/Author";
 
 const LoginPage = () => {
     const navigate = useNavigate();
-    const { logAuthor, authorLogged, loading } = useData();
+    const { logAuthor, authorLogged } = useData();
     const [showPassword, setShowPassword] = useState(false);
 
     useEffect(() => {
@@ -25,8 +26,9 @@ const LoginPage = () => {
         const email = String(formData.get("email"));
         const password = String(formData.get("password"));
 
-        // @ts-ignore
-        logAuthor({ email, password });
+        logAuthor({ email, password } as Partial<Author>);
+
+        navigate("/authors");
     };
 
     return (
@@ -74,7 +76,6 @@ const LoginPage = () => {
                             <Button
                                 type="submit"
                                 className="w-full"
-                                disabled={loading}
                             >
                                 Iniciar Sesión
                             </Button>
