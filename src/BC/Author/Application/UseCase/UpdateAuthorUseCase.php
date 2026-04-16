@@ -26,11 +26,11 @@ class UpdateAuthorUseCase
             throw new Exception("No se puede actualizar: El autor no existe.");
         }
 
-        $firstName = $dto->getFirstName() ?? $existingAuthor->getAuthorFirstNameValue();
-        $lastName = $dto->getLastName() ?? $existingAuthor->getAuthorLastNameValue();
-        $birthDate = $dto->getBirthDate() ?? $existingAuthor->getAuthorBirthDateValue();
-        $email = $dto->getEmail() ?? $existingAuthor->getAuthorEmailValue();
-        $password = $dto->getPassword() ?? $existingAuthor->getAuthorPasswordValue();
+        $firstName =$dto->getFirstName()   ?? $existingAuthor->getAuthorFirstNameValue();
+        $lastName  =$dto->getLastName()    ?? $existingAuthor->getAuthorLastNameValue();
+        $birthDate =$dto->getBirthDate()   ?? $existingAuthor->getAuthorBirthDateValue();
+        $email    = $dto->getEmail()       ?? $existingAuthor->getAuthorEmailValue();
+        $password = $dto->getPassword()    ?? $existingAuthor->getAuthorPasswordValue();
 
         $author = new Author(
             $id,

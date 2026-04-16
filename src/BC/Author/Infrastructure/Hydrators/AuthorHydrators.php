@@ -32,6 +32,8 @@ class AuthorHydrators
             'first_name' => $author->getAuthorFirstNameValue(),
             'last_name' => $author->getAuthorLastNameValue(),
             'birth_date' => $author->getAuthorBirthDateValue(),
+            'email'      => $author->getAuthorEmailValue(),
+            'password'   => $author->getAuthorPasswordValue(),
         ];
     }
 }
