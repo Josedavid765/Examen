@@ -75,7 +75,7 @@ const LoginPage = () => {
                         <div className="pt-4">
                             <Button
                                 type="submit"
-                                className="w-full"
+                                className="w-full border-black dark:border-white"
                             >
                                 Iniciar Sesión
                             </Button>
