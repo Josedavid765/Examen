@@ -13,6 +13,7 @@ import { LucideChevronDown, LucideChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useData } from "@/contexts/DataContext";
 
 type Header = {
     id: string;
@@ -43,9 +44,10 @@ export default function DataTable<T>({
     loading,
     perPage = 5,
 }: DataTableProps<T>) {
+    const { isDarkMode } = useData(); // Consumimos el estado global
+
     const handleSort = (header: Header) => {
         const isSortable = header.sortable !== false && header.id !== "actions";
-
         if (!setOrder || !isSortable) return;
 
         if (order === header.id) {
@@ -56,37 +58,55 @@ export default function DataTable<T>({
             setOrder(header.id);
         }
     };
+
     return (
         <TableContainer
             component={Paper}
-            sx={{ mb: 4, boxShadow: 3, overflowX: "auto", borderRadius: 6 }}
+            // Ajustamos el fondo del Paper dinámicamente según el modo
+            sx={{
+                mb: 4,
+                boxShadow: 3,
+                overflowX: "auto",
+                borderRadius: 4, // Unificado a un valor estándar
+                backgroundColor: isDarkMode ? "#1e293b" : "#ffffff", // slate-800 o blanco
+                transition: "background-color 0.3s ease",
+                "& .MuiTableCell-root": {
+                    borderColor: isDarkMode
+                        ? "rgba(255, 255, 255, 0.1)"
+                        : "rgba(0, 0, 0, 0.1)",
+                },
+            }}
         >
-            <div className="flex items-center justify-between p-4 bg-slate-50 border-b">
-                <Typography variant="h6" className="font-bold text-slate-700">
+            {/* Header de la tabla (Título y Botón Nuevo) */}
+            <div className="flex items-center justify-between p-4 border-b bg-slate-50 dark:bg-slate-800 dark:border-slate-700 transition-colors">
+                <Typography
+                    variant="h6"
+                    className="font-bold text-slate-700 dark:text-slate-100"
+                >
                     {title}
                 </Typography>
 
                 {onAdd && (
                     <Button
                         onClick={onAdd}
-                        className={"gap-2 bg-slate-700 p-2"}
+                        className="gap-2 bg-slate-700 hover:bg-slate-800 dark:hover:bg-indigo-700 text-white dark:bg-slate-600 dark:text-slate-200 font-bold transition-all "
                     >
                         <Plus className="w-4 h-4" />
                         Nuevo
                     </Button>
                 )}
             </div>
-            <Table
-                sx={{ minWidth: 650, borderRadius: 6 }}
-                aria-label="custom table"
-            >
-                <TableHead
-                    sx={{
-                        background:
-                            "linear-gradient(to right, #5B0FBE, #00d4ff)",
-                    }}
-                >
-                    <TableRow>
+
+            <Table sx={{ minWidth: 650 }} aria-label="custom table">
+                <TableHead>
+                    <TableRow
+                        sx={{
+                            background: isDarkMode
+                                ? "linear-gradient(to right, #FF9A8B, #1E1040)"
+                                : "linear-gradient(to right, #5B0FBE, #00d4ff)",
+                            transition: "background 0.3s ease",
+                        }}
+                    >
                         {headers.map((header: Header) => {
                             const isSortable =
                                 header.sortable !== false &&
@@ -96,16 +116,14 @@ export default function DataTable<T>({
                                     key={header.id}
                                     sx={{
                                         color: "white",
-                                        backgroundColor: "transparent",
                                         fontWeight: "bold",
-                                        transition:
-                                            "background-color 0.2s ease",
+                                        borderBottom: "none",
                                         cursor: isSortable
                                             ? "pointer"
                                             : "default",
                                         "&:hover": {
                                             backgroundColor: isSortable
-                                                ? "rgba(255, 255, 255, 0.15)"
+                                                ? "rgba(255, 255, 255, 0.1)"
                                                 : "transparent",
                                         },
                                     }}
@@ -128,21 +146,12 @@ export default function DataTable<T>({
                 </TableHead>
                 <TableBody>
                     {loading ? (
+                        // Skeletons con soporte dark mode
                         Array.from({ length: perPage }).map((_, rowIndex) => (
                             <TableRow key={`skeleton-row-${rowIndex}`}>
                                 {headers.map((header) => (
-                                    <TableCell
-                                        key={`skeleton-cell-${header.id}-${rowIndex}`}
-                                    >
-                                        {header.id === "actions" ? (
-                                            <div className="flex justify-center gap-1">
-                                                <Skeleton className="h-8 w-14 rounded-md " />
-                                                <Skeleton className="h-8 w-16 rounded-md" />
-                                                <Skeleton className="h-8 w-16 rounded-md" />
-                                            </div>
-                                        ) : (
-                                            <Skeleton className="h-4 w-[85%]" />
-                                        )}
+                                    <TableCell key={`cell-${header.id}`}>
+                                        <Skeleton className="h-4 w-[80%] dark:bg-slate-600" />
                                     </TableCell>
                                 ))}
                             </TableRow>
@@ -154,7 +163,11 @@ export default function DataTable<T>({
                             <TableCell
                                 colSpan={headers.length}
                                 align="center"
-                                sx={{ py: 6, color: "text.secondary" }}
+                                sx={{
+                                    py: 6,
+                                    color: isDarkMode ? "#94a3b8" : "#64748b",
+                                    borderBottom: "none",
+                                }}
                             >
                                 No hay datos disponibles
                             </TableCell>

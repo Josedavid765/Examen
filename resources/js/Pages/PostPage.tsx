@@ -81,7 +81,7 @@ const PostPage = () => {
 
     return (
         <div className="relative max-w-7xl mx-auto py-8 px-4 gap-2">
-            <h1 className="absolute mx-10 top-0 left-1/2 transform -translate-x-3/4 text-3xl font-bold mb-10">
+            <h1 className="absolute mx-10 top-0 left-1/2 transform -translate-x-3/4 text-3xl font-bold mb-10 dark:text-slate-400">
                 Posts
             </h1>
 
@@ -90,7 +90,7 @@ const PostPage = () => {
                 {posts.map((post, index) => (
                     <Card
                         key={`${post.id}-${index}`}
-                        className="flex flex-col h-full bg-white text-black shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition"
+                        className="flex flex-col h-full bg-white text-black shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition dark:bg-gray-700 dark:text-slate-300"
                     >
                         <CardHeader className="pb-2">
                             <CardTitle
@@ -99,7 +99,7 @@ const PostPage = () => {
                             >
                                 {post.subject}
                             </CardTitle>
-                            <CardDescription className="text-sm text-gray-500/60">
+                            <CardDescription className="text-sm text-gray-500/60 dark:text-gray-400/60">
                                 Autor:{" "}
                                 {(post as Post).authorName ||
                                     `#${post.authorName}`}
@@ -119,7 +119,7 @@ const PostPage = () => {
                         </CardContent>
 
                         <CardFooter className="flex justify-between items-center border-t border-gray-100 pt-4">
-                            <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+                            <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded-full dark:bg-gray-600 dark:text-gray-300">
                                 {post.numComments} comentarios
                             </span>
                             <PostCommentsWidget postId={post.id} />
