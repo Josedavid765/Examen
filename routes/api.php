@@ -8,6 +8,7 @@ use Src\BC\Author\UI\Controller\UpdateAuthorController;
 use Src\BC\Author\UI\Controller\DeleteAuthorController;
 use Src\BC\Author\UI\Controller\ListAuthorsController;
 use Src\BC\Author\UI\Controller\ListAuthorPostsController;
+use Src\BC\Author\UI\Controller\LogoutAuthorController;
 
 use Src\BC\Post\UI\Controller\CreatePostController;
 use Src\BC\Post\UI\Controller\ReadPostController;
@@ -22,8 +23,10 @@ use Src\BC\Comment\UI\Controller\DeleteCommentController;
 use Src\BC\Comment\UI\Controller\ListCommentsByPostIdController;
 use Src\BC\Comment\UI\Controller\ListCommentsByAuthorIdController;
 
+
 Route::prefix('authors')->group(function () {
     Route::post('/login', LoginAuthorController::class);
+    Route::post('/logout', LogoutAuthorController::class);
     Route::get('/', ListAuthorsController::class);
     Route::post('/', CreateAuthorController::class);
 
