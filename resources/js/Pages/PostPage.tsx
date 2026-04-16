@@ -115,7 +115,7 @@ const PostPage = () => {
 
                         <CardContent className="flex-1 pt-2 pb-4 px-6 text-sm text-gray-700">
                             {/* line-clamp-3 limita la descripción a 3 líneas con puntos suspensivos */}
-                            <p className="line-clamp-3">{post.description}</p>
+                            <p className="line-clamp-3 dark:text-gray-200">{post.description}</p>
                         </CardContent>
 
                         <CardFooter className="flex justify-between items-center border-t border-gray-100 pt-4">

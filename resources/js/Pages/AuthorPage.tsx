@@ -90,7 +90,9 @@ const AuthorPage = () => {
     return (
         <>
             <Input
-                className={"border border-gray-600/20"}
+                className={
+                    "border border-gray-600/20 dark:border-gray-300/20 dark:text-white"
+                }
                 placeholder="Buscar..."
                 onChange={(e) => setFilter(e.target.value)}
                 value={filter}
@@ -114,7 +116,7 @@ const AuthorPage = () => {
                 onAdd={() => navigate("/authors/new")}
                 renderRow={(author: Author) => (
                     <TableRow key={author.id}>
-                        <TableCell className="max-w-">{author.id}</TableCell>
+                        <TableCell>{author.id}</TableCell>
                         <TableCell>{author.firstName}</TableCell>
                         <TableCell>{author.lastName}</TableCell>
                         <TableCell>{author.fullName}</TableCell>
@@ -125,7 +127,7 @@ const AuthorPage = () => {
                             {/* NUEVO BOTÓN PARA VER LOS POSTS */}
                             <Button
                                 className={
-                                    "border border-blue-600/20 px-2 bg-blue-100 text-blue-700 hover:bg-blue-200"
+                                    "border border-blue-600/20 px-2 bg-blue-100 text-blue-700 hover:bg-blue-200 dark:bg-purple-900/20 dark:text-purple-300 dark:border-purple-300/20 dark:hover:bg-purple-950/20"
                                 }
                                 variant="secondary"
                                 onClick={() =>
@@ -136,7 +138,9 @@ const AuthorPage = () => {
                             </Button>
 
                             <Button
-                                className={"border border-black/20 px-2"}
+                                className={
+                                    "border border-blue-600/20 px-2 bg-blue-100 text-blue-700 hover:bg-blue-200 dark:bg-purple-900/20 dark:text-purple-300 dark:border-purple-300/20 dark:hover:bg-purple-950/20"
+                                }
                                 variant="secondary"
                                 onClick={() =>
                                     navigate(`/authors/edit/${author.id}`)
@@ -148,7 +152,9 @@ const AuthorPage = () => {
                                 onClick={() =>
                                     handleOpenDeleteDialog(author.id)
                                 }
-                                className={"px-2"}
+                                className={
+                                    "px-2 text-white dark:text-slate-300 bg-red-500 dark:bg-red-900"
+                                }
                                 variant="destructive"
                             >
                                 Eliminar
@@ -161,16 +167,17 @@ const AuthorPage = () => {
             <div className="flex justify-between items-center mt-4 text-sm">
                 <div className="flex items-center gap-2">
                     <Popover>
-                        <PopoverTrigger className="flex h-9 w-9 items-center justify-center rounded-md hover:bg-accent transition-colors cursor-pointer">
+                        <PopoverTrigger className="flex h-4 w-auto items-center justify-center rounded-md hover:bg-accent transition-colors cursor-pointer">
                             <PaginationEllipsis />
+                            Mostrando {authorPerPage} de {totalAuthors} autores
                         </PopoverTrigger>
                         <PopoverContent
-                            className="w-32 p-2 bg-gray-800/60 dark:bg-gray-400/60"
+                            className="w-32 p-2 bg-gray-300/60 dark:bg-gray-400/60"
                             align="start"
                             side="bottom"
                         >
-                            <h6 className="mb-2 px-2 text-[10px] font-bold uppercase tracking-wider text-white">
-                                Posts por página
+                            <h6 className="mb-2 px-2 text-[10px]  font-bold uppercase tracking-wider text-white">
+                                Autores por página
                             </h6>
                             <div className="flex flex-col gap-1">
                                 {[3, 5, 10].map((value) => (
@@ -195,7 +202,7 @@ const AuthorPage = () => {
                     </Popover>
                 </div>
 
-                <Pagination className="mx-0 w-auto">
+                <Pagination className="mx-0 w-auto dark:text-slate-400">
                     <PaginationContent>
                         <PaginationItem>
                             <ChevronsLeft
@@ -274,7 +281,7 @@ const AuthorPage = () => {
                     <DialogFooter className="flex justify-end space-x-2 mt-4">
                         <Button
                             variant="secondary"
-                            className="px-2"
+                            className="px-2 border-black dark:border-white"
                             onClick={() => {
                                 setAuthorIdToDelete(null);
                                 setIsDeleteDialogOpen(false); // ESTO CIERRA LA VENTANA
@@ -284,7 +291,7 @@ const AuthorPage = () => {
                         </Button>
                         <Button
                             variant="destructive"
-                            className="px-2"
+                            className="px-2 bg-red-500"
                             onClick={() => {
                                 if (authorIdToDelete) {
                                     handleDelete(authorIdToDelete);

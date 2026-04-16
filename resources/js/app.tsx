@@ -20,32 +20,73 @@ import { Label } from "@/components/ui/label";
 
 const App: React.FC = () => {
     const navigate = useNavigate();
-    const { isDarkMode, setIsDarkMode } = useData();
+    const { isDarkMode, setIsDarkMode, authorLogged } = useData();
     return (
-        <div className="min-h-screen bg-slate-50 pt-12 dark:bg-slate-900 dark:text-white transition-colors duration-300">
-            <div className="fixed top-0 left-0 z-50 w-full grid grid-cols-3 bg-linear-to-r from-[#FF9A8B] to-[#1E1040] shadow gap-4 py-3 mb-10 ">
+        <div className="min-h-screen bg-slate-50 pt-12 dark:bg-slate-800 dark:text-white transition-colors duration-300">
+            <div
+                className={
+                    isDarkMode
+                        ? "fixed top-0 left-0 z-50 w-full grid grid-cols-3 bg-linear-to-r from-[#FF9A8B] to-[#1E1040] shadow gap-4 py-3 mb-10 transition-colors"
+                        : "fixed top-0 left-0 z-50 w-full grid grid-cols-3 bg-linear-to-r from-[#5B0FBE] to-[#00d4ff] shadow gap-4 py-3 mb-10 transition-colors"
+                }
+            >
                 <div></div>
                 <div className="flex justify-center items-center gap-4">
-                    <Button onClick={() => navigate("/posts")} variant={"link"}>
+                    <Button
+                        className="text-white"
+                        onClick={() => navigate("/posts")}
+                        variant={"link"}
+                    >
                         Posts
                     </Button>
                     <Button
+                        className="text-white"
                         onClick={() => navigate("/authors")}
                         variant={"link"}
                     >
                         Autores
                     </Button>
                 </div>
-                <div >
+                <div className="flex">
                     <div>
                         <Label className="flex items-center gap-3 cursor-pointer group">
                             <Switch
-                            id="dark-mode"
-                            checked={isDarkMode}
-                            onCheckedChange={() => setIsDarkMode(!isDarkMode)}
-                            className=" border-gray-400/40 "/>
-                            <span className="text-sm font-medium text-white/70 transition-opacity group-hover:opacity-75">Toggle dark mode</span>
+                                id="dark-mode"
+                                checked={!isDarkMode}
+                                onCheckedChange={() =>
+                                    setIsDarkMode(!isDarkMode)
+                                }
+                                className=" border-gray-400/40 "
+                            />
+                            <span className="text-sm font-medium text-white/70 transition-opacity group-hover:opacity-75">
+                                {!isDarkMode ? "Modo Claro" : "Modo Oscuro"}
+                            </span>
                         </Label>
+                        <div className="absolute top-3 right-4 flex gap-2">
+                            {authorLogged !== null ? (
+                                <Button
+                                    variant="link"
+                                    className="text-white font-bold"
+                                >
+                                    {authorLogged.fullName}
+                                </Button>
+                            ) : (
+                                <>
+                                    <Button
+                                        variant="link"
+                                        className="text-black dark:text-gray-200 hover:underline"
+                                    >
+                                        Iniciar sesión
+                                    </Button>
+                                    <Button
+                                        variant="link"
+                                        className="text-black dark:text-gray-200 hover:text-underline"
+                                    >
+                                        Registrarse
+                                    </Button>
+                                </>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>

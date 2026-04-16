@@ -62,23 +62,26 @@ export default function DataTable<T>({
     return (
         <TableContainer
             component={Paper}
-            // Ajustamos el fondo del Paper dinámicamente según el modo
             sx={{
                 mb: 4,
+                mt: 2,
                 boxShadow: 3,
                 overflowX: "auto",
                 borderRadius: 4, // Unificado a un valor estándar
-                backgroundColor: isDarkMode ? "#1e293b" : "#ffffff", // slate-800 o blanco
+                backgroundColor: isDarkMode ? "#1e293b" : "#ffffff",
                 transition: "background-color 0.3s ease",
+                "& .MuiTableCell-body": {
+                    color: isDarkMode ? "#e2e8f0" : "#475569",
+                },
                 "& .MuiTableCell-root": {
                     borderColor: isDarkMode
-                        ? "rgba(255, 255, 255, 0.1)"
+                        ? "rgba(500, 500, 500, 0.1)"
                         : "rgba(0, 0, 0, 0.1)",
                 },
             }}
         >
             {/* Header de la tabla (Título y Botón Nuevo) */}
-            <div className="flex items-center justify-between p-4 border-b bg-slate-50 dark:bg-slate-800 dark:border-slate-700 transition-colors">
+            <div className="flex items-center justify-between p-4 border-b bg-slate-50 dark:bg-slate-800 dark:border-slate-600 transition-colors">
                 <Typography
                     variant="h6"
                     className="font-bold text-slate-700 dark:text-slate-100"
@@ -89,7 +92,7 @@ export default function DataTable<T>({
                 {onAdd && (
                     <Button
                         onClick={onAdd}
-                        className="gap-2 bg-slate-700 hover:bg-slate-800 dark:hover:bg-indigo-700 text-white dark:bg-slate-600 dark:text-slate-200 font-bold transition-all "
+                        className="gap-2 bg-slate-700 hover:bg-slate-800 dark:hover:bg-slate-500 text-white dark:bg-slate-600 dark:text-slate-200 font-bold transition-all "
                     >
                         <Plus className="w-4 h-4" />
                         Nuevo
@@ -98,7 +101,7 @@ export default function DataTable<T>({
             </div>
 
             <Table sx={{ minWidth: 650 }} aria-label="custom table">
-                <TableHead >
+                <TableHead>
                     <TableRow
                         sx={{
                             background: isDarkMode
