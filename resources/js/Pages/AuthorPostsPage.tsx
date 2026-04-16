@@ -150,7 +150,9 @@ const AuthorPostsPage = () => {
                         </TableCell>
                         <TableCell className="flex justify-center align-middle space-x-1">
                             <Button
-                                className={"border border-black/20 px-2"}
+                                className={
+                                    "border border-blue-600/20 px-2 bg-blue-100 text-blue-700 hover:bg-blue-200 dark:bg-purple-900/20 dark:text-purple-300 dark:border-purple-300/20 dark:hover:bg-purple-950/20"
+                                }
                                 variant="secondary"
                                 onClick={() =>
                                     navigate(`/posts/edit/${post.id}`)
@@ -160,7 +162,9 @@ const AuthorPostsPage = () => {
                             </Button>
                             <Button
                                 onClick={() => handleOpenDeleteDialog(post.id)}
-                                className={"px-2 my-2 "}
+                                className={
+                                    "px-2 text-white dark:text-slate-300 bg-red-500 dark:bg-red-900"
+                                }
                                 variant="destructive"
                             >
                                 Eliminar
@@ -179,7 +183,7 @@ const AuthorPostsPage = () => {
                         <PopoverContent
                             className="w-32 p-2 bg-gray-800/60"
                             align="start"
-                            side="inline-end"
+                            side="bottom"
                         >
                             <h6 className="mb-2 px-2 text-[10px] font-bold uppercase tracking-wider text-white">
                                 Posts por página
@@ -285,6 +289,7 @@ const AuthorPostsPage = () => {
                         <Button
                             variant="secondary"
                             disabled={loading}
+                            className="border-black dark:border-white"
                             onClick={() => {
                                 setPostIdToDelete(null);
                                 setIsDeleteDialogOpen(false);
@@ -295,6 +300,7 @@ const AuthorPostsPage = () => {
                         <Button
                             variant="destructive"
                             disabled={loading}
+                            className="bg-[#ff0000]" 
                             onClick={() => {
                                 if (postIdToDelete)
                                     handleDelete(postIdToDelete);

@@ -42,7 +42,7 @@ const PostCommentsWidget = ({ postId }: { postId: string }) => {
                 </PopoverTrigger>
             </div>
             <PopoverContent
-                className="w-80 p-4 max-h-64 overflow-y-auto bg-slate-200"
+                className="w-80 p-4 max-h-64 overflow-y-auto bg-slate-200 dark:bg-slate-800"
                 side="top"
                 align="end"
                 sideOffset={8}
@@ -61,7 +61,7 @@ const PostCommentsWidget = ({ postId }: { postId: string }) => {
                                 <span className="font-bold text-gray-800 text-xs">
                                     {comment.authorFullName || "Anónimo"}:
                                 </span>
-                                <p className="text-gray-600 mt-1">
+                                <p className="text-gray-600 dark:text-gray-200 mt-1">
                                     {comment.description}
                                 </p>
                             </div>

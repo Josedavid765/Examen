@@ -110,14 +110,14 @@ const PostFormPage = () => {
     };
 
     return (
-        <div className="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md mt-10">
-            <h2 className="text-2xl font-bold mb-6 text-gray-800">
+        <div className="max-w-2xl mx-auto p-8 rounded-xl border-2 shadow-md mt-10 dark:border-gray-400/20">
+            <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-slate-50">
                 {postId ? "Editar Post" : "Crear Nuevo Post"}
             </h2>
 
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
                         Asunto / Título
                     </label>
                     <Input
@@ -131,7 +131,7 @@ const PostFormPage = () => {
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
                         Descripción
                     </label>
                     <textarea
@@ -146,7 +146,7 @@ const PostFormPage = () => {
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium dark:text-gray-400 text-gray-700 mb-1">
                         Estado
                     </label>
                     <select
@@ -167,14 +167,14 @@ const PostFormPage = () => {
                         type="button"
                         variant="secondary"
                         onClick={() => navigate(-1)}
-                        className="px-2"
+                        className="px-2 border-black dark:border-white"
                     >
                         Cancelar
                     </Button>
                     <Button
                         type="submit"
                         disabled={loading}
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-2"
+                        className="bg-blue-600 hover:bg-blue-700 dark:bg-purple-900 dark:hover:bg-purple-800 text-white px-2"
                     >
                         {loading ? "Guardando..." : "Guardar Post"}
                     </Button>

@@ -52,8 +52,6 @@ const AuthorFormPage = () => {
             password: String(formData.get("password")),
         };
 
-        console.log(payload);
-
         try {
             if (isEditMode && id) {
                 await apiService.updateAuthor(id, payload);
