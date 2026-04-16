@@ -78,6 +78,7 @@ const AuthorPage = () => {
         try {
             await apiService.deleteAuthor(String(id));
             await refreshAuthorData();
+            setAuthorPage(1);
         } catch (error) {
             console.log(error);
             alert("Hubo un error al eliminar el autor");
