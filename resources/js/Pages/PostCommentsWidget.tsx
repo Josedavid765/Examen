@@ -14,7 +14,12 @@ import { Status } from "@/models/Status";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-const PostCommentsWidget = ({ postId }: { postId: string }) => {
+interface PostCommentsWidgetProps {
+    postId: string;
+    onCommentAdded?: () => void;
+}
+
+const PostCommentsWidget = ({ postId, onCommentAdded }: PostCommentsWidgetProps) => {
     const { authorLogged } = useData();
     const [comments, setComments] = useState<Comment[]>([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -64,6 +69,10 @@ const PostCommentsWidget = ({ postId }: { postId: string }) => {
             } as Comment]);
 
             setNewCommentText("");
+
+            if (onCommentAdded) {
+                onCommentAdded();
+            }
         } catch (error) {
             console.error("Error al crear el comentario:", error);
         } finally {

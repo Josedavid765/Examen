@@ -79,6 +79,16 @@ const PostPage = () => {
         };
     }, [hasMore, loading]);
 
+    const handleCommentAdded = (postId: string) => {
+        setPosts((prevPosts) =>
+            prevPosts.map((post) =>
+                post.id === postId
+                    ? { ...post, numComments: post.numComments + 1 }
+                    : post
+            )
+        );
+    };
+
     return (
         <div className="relative max-w-7xl mx-auto py-8 px-4 gap-2">
             <h1 className="absolute mx-10 top-0 left-1/2 transform -translate-x-3/4 text-3xl font-bold mb-10 dark:text-slate-400">
@@ -122,7 +132,10 @@ const PostPage = () => {
                             <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded-full dark:bg-gray-600 dark:text-gray-300">
                                 {post.numComments} comentarios
                             </span>
-                            <PostCommentsWidget postId={post.id} />
+                            <PostCommentsWidget
+                                postId={post.id}
+                                onCommentAdded={() => handleCommentAdded(post.id)}
+                            />
                         </CardFooter>
                     </Card>
                 ))}
