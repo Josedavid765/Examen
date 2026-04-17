@@ -23,6 +23,7 @@ class ReadAuthorController extends Controller
                     'id' => $author->getAuthorIdValue(),
                     'firstName' => $author->getAuthorFirstNameValue(),
                     'lastName'  => $author->getAuthorLastNameValue(),
+                    'fullName'  => $author->getAuthorFirstNameValue() . ' ' . $author->getAuthorLastNameValue(),
                     'birthDate' => $author->getAuthorBirthDateValue(),
                     'email'     => $author->getAuthorEmailValue(),
                     'password'  => $author->getAuthorPasswordValue()

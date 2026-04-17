@@ -16,7 +16,7 @@ const LoginPage = () => {
 
     useEffect(() => {
         if (authorLogged) {
-            navigate("/authors");
+            navigate("/profile");
         }
     }, [authorLogged, navigate]);
 
@@ -28,7 +28,9 @@ const LoginPage = () => {
 
         logAuthor({ email, password } as Partial<Author>);
 
-        navigate("/authors");
+        // `logAuthor` updates `authorLogged`, triggering the `useEffect` above,
+        // but we can also manually navigate here or let `useEffect` handle it.
+        navigate("/profile");
     };
 
     return (
