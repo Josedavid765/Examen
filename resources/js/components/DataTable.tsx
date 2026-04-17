@@ -26,6 +26,7 @@ interface DataTableProps<T> {
     rows: T[];
     renderRow: (row: T) => React.ReactNode;
     onAdd?: () => void;
+    disableAdd?: boolean;
     filter?: string;
     order?: string;
     setOrder?: (order: string) => void;
@@ -39,6 +40,7 @@ export default function DataTable<T>({
     rows,
     renderRow,
     onAdd,
+    disableAdd = false,
     order,
     setOrder,
     loading,
@@ -92,6 +94,7 @@ export default function DataTable<T>({
                 {onAdd && (
                     <Button
                         onClick={onAdd}
+                        disabled={disableAdd}
                         className="gap-2 bg-slate-700 hover:bg-slate-800 dark:hover:bg-slate-500 text-white dark:bg-slate-600 dark:text-slate-200 font-bold transition-all "
                     >
                         <Plus className="w-4 h-4" />
