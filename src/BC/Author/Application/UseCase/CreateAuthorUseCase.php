@@ -10,6 +10,7 @@ use Src\BC\Author\Domain\ValueObject\AuthorIdValueObject;
 use Src\BC\Author\Domain\ValueObject\AuthorLastNameValueObject;
 use Src\BC\Author\Domain\ValueObject\AuthorBirthDateValueObject;
 use Src\BC\Author\Domain\ValueObject\AuthorEmailValueObject;
+use Illuminate\Support\Facades\Hash;
 use Src\BC\Author\Domain\ValueObject\AuthorPasswordValueObject;
 
 class CreateAuthorUseCase
@@ -23,7 +24,14 @@ class CreateAuthorUseCase
         $lastName = new AuthorLastNameValueObject($dto->getLastName());
         $birthDate = new AuthorBirthDateValueObject($dto->getBirthDate());
         $email = new AuthorEmailValueObject($dto->getEmail());
-        $password = new AuthorPasswordValueObject($dto->getPassword());
+        
+        $passwordPlana = $dto->getPassword();
+
+        $pepper = config('auth.pepper');
+
+        $passwordHasheada = Hash::make($passwordPlana . $pepper);
+
+        $password = new AuthorPasswordValueObject($passwordHasheada);
 
         $author = new Author($id, $firstName, $lastName, $birthDate, $email, $password);
 

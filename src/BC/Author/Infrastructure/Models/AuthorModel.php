@@ -15,6 +15,9 @@ class AuthorModel extends Model
         'first_name', 
         'last_name', 
         'birth_date', 
-        'email', 
+        'email',
         'password'];
+
+    protected $hidden = [
+    'password'];
 }

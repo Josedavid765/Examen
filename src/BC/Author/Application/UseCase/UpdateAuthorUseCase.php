@@ -12,6 +12,7 @@ use Src\BC\Author\Domain\ValueObject\AuthorBirthDateValueObject;
 use Exception;
 use Src\BC\Author\Domain\ValueObject\AuthorEmailValueObject;
 use Src\BC\Author\Domain\ValueObject\AuthorPasswordValueObject;
+use Illuminate\Support\Facades\Hash;
 
 class UpdateAuthorUseCase
 {
@@ -30,7 +31,16 @@ class UpdateAuthorUseCase
         $lastName  =$dto->getLastName()    ?? $existingAuthor->getAuthorLastNameValue();
         $birthDate =$dto->getBirthDate()   ?? $existingAuthor->getAuthorBirthDateValue();
         $email    = $dto->getEmail()       ?? $existingAuthor->getAuthorEmailValue();
-        $password = $dto->getPassword()    ?? $existingAuthor->getAuthorPasswordValue();
+        
+        $password = $dto->getPassword();
+
+        if ($password) {
+            $pepper = config('auth.pepper');
+            $hashedPassword = Hash::make($password . $pepper);
+            $passwordVO = new AuthorPasswordValueObject($hashedPassword);
+        } else {
+            $passwordVO = new AuthorPasswordValueObject($existingAuthor->getAuthorPasswordValue());
+        }
 
         $author = new Author(
             $id,
@@ -38,7 +48,7 @@ class UpdateAuthorUseCase
             new AuthorLastNameValueObject($lastName),
             new AuthorBirthDateValueObject($birthDate),
             new AuthorEmailValueObject($email),
-            new AuthorPasswordValueObject($password)
+            $passwordVO
         );
 
         $this->repo->updateAuthor($author);
