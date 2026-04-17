@@ -32,6 +32,7 @@ class ReadPostController
                     'publishDate' => $post->getPublishDateValue(),
                     'status'       => $post->getStatusValue(),
                     'numComments' => $post->getNumCommentsValue(),
+                    'authorName'   => $post->getAuthorFullNameValue(),
                 ]
             ], 200);
 

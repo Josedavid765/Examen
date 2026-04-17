@@ -14,6 +14,7 @@ import AuthorFormPage from "./Pages/AuthorFormPage.tsx";
 import AuthorPostsPage from "./Pages/AuthorPostsPage.tsx";
 import PostFormPage from "./Pages/PostFormPage.tsx";
 import PostPage from "./Pages/PostPage.tsx";
+import PostDetailPage from "./Pages/PostDetailPage.tsx";
 import LoginPage from "./Pages/LoginPage.tsx";
 import LoggedAuthorPage from "./Pages/LoggedAuthorPage.tsx";
 import { Button } from "@/components/ui/button";
@@ -133,6 +134,7 @@ const App: React.FC = () => {
 
                     <Route path="/posts/new" element={<PostFormPage />} />
                     <Route path="/posts/edit/:id" element={<PostFormPage />} />
+                    <Route path="/posts/:id" element={<PostDetailPage />} />
                     <Route path="/posts" element={<PostPage />} />
 
                     <Route

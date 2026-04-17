@@ -155,6 +155,17 @@ const AuthorPostsPage = () => {
                                 }
                                 variant="secondary"
                                 onClick={() =>
+                                    navigate(`/posts/${post.id}`)
+                                }
+                            >
+                                Ver Post
+                            </Button>
+                            <Button
+                                className={
+                                    "border border-blue-600/20 px-2 bg-blue-100 text-blue-700 hover:bg-blue-200 dark:bg-purple-900/20 dark:text-purple-300 dark:border-purple-300/20 dark:hover:bg-purple-950/20"
+                                }
+                                variant="secondary"
+                                onClick={() =>
                                     navigate(`/posts/edit/${post.id}`)
                                 }
                             >
