@@ -47,6 +47,7 @@ const AuthorPage = () => {
         setOrderAuthor,
         authors,
         loading,
+        authorLogged,
     } = useData();
 
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -140,12 +141,14 @@ const AuthorPage = () => {
 
                             <Button
                                 className={
-                                    "border border-blue-600/20 px-2 bg-blue-100 text-blue-700 hover:bg-blue-200 dark:bg-purple-900/20 dark:text-purple-300 dark:border-purple-300/20 dark:hover:bg-purple-950/20"
+                                    "border border-blue-600/20 px-2 bg-blue-100 text-blue-700 hover:bg-blue-200 dark:bg-purple-900/20 dark:text-purple-300 dark:border-purple-300/20 dark:hover:bg-purple-950/20 disabled:opacity-50 disabled:cursor-not-allowed"
                                 }
                                 variant="secondary"
+                                disabled={!authorLogged || authorLogged.id !== author.id}
                                 onClick={() =>
                                     navigate(`/authors/edit/${author.id}`)
                                 }
+                                title={(!authorLogged || authorLogged.id !== author.id) ? "Debes iniciar sesión con este autor para editar" : ""}
                             >
                                 Editar
                             </Button>
@@ -153,10 +156,12 @@ const AuthorPage = () => {
                                 onClick={() =>
                                     handleOpenDeleteDialog(author.id)
                                 }
+                                disabled={!authorLogged || authorLogged.id !== author.id}
                                 className={
-                                    "px-2 text-white dark:text-slate-300 bg-red-500 dark:bg-red-900"
+                                    "px-2 text-white dark:text-slate-300 bg-red-500 dark:bg-red-900 disabled:opacity-50 disabled:cursor-not-allowed"
                                 }
                                 variant="destructive"
+                                title={(!authorLogged || authorLogged.id !== author.id) ? "Debes iniciar sesión con este autor para eliminar" : ""}
                             >
                                 Eliminar
                             </Button>

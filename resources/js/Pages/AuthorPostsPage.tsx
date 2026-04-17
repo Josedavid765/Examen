@@ -48,6 +48,7 @@ const AuthorPostsPage = () => {
         refreshPostData,
         orderPost,
         setOrderPost,
+        authorLogged,
     } = useData();
 
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -122,6 +123,7 @@ const AuthorPostsPage = () => {
                 }}
                 perPage={postPerPage}
                 onAdd={() => navigate("/posts/new")}
+                disableAdd={!authorLogged || authorLogged.id !== id}
                 renderRow={(post: Post) => (
                     <TableRow key={post.id}>
                         <TableCell>{post.id}</TableCell>
@@ -162,21 +164,25 @@ const AuthorPostsPage = () => {
                             </Button>
                             <Button
                                 className={
-                                    "border border-blue-600/20 px-2 bg-blue-100 text-blue-700 hover:bg-blue-200 dark:bg-purple-900/20 dark:text-purple-300 dark:border-purple-300/20 dark:hover:bg-purple-950/20"
+                                    "border border-blue-600/20 px-2 bg-blue-100 text-blue-700 hover:bg-blue-200 dark:bg-purple-900/20 dark:text-purple-300 dark:border-purple-300/20 dark:hover:bg-purple-950/20 disabled:opacity-50 disabled:cursor-not-allowed"
                                 }
                                 variant="secondary"
+                                disabled={!authorLogged || authorLogged.id !== id}
                                 onClick={() =>
                                     navigate(`/posts/edit/${post.id}`)
                                 }
+                                title={(!authorLogged || authorLogged.id !== id) ? "Debes iniciar sesión con este autor para editar" : ""}
                             >
                                 Editar
                             </Button>
                             <Button
                                 onClick={() => handleOpenDeleteDialog(post.id)}
+                                disabled={!authorLogged || authorLogged.id !== id}
                                 className={
-                                    "px-2 text-white dark:text-slate-300 bg-red-500 dark:bg-red-900"
+                                    "px-2 text-white dark:text-slate-300 bg-red-500 dark:bg-red-900 disabled:opacity-50 disabled:cursor-not-allowed"
                                 }
                                 variant="destructive"
+                                title={(!authorLogged || authorLogged.id !== id) ? "Debes iniciar sesión con este autor para eliminar" : ""}
                             >
                                 Eliminar
                             </Button>
