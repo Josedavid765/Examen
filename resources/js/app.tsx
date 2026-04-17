@@ -15,6 +15,7 @@ import AuthorPostsPage from "./Pages/AuthorPostsPage.tsx";
 import PostFormPage from "./Pages/PostFormPage.tsx";
 import PostPage from "./Pages/PostPage.tsx";
 import LoginPage from "./Pages/LoginPage.tsx";
+import LoggedAuthorPage from "./Pages/LoggedAuthorPage.tsx";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
@@ -71,13 +72,19 @@ const App: React.FC = () => {
                         <div className="absolute top-3 right-4 flex gap-2 items-center">
                             {authorLogged !== null ? (
                                 <>
-                                    <span className="text-white font-bold">
+                                    <span
+                                        className="text-white font-bold cursor-pointer hover:underline"
+                                        onClick={() => navigate("/profile")}
+                                    >
                                         {authorLogged.fullName}
                                     </span>
                                     <Button
                                         variant="link"
                                         className="text-white underline hover:text-gray-200"
-                                        onClick={logout}
+                                        onClick={() => {
+                                            logout();
+                                            navigate("/authors");
+                                        }}
                                     >
                                         Cerrar sesión
                                     </Button>
@@ -116,6 +123,8 @@ const App: React.FC = () => {
                         path="/authors/edit/:id"
                         element={<AuthorFormPage />}
                     />
+
+                    <Route path="/profile" element={<LoggedAuthorPage />} />
 
                     <Route
                         path="/authors/:id/posts"
