@@ -11,8 +11,11 @@ import {
 } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
 import PostCommentsWidget from "./PostCommentsWidget";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const PostPage = () => {
+    const navigate = useNavigate();
     const [posts, setPosts] = useState<Post[]>([]);
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
@@ -132,10 +135,19 @@ const PostPage = () => {
                             <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded-full dark:bg-gray-600 dark:text-gray-300">
                                 {post.numComments} comentarios
                             </span>
-                            <PostCommentsWidget
-                                postId={post.id}
-                                onCommentAdded={() => handleCommentAdded(post.id)}
-                            />
+                            <div className="flex gap-2">
+                                <Button
+                                    variant="link"
+                                    className="text-blue-500 p-0 h-auto font-semibold"
+                                    onClick={() => navigate(`/posts/${post.id}`)}
+                                >
+                                    Ver Post
+                                </Button>
+                                <PostCommentsWidget
+                                    postId={post.id}
+                                    onCommentAdded={() => handleCommentAdded(post.id)}
+                                />
+                            </div>
                         </CardFooter>
                     </Card>
                 ))}

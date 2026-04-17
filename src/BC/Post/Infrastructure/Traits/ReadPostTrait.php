@@ -11,7 +11,15 @@ trait ReadPostTrait
 {
     public function readPost(PostIdValueObject $id): ?Post
     {
-        $postModel = PostModel::find($id->value());
+        $postModel = PostModel::query()
+            ->join('authors', 'posts.author_id', '=', 'authors.id')
+            ->select([
+                'posts.*',
+                'authors.first_name',
+                'authors.last_name'
+            ])
+            ->where('posts.id', $id->value())
+            ->first();
 
         if (!$postModel) {
             return null;
