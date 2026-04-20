@@ -55,20 +55,24 @@ const App: React.FC = () => {
                 <div className="flex">
                     <div>
                         <Label className="flex items-center gap-3 cursor-pointer group">
-                            {isDarkMode &&
-                                <CiLight className="text-2xl" />
-                            }
+                            <CiLight
+                                className={`text-2xl text-white ${isDarkMode ? "visible" : "invisible"}`}
+                            />
+
                             <Switch
                                 id="dark-mode"
                                 checked={isDarkMode}
                                 onCheckedChange={() =>
                                     setIsDarkMode(!isDarkMode)
                                 }
-                                className= {isDarkMode ? "bg-gray-400/40" : "bg-white"}
+                                className={
+                                    isDarkMode ? "bg-gray-400/40" : "bg-white"
+                                }
                             />
-                            {!isDarkMode &&
-                                <CiDark className="text-2xl" />
-                            }
+
+                            <CiDark
+                                className={`text-2xl text-black ${!isDarkMode ? "visible" : "invisible"}`}
+                            />
                         </Label>
                         <div className="absolute top-3 right-4 flex gap-2 items-center">
                             {authorLogged !== null ? (
