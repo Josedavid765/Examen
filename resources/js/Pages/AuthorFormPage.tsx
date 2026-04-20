@@ -1,60 +1,88 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { apiService } from "../services/apiService";
 import { Button } from "@/components/ui/button";
-import { Field, FieldError, FieldLabel } from "@/components/ui/field";
+import { Field, FieldLabel } from "@/components/ui/field";
 import { Form } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Author } from "@/models/Author";
 import { useData } from "@/contexts/DataContext";
 import { Spinner } from "@/components/ui/spinner";
-import { IoIosEye } from "react-icons/io";
-import { IoIosEyeOff } from "react-icons/io";
+import { IoIosEye, IoIosEyeOff } from "react-icons/io";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
 const AuthorFormPage = () => {
-    const { id } = useParams<{ id: string }>(); // Captura el ID de la URL si existe
+    const { id } = useParams<{ id: string }>();
+    const isEditMode = Boolean(id);
     const navigate = useNavigate();
-
     const { refreshAuthorData, logAuthor } = useData();
 
     const [loading, setLoading] = useState(false);
     const [initialLoading, setInitialLoading] = useState(false);
-    const [author, setAuthor] = useState<Author | null>(null);
     const [showPassword, setShowPassword] = useState(false);
 
-    const isEditMode = Boolean(id);
+    const getAuthorSchema = (isEdit: boolean) =>
+        z.object({
+            firstName: z.string().min(1, "El nombre es obligatorio"),
+            lastName: z.string().min(1, "El apellido es obligatorio"),
+            email: z
+                .string()
+                .email("Debe ser un correo válido")
+                .min(1, "El correo es obligatorio"),
+            birthDate: z
+                .string()
+                .min(1, "La fecha de nacimiento es obligatoria"),
+            password: isEdit
+                ? z.string().optional()
+                : z
+                      .string()
+                      .min(6, "La contraseña debe tener al menos 6 caracteres"),
+        });
 
-    // Si estamos en modo edición, cargamos los datos del autor
+    type AuthorFormValues = z.infer<ReturnType<typeof getAuthorSchema>>;
+
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors },
+    } = useForm<AuthorFormValues>({
+        resolver: zodResolver(getAuthorSchema(isEditMode)),
+    });
+
+    // 3. Carga de datos asíncrona usando 'reset'
     useEffect(() => {
         if (isEditMode && id) {
             setInitialLoading(true);
             apiService
                 .getAuthor(id)
                 .then((res) => {
-                    setAuthor(res);
+                    // Reseteamos el formulario con los datos de la API
+                    reset({
+                        firstName: res.firstName,
+                        lastName: res.lastName,
+                        email: res.email,
+                        birthDate: res.birthDate
+                            ? res.birthDate.split(" ")[0]
+                            : "",
+                    });
                 })
                 .catch((err) => console.error("Error al cargar autor:", err))
                 .finally(() => setInitialLoading(false));
         }
-    }, [id, isEditMode]);
+    }, [id, isEditMode, reset]);
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    // 4. La función onSubmit ahora recibe los datos limpios y validados por Zod
+    const onSubmit = async (data: AuthorFormValues) => {
         setLoading(true);
 
-        const formData = new FormData(e.currentTarget);
-        const passwordInput = String(formData.get("password"));
-
-        const payload: Partial<Author> = {
-            firstName: String(formData.get("firstname")),
-            lastName: String(formData.get("lastname")),
-            birthDate: String(formData.get("birthdate")),
-            email: String(formData.get("email")),
-        };
-
-        if(passwordInput.trim() !== "") {
-            payload.password = passwordInput;
+        // Si la contraseña viene vacía (ej. en edición), la borramos del payload para no sobrescribirla
+        const payload: Partial<Author> = { ...data };
+        if (!payload.password || payload.password.trim() === "") {
+            delete payload.password;
         }
 
         try {
@@ -65,14 +93,14 @@ const AuthorFormPage = () => {
                 logAuthor(payload as Author);
             }
             await refreshAuthorData();
-            navigate("/authors"); // Volver a la tabla tras el éxito
+            navigate("/authors");
         } catch (error) {
             console.error("Error al guardar:", error);
-            if (isEditMode) {
-                alert("Hubo un error al actualizar el autor.");
-            } else {
-                alert("Hubo un error al crear el autor.");
-            }
+            alert(
+                isEditMode
+                    ? "Hubo un error al actualizar el autor."
+                    : "Hubo un error al crear el autor.",
+            );
         } finally {
             setLoading(false);
         }
@@ -97,73 +125,75 @@ const AuthorFormPage = () => {
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
+                    {/* 5. Usamos handleSubmit(onSubmit) para interceptar el envío */}
                     <Form
                         className="space-y-6"
-                        onSubmit={handleSubmit}
-                        key={author?.id || "new"}
+                        onSubmit={handleSubmit(onSubmit)}
                     >
                         <Field>
                             <FieldLabel>Nombre</FieldLabel>
+                            {/* Conectamos el input usando ...register */}
                             <Input
-                                name="firstname"
+                                {...register("firstName")}
                                 placeholder="Ej: George"
-                                defaultValue={author?.firstName || ""}
-                                required
                             />
-                            <FieldError>El nombre es obligatorio.</FieldError>
+                            {/* Mostramos el error dinámico de Zod */}
+                            {errors.firstName && (
+                                <span className="text-sm text-red-500 mt-1">
+                                    {errors.firstName.message}
+                                </span>
+                            )}
                         </Field>
 
-                        {/* Campo Apellido */}
                         <Field>
                             <FieldLabel>Apellido</FieldLabel>
                             <Input
-                                name="lastname"
+                                {...register("lastName")}
                                 placeholder="Ej: Lucas"
-                                defaultValue={author?.lastName || ""}
-                                required
                             />
-                            <FieldError>El apellido es obligatorio.</FieldError>
+                            {errors.lastName && (
+                                <span className="text-sm text-red-500 mt-1">
+                                    {errors.lastName.message}
+                                </span>
+                            )}
                         </Field>
 
-                        {/* Campo Fecha de Nacimiento */}
                         <Field>
                             <FieldLabel>Fecha de Nacimiento</FieldLabel>
-                            <Input
-                                name="birthdate"
-                                type="date"
-                                // Limpiamos la fecha por si viene con horas (YYYY-MM-DD)
-                                defaultValue={
-                                    author?.birthDate
-                                        ? author.birthDate.split(" ")[0]
-                                        : ""
-                                }
-                                required
-                            />
-                            <FieldError>
-                                Selecciona una fecha válida.
-                            </FieldError>
+                            <Input {...register("birthDate")} type="date" />
+                            {errors.birthDate && (
+                                <span className="text-sm text-red-500 mt-1">
+                                    {errors.birthDate.message}
+                                </span>
+                            )}
                         </Field>
 
                         <Field>
                             <FieldLabel>Correo</FieldLabel>
                             <Input
-                                name="email"
+                                {...register("email")}
                                 type="email"
                                 placeholder="Ej: correo@gmail.com"
-                                defaultValue={author?.email || ""}
-                                required
                             />
+                            {errors.email && (
+                                <span className="text-sm text-red-500 mt-1">
+                                    {errors.email.message}
+                                </span>
+                            )}
                         </Field>
 
                         <Field>
-                            <FieldLabel>Contraseña {isEditMode && "(Déjala en blanco para no cambiarla)"} </FieldLabel>
+                            <FieldLabel>
+                                Contraseña
+                                {isEditMode &&
+                                    "(Déjala en blanco para no cambiarla)"}
+                            </FieldLabel>
                             <div className="relative flex items-center">
                                 <Input
-                                    name="password"
+                                    {...register("password")}
                                     type={showPassword ? "text" : "password"}
-                                    defaultValue=""
                                     className="pr-10"
-                                    required={!isEditMode} // Solo es requerida si estamos creando un nuevo autor
+                                    // Required manual eliminado, Zod y el hook se encargan ahora.
                                 />
                                 <Button
                                     type="button"
@@ -179,6 +209,12 @@ const AuthorFormPage = () => {
                                     )}
                                 </Button>
                             </div>
+                            {/* Mini validación cruzada: si estamos creando, requerimos contraseña manualmente si Zod la puso opcional */}
+                            {errors.password && (
+                                <span className="text-sm text-red-500 mt-1">
+                                    {errors.password.message}
+                                </span>
+                            )}
                         </Field>
 
                         <div className="flex gap-4 pt-4">
