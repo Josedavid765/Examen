@@ -1,7 +1,6 @@
-// IMPORTANTE: Asegúrate de importar tu modelo real de Comment
 import { Comment } from "@/models/Comment";
 import { apiService } from "@/services/apiService";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
     Popover,
     PopoverContent,
@@ -13,7 +12,6 @@ import { useData } from "@/contexts/DataContext";
 import { Status } from "@/models/Status";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
 interface PostCommentsWidgetProps {
     postId: string;
     onCommentAdded?: () => void;
@@ -27,9 +25,9 @@ const PostCommentsWidget = ({ postId, onCommentAdded }: PostCommentsWidgetProps)
     const [newCommentText, setNewCommentText] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const loadComments = async () => {
+    const loadComments = async (force = false) => {
         // Evita recargar si ya se cargaron una vez
-        if (hasLoaded) return;
+        if (hasLoaded && !force) return;
 
         setIsLoading(true);
         try {
@@ -45,6 +43,11 @@ const PostCommentsWidget = ({ postId, onCommentAdded }: PostCommentsWidgetProps)
             setIsLoading(false);
         }
     };
+
+    useEffect(() => {
+        setHasLoaded(false); //Resetear si cambia el post
+        loadComments();
+    }, [postId]);
 
     const handleAddComment = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -65,6 +68,7 @@ const PostCommentsWidget = ({ postId, onCommentAdded }: PostCommentsWidgetProps)
             // Optimistically update the UI
             setComments(prevComments => [...prevComments, {
                 ...createdComment,
+                description: newCommentText,
                 authorFullName: authorLogged.fullName,
             } as Comment]);
 
