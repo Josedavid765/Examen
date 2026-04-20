@@ -44,20 +44,25 @@ const AuthorFormPage = () => {
         setLoading(true);
 
         const formData = new FormData(e.currentTarget);
+        const passwordInput = String(formData.get("password"));
+
         const payload: Partial<Author> = {
             firstName: String(formData.get("firstname")),
             lastName: String(formData.get("lastname")),
             birthDate: String(formData.get("birthdate")),
             email: String(formData.get("email")),
-            password: String(formData.get("password")),
         };
+
+        if(passwordInput.trim() !== "") {
+            payload.password = passwordInput;
+        }
 
         try {
             if (isEditMode && id) {
                 await apiService.updateAuthor(id, payload);
             } else {
                 await apiService.createAuthor(payload as Author);
-                logAuthor(payload as Author); 
+                logAuthor(payload as Author);
             }
             await refreshAuthorData();
             navigate("/authors"); // Volver a la tabla tras el éxito
@@ -151,14 +156,14 @@ const AuthorFormPage = () => {
                         </Field>
 
                         <Field>
-                            <FieldLabel>Contraseña</FieldLabel>
+                            <FieldLabel>Contraseña {isEditMode && "(Déjala en blanco para no cambiarla)"} </FieldLabel>
                             <div className="relative flex items-center">
                                 <Input
                                     name="password"
                                     type={showPassword ? "text" : "password"}
-                                    defaultValue={author?.password || ""}
+                                    defaultValue=""
                                     className="pr-10"
-                                    required
+                                    required={!isEditMode} // Solo es requerida si estamos creando un nuevo autor
                                 />
                                 <Button
                                     type="button"
