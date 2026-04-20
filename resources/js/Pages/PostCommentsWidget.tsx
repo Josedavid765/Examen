@@ -86,7 +86,7 @@ const PostCommentsWidget = ({ postId, onCommentAdded }: PostCommentsWidgetProps)
 
     return (
         <Popover onOpenChange={(isOpen) => isOpen && loadComments()}>
-            <div className="cursor-pointer bg-slate-300/40 rounded px-1 hover:border hover:border-gray-300 transition">
+            <div className="flex items-center justify-center w-7 h-7 cursor-pointer bg-slate-300/40 rounded hover:border hover:border-gray-300 transition">
                 <PopoverTrigger>
                     <FaRegCommentDots />
                 </PopoverTrigger>

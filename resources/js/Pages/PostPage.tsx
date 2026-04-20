@@ -87,8 +87,8 @@ const PostPage = () => {
             prevPosts.map((post) =>
                 post.id === postId
                     ? { ...post, numComments: post.numComments + 1 }
-                    : post
-            )
+                    : post,
+            ),
         );
     };
 
@@ -128,7 +128,9 @@ const PostPage = () => {
 
                         <CardContent className="flex-1 pt-2 pb-4 px-6 text-sm text-gray-700">
                             {/* line-clamp-3 limita la descripción a 3 líneas con puntos suspensivos */}
-                            <p className="line-clamp-3 dark:text-gray-200">{post.description}</p>
+                            <p className="line-clamp-3 dark:text-gray-200">
+                                {post.description}
+                            </p>
                         </CardContent>
 
                         <CardFooter className="flex justify-between items-center border-t border-gray-100 pt-4">
@@ -137,15 +139,18 @@ const PostPage = () => {
                             </span>
                             <div className="flex gap-2">
                                 <Button
-                                    variant="link"
-                                    className="text-blue-500 p-0 h-auto font-semibold"
-                                    onClick={() => navigate(`/posts/${post.id}`)}
+                                    className="border border-blue-600/20 px-2 bg-blue-100 text-blue-700 hover:bg-blue-200 dark:bg-purple-900/20 dark:text-purple-300 dark:border-purple-300/20 dark:hover:bg-purple-950/20"
+                                    onClick={() =>
+                                        navigate(`/posts/${post.id}`)
+                                    }
                                 >
                                     Ver Post
                                 </Button>
                                 <PostCommentsWidget
                                     postId={post.id}
-                                    onCommentAdded={() => handleCommentAdded(post.id)}
+                                    onCommentAdded={() =>
+                                        handleCommentAdded(post.id)
+                                    }
                                 />
                             </div>
                         </CardFooter>
