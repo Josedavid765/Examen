@@ -1,6 +1,6 @@
 import { Comment } from "@/models/Comment";
 import { apiService } from "@/services/apiService";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import {
     Popover,
     PopoverContent,
@@ -43,11 +43,6 @@ const PostCommentsWidget = ({ postId, onCommentAdded }: PostCommentsWidgetProps)
             setIsLoading(false);
         }
     };
-
-    useEffect(() => {
-        setHasLoaded(false); //Resetear si cambia el post
-        loadComments();
-    }, [postId]);
 
     const handleAddComment = async (e: React.FormEvent) => {
         e.preventDefault();
