@@ -70,6 +70,11 @@ const AuthorPage = () => {
         refreshAuthorData(debouncedFilter);
     }, [AuthorPage, authorPerPage, orderAuthor, debouncedFilter]);
 
+    // Resetear a la página 1 cuando cambia el orden de los autores
+    useEffect(() => {
+        setAuthorPage(1);
+    }, [orderAuthor, setAuthorPage]);
+
     const handleOpenDeleteDialog = (id: string) => {
         setAuthorIdToDelete(id);
         setIsDeleteDialogOpen(true);
@@ -227,17 +232,17 @@ const AuthorPage = () => {
                         <PaginationLink
                             onClick={() => setAuthorPage(AuthorPage - 1)}
                             style={{
-                                display: AuthorPage === 1 ? "none" : "flex",
+                                display: AuthorPage <= 1 ? "none" : "flex",
                             }}
                         >
                             {AuthorPage - 1}
                         </PaginationLink>
-                        <PaginationLink >{AuthorPage}</PaginationLink>
+                        <PaginationLink isActive={true}>{AuthorPage}</PaginationLink>
                         <PaginationLink
                             onClick={() => setAuthorPage(AuthorPage + 1)}
                             style={{
                                 display:
-                                    AuthorPage === totalAuthorPages
+                                    AuthorPage >= totalAuthorPages
                                         ? "none"
                                         : "flex",
                             }}
