@@ -68,6 +68,11 @@ const AuthorPostsPage = () => {
         }
     }, [id, PostPage, postPerPage, orderPost]);
 
+    // Resetear a la página 1 cuando cambia el orden de los posts
+    useEffect(() => {
+        setPostPage(1);
+    }, [orderPost, setPostPage]);
+
     const handleDelete = async (postId: string) => {
         try {
             await apiService.deletePost(postId);
@@ -247,17 +252,17 @@ const AuthorPostsPage = () => {
                         <PaginationLink
                             onClick={() => setPostPage(PostPage - 1)}
                             style={{
-                                display: PostPage === 1 ? "none" : "flex",
+                                display: PostPage <= 1 ? "none" : "flex",
                             }}
                         >
                             {PostPage - 1}
                         </PaginationLink>
-                        <PaginationLink>{PostPage}</PaginationLink>
+                        <PaginationLink isActive={true}>{PostPage}</PaginationLink>
                         <PaginationLink
                             onClick={() => setPostPage(PostPage + 1)}
                             style={{
                                 display:
-                                    PostPage === totalPostPages
+                                    PostPage >= totalPostPages
                                         ? "none"
                                         : "flex",
                             }}
