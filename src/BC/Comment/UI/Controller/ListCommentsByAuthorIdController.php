@@ -45,8 +45,8 @@ class ListCommentsByAuthorIdController extends Controller
                     'id'              => $comment->getCommentIdValue(),
                     'description'     => $comment->getDescriptionValue(),
                     'authorId'        => $comment->getAuthorIdValue(),
-                    'authorFullName'  => $comment->getAuthorFullNameValue(),
-                    'status'          => $comment->getStatusValue(),
+                    'authorFullName'  => $comment->getAuthorFullNameValue() ?? 'Autor Desconocido',
+                    'status'          => strtoupper($comment->getStatusValue()), // Para que encaje con el enum del Front
                     'postId'          => $comment->getPostIdValue(),
                     'commentDate'     => $comment->getCommentDateValue(),
                 ];
@@ -58,10 +58,10 @@ class ListCommentsByAuthorIdController extends Controller
                 'meta'   => $result['meta']
             ], 200);
 
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) { // Usamos Throwable para atrapar errores fatales de PHP (como TypeErrors)
             return response()->json([
                 'status' => 'error',
-                'error'  => $e->getMessage()
+                'error'  => $e->getMessage() . ' en la línea ' . $e->getLine()
             ], 500);
         }
     }
