@@ -232,9 +232,11 @@ export const apiService = {
         return json.data ? json.data : json;
     },
 
-    getCommentsByAuthor: async (authorId: string): Promise<Comment[]> => {
+    getCommentsByAuthor: async (authorId: string, order?: string): Promise<Comment[]> => {
+        const params = new URLSearchParams();
+        if (order) params.append("order", order);
         const response = await fetch(
-            `${BASE_URL}/authors/${authorId}/comments`,
+            `${BASE_URL}/authors/${authorId}/comments?${params.toString()}`,
             { headers },
         );
         if (!response.ok)

@@ -14,16 +14,19 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
+import { Comment } from "@/models/Comment";
 
 const LoggedAuthorPage = () => {
     const navigate = useNavigate();
     const { authorLogged, logout } = useData();
     const [authorData, setAuthorData] = useState<Author | null>(null);
+    const [authorComments, setAuthorComments] = useState<Comment[] | []>([]);
     const [loading, setLoading] = useState(true);
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const [authorIdToDelete, setAuthorIdToDelete] = useState<string | null>(
         null,
     );
+    const [order, setOrder] = useState<string | undefined>(undefined);
 
     useEffect(() => {
         if (!authorLogged) {
@@ -45,6 +48,28 @@ const LoggedAuthorPage = () => {
 
         fetchAuthor();
     }, [authorLogged, navigate]);
+
+    useEffect(() => {
+        if (!authorLogged) return;
+        const fetchAuthorComments = async () => {
+            try {
+                setLoading(true);
+                const comments = (await apiService.getCommentsByAuthor(
+                    authorLogged.id!,
+                    order,
+                )) as Comment[];
+                setAuthorComments(comments);
+            } catch (error) {
+                console.error(
+                    "Error al obtener los comentarios del autor logueado",
+                    error,
+                );
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchAuthorComments();
+    }, [authorLogged, order]);
 
     const handleOpenDeleteDialog = (id: string) => {
         setAuthorIdToDelete(id);
@@ -131,7 +156,38 @@ const LoggedAuthorPage = () => {
                 )}
             />
 
-            {/* MODAL ELIMINAR */}
+            <DataTable
+                title="Mis Comentarios"
+                loading={loading}
+                headers={[
+                    { id: "id", name: "ID", sortable: false },
+                    { id: "description", name: "Descripción", sortable: false },
+                    { id: "status", name: "Estado", sortable: false },
+                    {
+                        id: "commentDate",
+                        name: "Fecha de publicación",
+                        sortable: true,
+                    },
+                ]}
+                rows={authorComments || []}
+                perPage={authorComments?.length || 10}
+                order={order}
+                setOrder={setOrder}
+                onAdd={undefined} // Quitar botón de añadir si no tiene sentido
+                renderRow={(comment: Comment) => (
+                    <TableRow key={comment.id}>
+                        <TableCell>{comment.id}</TableCell>
+                        <TableCell>{comment.description}</TableCell>
+                        <TableCell>{comment.status}</TableCell>
+                        <TableCell>
+                            {comment.commentDate
+                                ? `${new Date(comment.commentDate).getDate()}/${new Date(comment.commentDate).getMonth() + 1}/${new Date(comment.commentDate).getFullYear()}`
+                                : "N/A"}
+                        </TableCell>
+                    </TableRow>
+                )}
+            />
+
             <Dialog
                 open={isDeleteDialogOpen}
                 onOpenChange={setIsDeleteDialogOpen}

@@ -66,7 +66,7 @@ const Navbar: React.FC = () => {
                                 </span>
                                 <Button
                                     variant="link"
-                                    className="text-white underline hover:text-gray-200"
+                                    className="text-white underline hover:opacity-60 cursor-pointer"
                                     onClick={() => {
                                         logout();
                                         navigate("/authors");
