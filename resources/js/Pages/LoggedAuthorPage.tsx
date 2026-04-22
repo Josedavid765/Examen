@@ -54,11 +54,11 @@ const LoggedAuthorPage = () => {
         const fetchAuthorComments = async () => {
             try {
                 setLoading(true);
-                const comments = (await apiService.getCommentsByAuthor(
+                const response = (await apiService.getCommentsByAuthor(
                     authorLogged.id!,
                     order,
-                )) as Comment[];
-                setAuthorComments(comments);
+                )) as unknown as { data: Comment[] };
+                setAuthorComments(response.data);
             } catch (error) {
                 console.error(
                     "Error al obtener los comentarios del autor logueado",
@@ -163,6 +163,7 @@ const LoggedAuthorPage = () => {
                     { id: "id", name: "ID", sortable: false },
                     { id: "description", name: "Descripción", sortable: false },
                     { id: "status", name: "Estado", sortable: false },
+                    {id: "postId", name: "ID del Post", sortable: false},
                     {
                         id: "commentDate",
                         name: "Fecha de publicación",
@@ -179,6 +180,7 @@ const LoggedAuthorPage = () => {
                         <TableCell>{comment.id}</TableCell>
                         <TableCell>{comment.description}</TableCell>
                         <TableCell>{comment.status}</TableCell>
+                        <TableCell>{comment.postId}</TableCell>
                         <TableCell>
                             {comment.commentDate
                                 ? `${new Date(comment.commentDate).getDate()}/${new Date(comment.commentDate).getMonth() + 1}/${new Date(comment.commentDate).getFullYear()}`
