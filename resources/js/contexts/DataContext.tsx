@@ -1,7 +1,14 @@
-import { createContext, useContext, useState, ReactNode, useEffect } from "react";
+import {
+    createContext,
+    useContext,
+    useState,
+    ReactNode,
+    useEffect,
+} from "react";
 import { apiService } from "../services/apiService";
 import { Author } from "../models/Author";
 import { Post } from "../models/Post";
+import { toastManager } from "@/components/ui/toast";
 
 interface DataContextType {
     authorLogged: Author | null;
@@ -83,17 +90,23 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
         queryParams.get("order") || "publishDate",
     );
 
-    const logAuthor = (author: Partial<Author>) => {
-        try{
+    const logAuthor = async (author: Partial<Author>) => {
+        try {
             setLoading(true);
-            apiService.login({ email: author.email, password: author.password }).then(loggedAuthor => {
-                setAuthorLogged(loggedAuthor);
-                localStorage.setItem("authorLogged", JSON.stringify(loggedAuthor));
-            }).catch(error => {
-                console.error("Error al iniciar sesión:", error);
+            const loggedAuthor = await apiService.login({
+                email: author.email,
+                password: author.password,
             });
-            loadAuthors();
-        } catch (error) {
+            setAuthorLogged(loggedAuthor);
+            localStorage.setItem("authorLogged", JSON.stringify(loggedAuthor));
+
+            toastManager.add({
+                title: "Inicio de sesión exitoso",
+                description: `Bienvenido, ${loggedAuthor.fullName}!`,
+                type: "success",
+            });
+            await loadAuthors();
+        } catch (error: any) {
             console.error("Error al iniciar sesión:", error);
         } finally {
             setLoading(false);
@@ -105,7 +118,14 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
             await apiService.logout();
             setAuthorLogged(null);
             localStorage.removeItem("authorLogged");
-        } catch (error) {
+
+            toastManager.add({
+                title: "Sesión cerrada",
+                description: "Has cerrado sesión exitosamente.",
+                type: "success",
+            });
+            await loadAuthors();
+        } catch (error: any) {
             console.error("Error al cerrar sesión:", error);
         }
     };

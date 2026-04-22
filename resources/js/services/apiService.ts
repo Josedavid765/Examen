@@ -1,6 +1,7 @@
 import { Author } from "../models/Author";
 import { Post } from "../models/Post";
 import { Comment } from "../models/Comment";
+import { toastManager } from "@/components/ui/toast"; // Asegúrate de que esta ruta sea correcta
 
 const BASE_URL = "/api";
 
@@ -12,6 +13,16 @@ interface PaginatedResponse<T> {
 const headers = {
     "Content-Type": "application/json",
     Accept: "application/json",
+};
+
+// Función auxiliar para centralizar los errores y lanzar el toast
+const handleApiError = (defaultMessage: string) => {
+    toastManager.add({
+        title: "Error de conexión",
+        description: defaultMessage,
+        type: "error",
+    });
+    throw new Error(defaultMessage);
 };
 
 export const apiService = {
@@ -33,13 +44,13 @@ export const apiService = {
             `${BASE_URL}/authors?${params.toString()}`,
             { headers },
         );
-        if (!response.ok) throw new Error("Error obteniendo autores");
+        if (!response.ok) handleApiError("Error obteniendo autores");
         return await response.json();
     },
 
     getAuthor: async (id: string): Promise<Author> => {
         const response = await fetch(`${BASE_URL}/authors/${id}`, { headers });
-        if (!response.ok) throw new Error("Error obteniendo autor");
+        if (!response.ok) handleApiError("Error obteniendo autor");
         const json = await response.json();
         return json.data ? json.data : json;
     },
@@ -47,13 +58,12 @@ export const apiService = {
     createAuthor: async (
         data: Omit<Author, "id" | "fullName">,
     ): Promise<Author> => {
-        console.log(data);
         const response = await fetch(`${BASE_URL}/authors`, {
             method: "POST",
             headers,
             body: JSON.stringify(data),
         });
-        if (!response.ok) throw new Error("Error creando autor");
+        if (!response.ok) handleApiError("Error creando autor");
         return await response.json();
     },
 
@@ -63,7 +73,10 @@ export const apiService = {
             headers,
             body: JSON.stringify(data),
         });
-        if (!response.ok) throw new Error("Error iniciando sesión");
+        if (!response.ok)
+            handleApiError(
+                "Error iniciando sesión. Verifica tus credenciales.",
+            );
         const json = await response.json();
         return json.data ? json.data : json;
     },
@@ -73,7 +86,7 @@ export const apiService = {
             method: "POST",
             headers,
         });
-        if (!response.ok) throw new Error("Error cerrando sesión");
+        if (!response.ok) handleApiError("Error cerrando sesión");
     },
 
     updateAuthor: async (
@@ -85,7 +98,7 @@ export const apiService = {
             headers,
             body: JSON.stringify(data),
         });
-        if (!response.ok) throw new Error("Error actualizando autor");
+        if (!response.ok) handleApiError("Error actualizando autor");
         return await response.json();
     },
 
@@ -94,7 +107,7 @@ export const apiService = {
             method: "DELETE",
             headers,
         });
-        if (!response.ok) throw new Error("Error eliminando autor");
+        if (!response.ok) handleApiError("Error eliminando autor");
     },
 
     getAuthorPosts: async (
@@ -114,7 +127,7 @@ export const apiService = {
                 headers,
             },
         );
-        if (!response.ok) throw new Error("Error obteniendo posts del autor");
+        if (!response.ok) handleApiError("Error obteniendo posts del autor");
 
         return await response.json();
     },
@@ -130,13 +143,13 @@ export const apiService = {
         const response = await fetch(`${BASE_URL}/posts?${params.toString()}`, {
             headers,
         });
-        if (!response.ok) throw new Error("Error obteniendo posts");
+        if (!response.ok) handleApiError("Error obteniendo posts");
         return await response.json();
     },
 
     getPost: async (id: string): Promise<Post> => {
         const response = await fetch(`${BASE_URL}/posts/${id}`, { headers });
-        if (!response.ok) throw new Error("Error obteniendo post");
+        if (!response.ok) handleApiError("Error obteniendo post");
         const json = await response.json();
         return json.data ? json.data : json;
     },
@@ -147,7 +160,7 @@ export const apiService = {
             headers,
             body: JSON.stringify(data),
         });
-        if (!response.ok) throw new Error("Error creando post");
+        if (!response.ok) handleApiError("Error creando post");
         return await response.json();
     },
 
@@ -157,7 +170,7 @@ export const apiService = {
             headers,
             body: JSON.stringify(data),
         });
-        if (!response.ok) throw new Error("Error actualizando post");
+        if (!response.ok) handleApiError("Error actualizando post");
         return await response.json();
     },
 
@@ -166,12 +179,12 @@ export const apiService = {
             method: "DELETE",
             headers,
         });
-        if (!response.ok) throw new Error("Error eliminando post");
+        if (!response.ok) handleApiError("Error eliminando post");
     },
 
     getComment: async (id: string): Promise<Comment> => {
         const response = await fetch(`${BASE_URL}/comments/${id}`, { headers });
-        if (!response.ok) throw new Error("Error obteniendo comentario");
+        if (!response.ok) handleApiError("Error obteniendo comentario");
         return await response.json();
     },
 
@@ -181,7 +194,7 @@ export const apiService = {
             headers,
             body: JSON.stringify(data),
         });
-        if (!response.ok) throw new Error("Error creando comentario");
+        if (!response.ok) handleApiError("Error creando comentario");
         return await response.json();
     },
 
@@ -194,7 +207,7 @@ export const apiService = {
             headers,
             body: JSON.stringify(data),
         });
-        if (!response.ok) throw new Error("Error actualizando comentario");
+        if (!response.ok) handleApiError("Error actualizando comentario");
         return await response.json();
     },
 
@@ -203,7 +216,7 @@ export const apiService = {
             method: "DELETE",
             headers,
         });
-        if (!response.ok) throw new Error("Error eliminando comentario");
+        if (!response.ok) handleApiError("Error eliminando comentario");
     },
 
     getCommentsByPost: async (postId: string): Promise<Comment[]> => {
@@ -214,7 +227,7 @@ export const apiService = {
             },
         );
         if (!response.ok)
-            throw new Error("Error obteniendo comentarios del post");
+            handleApiError("Error obteniendo comentarios del post");
         const json = await response.json();
         return json.data ? json.data : json;
     },
@@ -225,7 +238,7 @@ export const apiService = {
             { headers },
         );
         if (!response.ok)
-            throw new Error("Error obteniendo comentarios del autor");
+            handleApiError("Error obteniendo comentarios del autor");
         return await response.json();
     },
 };

@@ -17,6 +17,7 @@ import PostDetailPage from "./Pages/PostDetailPage.tsx";
 import LoginPage from "./Pages/LoginPage.tsx";
 import LoggedAuthorPage from "./Pages/LoggedAuthorPage.tsx";
 import Navbar from "./components/Navbar.tsx";
+import { ToastProvider } from "./components/ui/toast.tsx";
 
 const App: React.FC = () => {
     return (
@@ -75,9 +76,11 @@ if (container) {
     root.render(
         <React.StrictMode>
             <DataProvider>
-                <Router>
-                    <App />
-                </Router>
+                <ToastProvider position="bottom-right">
+                    <Router>
+                        <App />
+                    </Router>
+                </ToastProvider>
             </DataProvider>
         </React.StrictMode>,
     );
