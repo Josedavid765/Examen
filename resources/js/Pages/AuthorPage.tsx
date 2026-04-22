@@ -225,7 +225,7 @@ const AuthorPage = () => {
                             <PaginationPrevious
                                 onClick={() => setAuthorPage(AuthorPage - 1)}
                                 style={{
-                                    display: AuthorPage === 1 ? "none" : "flex",
+                                    visibility: AuthorPage === 1 ? "hidden" : "visible",
                                 }}
                             />
                         </PaginationItem>
@@ -233,8 +233,9 @@ const AuthorPage = () => {
                             onClick={() => setAuthorPage(AuthorPage - 1)}
                             style={{
                                 cursor: AuthorPage <= 1 ? "not-allowed" : "pointer",
-                                display: AuthorPage <= 1 ? "none" : "flex",
+                                visibility: AuthorPage <= 1 ? "hidden" : "visible",
                             }}
+
                         >
                             {AuthorPage - 1}
                         </PaginationLink>
@@ -245,10 +246,7 @@ const AuthorPage = () => {
                             onClick={() => setAuthorPage(AuthorPage + 1)}
                             style={{
                                 cursor: AuthorPage >= totalAuthorPages ? "not-allowed" : "pointer",
-                                display:
-                                    AuthorPage >= totalAuthorPages
-                                        ? "none"
-                                        : "flex",
+                                visibility: AuthorPage >= totalAuthorPages ? "hidden" : "visible",
                             }}
                         >
                             {AuthorPage + 1}
@@ -257,10 +255,7 @@ const AuthorPage = () => {
                             <PaginationNext
                                 onClick={() => setAuthorPage(AuthorPage + 1)}
                                 style={{
-                                    display:
-                                        AuthorPage >= totalAuthorPages
-                                            ? "none"
-                                            : "flex",
+                                    visibility: AuthorPage >= totalAuthorPages ? "hidden" : "visible",
                                 }}
                             />
                         </PaginationItem>
