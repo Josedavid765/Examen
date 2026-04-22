@@ -14,7 +14,11 @@ class ListAuthorCommentsUseCase
         private CommentRepositoryPort $commentRepo
     ) {}
 
-    public function execute(string $authorId): array
+    public function execute(string $authorId, 
+        int $limit = 10, 
+        int $offset = 0, 
+        string $order = 'comment_date', 
+        string $direction = 'desc'): array
     {
         $id = new AuthorIdValueObject($authorId);
 
@@ -23,6 +27,13 @@ class ListAuthorCommentsUseCase
         if (!$author) {
             throw new Exception("Author not found");
         }
-        return $this->commentRepo->listCommentsByAuthorId($author->getAuthorIdValue());
+        
+        return $this->commentRepo->listCommentsByAuthorId(
+            $authorId, 
+            10, 
+            0,  
+            $order, 
+            $direction
+        );
     }
 }

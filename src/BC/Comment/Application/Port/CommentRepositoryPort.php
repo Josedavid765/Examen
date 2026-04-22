@@ -15,7 +15,11 @@ interface CommentRepositoryPort
 
     public function deleteComment(CommentIdValueObject $id):void;
 
-    public function listCommentsByAuthorId(string $authorId, string $order = 'commentDate', string $direction = 'desc', int $page = 1, int $perPage = 10 ):array;
+    public function listCommentsByAuthorId(string $authorId, 
+        int $limit = 10, 
+        int $offset = 0,
+        string $order = 'comment_date',
+        string $direction = 'desc'):array;
 
     public function deleteCommentsByAuthorIdBatch(string $authorId, int $limit):int;
     

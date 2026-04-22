@@ -4,6 +4,7 @@ namespace Src\BC\Author\UI\Controller;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Src\BC\Author\Application\UseCase\ListAuthorCommentsUseCase;
 
 class ListAuthorCommentsController extends Controller
@@ -12,15 +13,23 @@ class ListAuthorCommentsController extends Controller
         private ListAuthorCommentsUseCase $useCase
     ) {}
 
-    public function __invoke(string $id): JsonResponse
+    public function __invoke(Request $request, string $id): JsonResponse
     {
         try {
-            $comments = $this->useCase->execute($id);
+
+            $order = $request->query('order', 'comment_date');
+
+            $rawDirection = $request->query('direction', '-');
+
+            $direction = ($rawDirection === '-' || $rawDirection === 'desc') ? 'desc' : 'asc';
+
+            $comments = $this->useCase->execute($id, $order, $direction);
 
             $data = array_map(fn($comment) => [
-                'id'      => $comment->getCommentIdValue(),
-                'postId' => $comment->getPostIdValue(),
-                'content' => $comment->getDescriptionValue()
+                'id'          => $comment->getCommentIdValue(),
+                'postId'      => $comment->getPostIdValue(),
+                'content'     => $comment->getDescriptionValue(),
+                'commentDate' => $comment->getCommentDateValue()
             ], $comments);
 
             return response()->json([
