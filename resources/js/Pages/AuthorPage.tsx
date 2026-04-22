@@ -232,15 +232,19 @@ const AuthorPage = () => {
                         <PaginationLink
                             onClick={() => setAuthorPage(AuthorPage - 1)}
                             style={{
+                                cursor: AuthorPage <= 1 ? "not-allowed" : "pointer",
                                 display: AuthorPage <= 1 ? "none" : "flex",
                             }}
                         >
                             {AuthorPage - 1}
                         </PaginationLink>
-                        <PaginationLink isActive={true}>{AuthorPage}</PaginationLink>
+                        <PaginationLink isActive={true} style={{ cursor: "pointer" }}>
+                            {AuthorPage}
+                        </PaginationLink>
                         <PaginationLink
                             onClick={() => setAuthorPage(AuthorPage + 1)}
                             style={{
+                                cursor: AuthorPage >= totalAuthorPages ? "not-allowed" : "pointer",
                                 display:
                                     AuthorPage >= totalAuthorPages
                                         ? "none"
